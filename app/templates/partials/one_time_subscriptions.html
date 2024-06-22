@@ -1,0 +1,93 @@
+<h2>One-time Subscriptions (Loans)</h2>
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Amount</th>
+    <th>Period</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for subscription in one_time_subscriptions %}
+  <tr>
+    <td>{{ subscription.id }}</td>
+    <td>{{ subscription.name }}</td>
+    <td>{{ subscription.description }}</td>
+    <td>{{ subscription.monthly_amount }} RUB</td>
+    <td>{{ subscription.period }}</td>
+    <td>
+      <button onclick="document.getElementById('editSubscriptionForm{{ subscription.id }}').style.display='block'">Edit</button>
+      <button type="button" onclick="toggleSubscriptionPause({{ subscription.id }})">
+        {{ 'Pause' if not subscription.is_paused else 'Resume' }}
+      </button>
+      <button type="button" onclick="deleteSubscription({{ subscription.id }})">Delete</button>
+    </td>
+  </tr>
+  <tr id="editSubscriptionForm{{ subscription.id }}" style="display:none;">
+    <td colspan="6">
+      <form id="editSubscriptionFormElement{{ subscription.id }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label for="name">Name:</label>
+        <input type="text" name="name" placeholder="Name" value="{{ subscription.name }}" required>
+        <label for="description">Description:</label>
+        <textarea name="description" placeholder="Description">{{ subscription.description }}</textarea>
+        <label for="monthly_amount">Monthly Amount:</label>
+        <input type="number" name="monthly_amount" placeholder="Monthly Amount" value="{{ subscription.monthly_amount }}" step="0.01" required>
+        <input type="checkbox" name="is_variable" id="is_variable{{ subscription.id }}" {% if subscription.is_variable %}checked{% endif %}>
+        <label for="is_variable{{ subscription.id }}">Variable</label>
+        <label for="period">Period:</label>
+        <select name="period" required>
+          <option value="monthly" {% if subscription.period == 'monthly' %}selected{% endif %}>Monthly</option>
+          <option value="annual" {% if subscription.period == 'annual' %}selected{% endif %}>Annual</option>
+          <option value="one-time" {% if subscription.period == 'one-time' %}selected{% endif %}>One-time</option>
+        </select>
+        <button type="button" onclick="editSubscription({{ subscription.id }})">Save Changes</button>
+      </form>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="6">
+      <details>
+        <summary>Users</summary>
+        <ul>
+          {% for user_subscription in subscription.user_subscriptions %}
+          <li>
+            {{ user_subscription.user.name }} - {{ user_subscription.amount }} RUB
+            <form method="post" action="{{ url_for('subscription_bp.detach_user_from_subscription', user_subscription_id=user_subscription.id, subscription_id=subscription.id) }}" style="display:inline;">
+              <button type="submit">Detach</button>
+            </form>
+          </li>
+          {% endfor %}
+        </ul>
+      </details>
+      <details>
+        <summary>Attach User to Subscription</summary>
+        <form method="post" action="{{ url_for('subscription_bp.attach_user_to_subscription') }}">
+          <input type="hidden" name="subscription_id" value="{{ subscription.id }}">
+          <label for="user_id">User:</label>
+          <select id="user_id" name="user_id" required>
+            {% for user in users %}
+            <option value="{{ user.id }}">{{ user.name }}</option>
+            {% endfor %}
+          </select>
+
+          <label for="next_due_date">Next Due Date:</label>
+          <input type="date" id="next_due_date" name="next_due_date" value="{{ (now + timedelta(days=30)).strftime('%Y-%m-%d') }}" required>
+
+          <label for="amount">Amount:</label>
+          <input type="number" id="amount" name="amount" step="0.01" required>
+
+          <label for="is_paused">Is Paused:</label>
+          <input type="checkbox" id="is_paused" name="is_paused">
+
+          <button type="submit">Attach User to Subscription</button>
+        </form>
+      </details>
+    </td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>

@@ -1,0 +1,17 @@
+<details>
+  <summary><h2>Add Subscription</h2></summary>
+  <form method="post" action="{{ url_for('subscription_bp.add_subscription') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="text" name="name" placeholder="Name" required>
+    <textarea name="description" placeholder="Description" required></textarea>
+    <input type="number" name="monthly_amount" placeholder="Monthly Amount" step="0.01" required>
+    <input type="checkbox" name="is_variable" id="is_variable">
+    <label for="is_variable">Variable</label>
+    <select name="period" required>
+      <option value="monthly">Monthly</option>
+      <option value="annual">Annual</option>
+      <option value="one-time">One-time</option>
+    </select>
+    <button type="submit">Add Subscription</button>
+  </form>
+</details>

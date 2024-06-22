@@ -1,0 +1,19 @@
+<details>
+    <summary><h2>Add Payment</h2></summary>
+    <form method="post" action="{{ url_for('payment_bp.add_payment') }}">
+        <label for="user_id">User:</label>
+        <select id="user_id" name="user_id" required>
+            {% for user in users %}
+            <option value="{{ user.id }}">{{ user.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="status">Status:</label>
+        <select id="status" name="status" required>
+            <option value="pending">Pending</option>
+            <option value="paid">Paid</option>
+        </select>
+
+        <button type="submit">Add Payment</button>
+    </form>
+</details>

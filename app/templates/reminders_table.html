@@ -1,0 +1,26 @@
+<!-- app/templates/reminders_table.html -->
+<h2>Reminders</h2>
+<table>
+    <thead>
+    <tr>
+        <th>User</th>
+        <th>Reminder Date</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for reminder in reminders %}
+    <tr>
+        <td>{{ reminder.user.name }}</td>
+        <td>{{ reminder.reminder_date }}</td>
+        <td>{{ reminder.status }}</td>
+        <td>
+            <form method="post" action="{{ url_for('reminder_bp.delete_reminder', reminder_id=reminder.id) }}" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Management System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</head>
+<body>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul>
+  {% for message in messages %}
+  <li>{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+<h1>User Management System</h1>
+
+
+
+{% include 'partials/users.html' %}
+{% include 'partials/one_time_subscriptions.html' %}
+{% include 'partials/regular_subscriptions.html' %}
+{% include 'partials/payments.html' %}
+{% include 'partials/reminders.html' %}
+
+
+
+{% include 'forms/add_user.html' %}
+{% include 'forms/add_subscription.html' %}
+{% include 'forms/add_payment.html' %}
+{% include 'forms/add_reminder.html' %}
+
+</body>
+</html>
