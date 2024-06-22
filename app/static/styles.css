@@ -118,6 +118,7 @@ details {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
+    position: relative;
 }
 
 details summary {
@@ -125,6 +126,9 @@ details summary {
     font-weight: bold;
     color: #007bff;
     margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
 }
 
 details summary:hover {
@@ -133,12 +137,14 @@ details summary:hover {
 
 details[open] summary::after {
     content: "▲";
-    padding-left: 5px;
+    margin-left: auto;
+    font-size: 0.8em;
 }
 
 details summary::after {
     content: "▼";
-    padding-left: 5px;
+    margin-left: auto;
+    font-size: 0.8em;
 }
 
 details ul {

@@ -1,10 +1,12 @@
-from celery import Celery
 from celery.schedules import crontab
+from datetime import timedelta
+
+from celery.schedules import crontab
+
 from config import Config
-from datetime import datetime, timedelta
-from .utils import create_reminders_logic, process_payments_logic
-from .factory import create_app
 from .celery_factory import make_celery
+from .factory import create_app
+from .utils import create_reminders_logic, process_payments_logic
 
 celery = make_celery()
 

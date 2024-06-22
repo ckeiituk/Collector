@@ -6,6 +6,7 @@
   <title>User Management System</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
   <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
 {% with messages = get_flashed_messages() %}
@@ -19,20 +20,17 @@
 {% endwith %}
 <h1>User Management System</h1>
 
-
-
 {% include 'partials/users.html' %}
 {% include 'partials/one_time_subscriptions.html' %}
 {% include 'partials/regular_subscriptions.html' %}
 {% include 'partials/payments.html' %}
 {% include 'partials/reminders.html' %}
 
-
-
 {% include 'forms/add_user.html' %}
 {% include 'forms/add_subscription.html' %}
 {% include 'forms/add_payment.html' %}
 {% include 'forms/add_reminder.html' %}
+{% include 'forms/attach_user_to_subscription.html' %}
 
 </body>
 </html>

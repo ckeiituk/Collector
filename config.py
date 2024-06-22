@@ -12,3 +12,4 @@ class Config:
     reminder_schedule_type = 'daily'  # Допустимые значения: 'time', 'interval' 'daily'
     SECRET_KEY = os.urandom(32)
     WTF_CSRF_ENABLED = True
+    WTF_CSRF_SECRET_KEY = 'your_csrf_secret_key'

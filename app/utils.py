@@ -1,6 +1,8 @@
-from .models import db, User, Reminder, Payment
 from datetime import datetime, timedelta
 from decimal import Decimal
+
+from .models import db, User, Reminder, Payment
+
 
 def create_reminders_logic():
     print("Running create_reminders_logic")

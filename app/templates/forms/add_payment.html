@@ -1,6 +1,7 @@
 <details>
     <summary><h2>Add Payment</h2></summary>
-    <form method="post" action="{{ url_for('payment_bp.add_payment') }}">
+    <form id="addPaymentForm">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <label for="user_id">User:</label>
         <select id="user_id" name="user_id" required>
             {% for user in users %}
@@ -14,6 +15,6 @@
             <option value="paid">Paid</option>
         </select>
 
-        <button type="submit">Add Payment</button>
+        <button type="button" onclick="createPayment()">Add Payment</button>
     </form>
 </details>

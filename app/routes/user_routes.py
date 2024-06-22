@@ -1,10 +1,11 @@
+from collections import defaultdict
+from decimal import Decimal
+from flask_wtf.csrf import CSRFProtect
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from app.models import db, User, Payment, Reminder, Subscription
-from decimal import Decimal
-from collections import defaultdict
-from datetime import datetime, timedelta
 
 user_bp = Blueprint('user_bp', __name__)
+csrf = CSRFProtect()
 
 
 
@@ -29,6 +30,7 @@ def index():
 
 
 
+
 @user_bp.route('/add_user', methods=['POST'])
 def add_user():
     name = request.form.get('name')
@@ -37,13 +39,16 @@ def add_user():
     telegram_id = request.form.get('telegram_id')
     preferred_platform = request.form.get('preferred_platform')
     notification_time = request.form.get('notification_time')
+    balance = request.form.get('balance')
+
     new_user = User(
         name=name,
         discord_id=discord_id,
         vk_id=vk_id,
         telegram_id=telegram_id,
         preferred_platform=preferred_platform,
-        notification_time=notification_time
+        notification_time=notification_time,
+        balance=balance
     )
     db.session.add(new_user)
     db.session.commit()

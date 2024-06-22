@@ -1,31 +1,42 @@
 # app/routes/reminder_routes.py
 
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
+from flask_wtf.csrf import CSRFProtect
 from app.models import db, Reminder
 
 reminder_bp = Blueprint('reminder_bp', __name__)
-
+csrf = CSRFProtect()
 @reminder_bp.route('/reminders')
 def reminders():
     reminders = Reminder.query.order_by(Reminder.reminder_date.desc()).all()
-    return render_template('reminders_table.html', reminders=reminders)
+    return render_template('partials/reminders.html', reminders=reminders)
 
 @reminder_bp.route('/add_reminder', methods=['POST'])
 def add_reminder():
-    user_id = request.form.get('user_id')
-    reminder_date = request.form.get('reminder_date')
-    status = request.form.get('status', 'pending')
+    data = request.get_json()
+    user_id = data.get('user_id')
+    reminder_date = data.get('reminder_date')
+    status = data.get('status', 'pending')
 
-    new_reminder = Reminder(user_id=user_id, reminder_date=reminder_date, status=status)
-    db.session.add(new_reminder)
-    db.session.commit()
-    flash('Reminder added successfully!', 'success')
-    return redirect(url_for('reminder_bp.reminders'))
+    if not all([user_id, reminder_date, status]):
+        return jsonify({'message': 'Missing required fields'}), 400
+
+    try:
+        new_reminder = Reminder(user_id=user_id, reminder_date=reminder_date, status=status)
+        db.session.add(new_reminder)
+        db.session.commit()
+        return jsonify({'message': 'Reminder added successfully!'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': str(e)}), 500
 
 @reminder_bp.route('/delete_reminder/<int:reminder_id>', methods=['POST'])
 def delete_reminder(reminder_id):
     reminder = Reminder.query.get_or_404(reminder_id)
-    db.session.delete(reminder)
-    db.session.commit()
-    flash('Reminder deleted successfully!', 'success')
-    return redirect(url_for('reminder_bp.reminders'))
+    try:
+        db.session.delete(reminder)
+        db.session.commit()
+        return jsonify({'message': 'Reminder deleted successfully!'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': str(e)}), 500

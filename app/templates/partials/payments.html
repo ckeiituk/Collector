@@ -23,16 +23,12 @@
     <td>{{ payment.comment | safe }}</td>
     <td>{{ payment.status }}</td>
     <td>
-      <form method="post" action="{{ url_for('payment_bp.delete_payment', payment_id=payment.id) }}" style="display:inline;">
-        <button type="submit">Delete</button>
-      </form>
-      <form method="post" action="{{ url_for('payment_bp.update_payment_status', payment_id=payment.id) }}" style="display:inline;">
-        <button type="submit">{{ 'Mark as Paid' if payment.status == 'pending' else 'Mark as Pending' }}</button>
-      </form>
+      <button type="button" onclick="deletePayment({{ payment.id }})">Delete</button>
+      <button type="button" onclick="updatePaymentStatus({{ payment.id }})">
+        {{ 'Mark as Paid' if payment.status == 'pending' else 'Mark as Pending' }}
+      </button>
       {% if payment.status == 'pending' %}
-      <form method="post" action="{{ url_for('payment_bp.create_reminder', payment_id=payment.id) }}" style="display:inline;">
-        <button type="submit">Create Reminder</button>
-      </form>
+      <button type="button" onclick="createReminder({{ payment.id }})">Create Reminder</button>
       {% endif %}
     </td>
   </tr>

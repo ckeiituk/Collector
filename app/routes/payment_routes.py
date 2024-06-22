@@ -1,21 +1,27 @@
-# app/routes/payment_routes.py
-
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-from app.models import db, Payment, User, Reminder
-from decimal import Decimal
 from datetime import datetime
+from decimal import Decimal
+from flask_wtf.csrf import CSRFProtect
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
+from collections import defaultdict
+
+from app.models import db, Payment, User, Reminder
 
 payment_bp = Blueprint('payment_bp', __name__)
+csrf = CSRFProtect()
 
 @payment_bp.route('/payments')
 def payments():
     payments = Payment.query.order_by(Payment.created_at.desc()).all()
-    return render_template('payments_table.html', payments=payments)
+    payments_by_date = defaultdict(list)
+    for payment in payments:
+        payments_by_date[payment.created_at.date()].append(payment)
+    return render_template('partials/payments.html', payments_by_date=payments_by_date)
 
 @payment_bp.route('/add_payment', methods=['POST'])
 def add_payment():
-    user_id = int(request.form.get('user_id'))
-    status = request.form.get('status')
+    data = request.get_json()
+    user_id = int(data.get('user_id'))
+    status = data.get('status')
 
     user = User.query.get_or_404(user_id)
     subscriptions = user.subscriptions
@@ -41,16 +47,16 @@ def add_payment():
     new_payment = Payment(user_id=user.id, amount=final_amount, status=status, comment=comment)
     db.session.add(new_payment)
     db.session.commit()
-    flash('Payment added successfully!', 'success')
-    return redirect(url_for('payment_bp.payments'))
+
+    return jsonify({'message': 'Payment added successfully!'}), 200
+
 
 @payment_bp.route('/delete_payment/<int:payment_id>', methods=['POST'])
 def delete_payment(payment_id):
     payment = Payment.query.get_or_404(payment_id)
     db.session.delete(payment)
     db.session.commit()
-    flash('Payment deleted successfully!', 'success')
-    return redirect(url_for('payment_bp.payments'))
+    return jsonify({'message': 'Payment deleted successfully!'}), 200
 
 @payment_bp.route('/update_payment_status/<int:payment_id>', methods=['POST'])
 def update_payment_status(payment_id):
@@ -63,8 +69,7 @@ def update_payment_status(payment_id):
         reminder.status = new_status
 
     db.session.commit()
-    flash('Payment status updated successfully!', 'success')
-    return redirect(url_for('payment_bp.payments'))
+    return jsonify({'message': 'Payment status updated successfully!'}), 200
 
 @payment_bp.route('/create_reminder/<int:payment_id>', methods=['POST'])
 def create_reminder(payment_id):
@@ -72,5 +77,4 @@ def create_reminder(payment_id):
     reminder = Reminder(user_id=payment.user_id, reminder_date=datetime.utcnow(), status='pending')
     db.session.add(reminder)
     db.session.commit()
-    flash('Reminder created successfully!', 'success')
-    return redirect(url_for('payment_bp.payments'))
+    return jsonify({'message': 'Reminder created successfully!'}), 200

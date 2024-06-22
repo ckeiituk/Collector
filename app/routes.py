@@ -1,8 +1,10 @@
 # app/routes.py
 
 from flask import render_template, request, redirect, url_for
+
 from .database import db
 from .models import User, Subscription
+
 
 def init_routes(app):
     @app.route('/')

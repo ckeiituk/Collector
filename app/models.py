@@ -1,8 +1,10 @@
-import math
-from decimal import Decimal, ROUND_UP
 from datetime import datetime, timedelta
+from decimal import Decimal, ROUND_UP
+
 from sqlalchemy.orm import relationship
+
 from .database import db
+
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -47,12 +49,14 @@ class UserSubscription(db.Model):
     user = relationship('User', back_populates='subscriptions')
     subscription = relationship('Subscription', back_populates='user_subscriptions')
 
-    def __init__(self, user_id, subscription_id, coefficient=1.0, is_manual=False):
+    def __init__(self, user_id, subscription_id, next_due_date=None, amount=None, is_paused=False, coefficient=1.0, is_manual=False):
         self.user_id = user_id
         self.subscription_id = subscription_id
         self.coefficient = Decimal(coefficient)
         self.is_manual = is_manual
-        self.set_next_due_date()
+        self.is_paused = is_paused
+        self.next_due_date = next_due_date if next_due_date else self.set_next_due_date()
+        self.amount = amount if amount else self.calculate_amount()
 
     def calculate_amount(self):
         subscription = Subscription.query.get(self.subscription_id)
@@ -60,6 +64,7 @@ class UserSubscription(db.Model):
             total_users = UserSubscription.query.filter_by(subscription_id=self.subscription_id, is_paused=False).count()
             amount = (subscription.monthly_amount * self.coefficient) / total_users if total_users > 0 else subscription.monthly_amount
             self.amount = Decimal(amount).quantize(Decimal('1'), rounding=ROUND_UP)
+        return self.amount
 
     def set_next_due_date(self):
         subscription = Subscription.query.get(self.subscription_id)
@@ -67,6 +72,7 @@ class UserSubscription(db.Model):
             self.next_due_date = datetime.utcnow().date() + timedelta(days=30)  # Set the due date for the loan
         else:
             self.next_due_date = datetime.utcnow().date() + timedelta(days=30)
+        return self.next_due_date
 
     def total_paid(self):
         transactions = Transaction.query.filter_by(user_id=self.user_id).all()

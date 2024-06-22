@@ -1,6 +1,7 @@
 <details>
   <summary><h2>Add Reminder</h2></summary>
-  <form method="post" action="{{ url_for('reminder_bp.add_reminder') }}">
+  <form id="addReminderForm">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <label for="user_id">User:</label>
     <select id="user_id" name="user_id" required>
       {% for user in users %}
@@ -9,7 +10,7 @@
     </select>
 
     <label for="reminder_date">Reminder Date:</label>
-    <input type="date" id="reminder_date" name="reminder_date" value="{{ current_date }}" required>
+    <input type="date" id="reminder_date" name="reminder_date" required>
 
     <label for="status">Status:</label>
     <select id="status" name="status" required>
@@ -17,6 +18,6 @@
       <option value="sent">Sent</option>
     </select>
 
-    <button type="submit">Add Reminder</button>
+    <button type="button" onclick="addReminder()">Add Reminder</button>
   </form>
 </details>

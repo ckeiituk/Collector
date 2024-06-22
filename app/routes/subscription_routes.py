@@ -1,9 +1,12 @@
-from datetime import datetime, timedelta
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
-from app.models import db, Subscription, User, UserSubscription
+from datetime import datetime
 from decimal import Decimal, ROUND_UP
-from flask_wtf.csrf import CSRFProtect
+
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from flask import current_app as app
+from flask_wtf.csrf import CSRFProtect
+
+from app.models import db, Subscription, User, UserSubscription
+import json
 
 csrf = CSRFProtect(app)
 
@@ -21,28 +24,36 @@ def toggle_subscription_pause():
     return jsonify({'message': f'Subscription {status} successfully.'})
 
 
-@subscription_bp.route('/subscriptions', methods=['GET'])
-def subscriptions():
-    one_time_subscriptions = Subscription.query.filter_by(period='one-time').order_by(Subscription.id.asc()).all()
-    regular_subscriptions = Subscription.query.filter(Subscription.period != 'one-time').order_by(Subscription.id.asc()).all()
-    users = User.query.order_by(User.id.asc()).all()
-    now = datetime.utcnow()
-    return render_template('subscriptions.html', one_time_subscriptions=one_time_subscriptions, regular_subscriptions=regular_subscriptions, users=users, now=now)
-
+def subscription_list():
+    one_time_subscriptions = Subscription.query.filter_by(period='one-time').all()
+    regular_subscriptions = Subscription.query.filter(Subscription.period != 'one-time').all()
+    return render_template('partials/subscriptions.html', one_time_subscriptions=one_time_subscriptions, regular_subscriptions=regular_subscriptions)
 @subscription_bp.route('/add_subscription', methods=['POST'])
 def add_subscription():
     data = request.get_json()
     name = data.get('name')
     description = data.get('description')
-    monthly_amount = Decimal(data.get('monthly_amount'))
+    monthly_amount = data.get('monthly_amount')
     is_variable = data.get('is_variable', False)
     period = data.get('period')
 
-    new_subscription = Subscription(name=name, description=description, monthly_amount=monthly_amount, is_variable=is_variable, period=period)
-    db.session.add(new_subscription)
-    db.session.commit()
-    return jsonify({'message': 'Subscription added successfully!'})
+    if not all([name, description, monthly_amount, period]):
+        return jsonify({'message': 'Missing required fields'}), 400
 
+    try:
+        new_subscription = Subscription(
+            name=name,
+            description=description,
+            monthly_amount=Decimal(monthly_amount) if monthly_amount else Decimal(0),  # Убедитесь, что monthly_amount не пусто
+            is_variable=is_variable,
+            period=period
+        )
+        db.session.add(new_subscription)
+        db.session.commit()
+        return jsonify({'message': 'Subscription added successfully!'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': str(e)}), 500
 @subscription_bp.route('/edit_subscription/<int:id>', methods=['POST'])
 def edit_subscription(id):
     subscription = Subscription.query.get_or_404(id)
@@ -108,37 +119,49 @@ def update_user_subscription(user_subscription_id):
     flash('User subscription updated successfully!', 'success')
     return redirect(url_for('user_bp.index'))
 
+
 @subscription_bp.route('/attach_user_to_subscription', methods=['POST'])
 def attach_user_to_subscription():
-    user_id = request.form.get('user_id')
-    subscription_id = request.form.get('subscription_id')
-    next_due_date = request.form.get('next_due_date')
-    amount = Decimal(request.form.get('amount'))
-    is_paused = 'is_paused' in request.form
+    data = request.get_json()
+    user_id = data.get('user_id')
+    subscription_id = data.get('subscription_id')
+    next_due_date = data.get('next_due_date')
+    amount = data.get('amount')
+    is_paused = data.get('is_paused', False)
 
-    new_user_subscription = UserSubscription(
-        user_id=user_id,
-        subscription_id=subscription_id,
-        amount=amount,
-        next_due_date=next_due_date,
-        is_paused=is_paused
-    )
-    db.session.add(new_user_subscription)
-    db.session.commit()
-    flash('User attached to subscription successfully!', 'success')
-    return redirect(url_for('user_bp.index'))
+    if not all([user_id, subscription_id, next_due_date, amount]):
+        return jsonify({'message': 'Missing required fields'}), 400
+
+    try:
+        new_user_subscription = UserSubscription(
+            user_id=user_id,
+            subscription_id=subscription_id,
+            next_due_date=datetime.strptime(next_due_date, '%Y-%m-%d'),
+            amount=Decimal(amount),
+            is_paused=is_paused
+        )
+        db.session.add(new_user_subscription)
+        db.session.commit()
+        return jsonify({'message': 'User attached to subscription successfully!'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': str(e)}), 500
 
 @subscription_bp.route('/detach_user_subscription/<int:user_subscription_id>/<int:subscription_id>', methods=['POST'])
 def detach_user_from_subscription(user_subscription_id, subscription_id):
     user_subscription = UserSubscription.query.get_or_404(user_subscription_id)
-    db.session.delete(user_subscription)
-    db.session.commit()
+    try:
+        db.session.delete(user_subscription)
+        db.session.commit()
 
-    # Recalculate amounts for remaining users attached to this subscription
-    user_subscriptions = UserSubscription.query.filter_by(subscription_id=subscription_id).all()
-    for user_subscription in user_subscriptions:
-        user_subscription.calculate_amount()
-    db.session.commit()
+        # Recalculate amounts for remaining users attached to this subscription
+        user_subscriptions = UserSubscription.query.filter_by(subscription_id=subscription_id).all()
+        for user_subscription in user_subscriptions:
+            user_subscription.calculate_amount()
+        db.session.commit()
 
-    flash('User detached from subscription successfully!', 'success')
-    return redirect(url_for('user_bp.index'))
+        return jsonify({'message': 'User detached from subscription successfully!'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': str(e)}), 500
+

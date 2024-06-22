@@ -1,8 +1,9 @@
 # app/tasks.py
-from decimal import Decimal
-from app import create_app
-from app.models import db, UserSubscription, Payment, User, Reminder
 from datetime import datetime
+from decimal import Decimal
+
+from app import create_app
+from app.models import db, Payment, User, Reminder
 
 app = create_app()
 

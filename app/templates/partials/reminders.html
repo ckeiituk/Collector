@@ -15,9 +15,7 @@
         <td>{{ reminder.reminder_date }}</td>
         <td>{{ reminder.status }}</td>
         <td>
-            <form method="post" action="{{ url_for('reminder_bp.delete_reminder', reminder_id=reminder.id) }}" style="display:inline;">
-                <button type="submit">Delete</button>
-            </form>
+            <button type="button" onclick="deleteReminder({{ reminder.id }})">Delete</button>
         </td>
     </tr>
     {% endfor %}
