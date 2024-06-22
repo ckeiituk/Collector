@@ -1,7 +1,7 @@
 <details>
   <summary><h2>Add Subscription</h2></summary>
-  <form id="addSubscriptionForm">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <form id="addSubscriptionForm" method="post" action="{{ url_for('subscription_bp.add_subscription') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <label for="name">Name:</label>
     <input type="text" id="name" name="name" required>
 
@@ -21,6 +21,6 @@
       <option value="one-time">One-time</option>
     </select>
 
-    <button type="button" onclick="addSubscription()">Add Subscription</button>
+    <button type="submit">Add Subscription</button>
   </form>
 </details>

@@ -1,8 +1,8 @@
 <details>
   <summary><h2>Add User</h2></summary>
-  <form id="addUserForm" method="post" action="{{ url_for('user_bp.add_user') }}">
-    {{ csrf_token() }}
+  <form id="addUserForm">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     {% include 'forms/user_form.html' %}
-    <button type="submit">Save</button>
+    <button type="button" onclick="addUser()">Save</button>
   </form>
 </details>

@@ -8,7 +8,7 @@ from .database import db
 
 class User(db.Model):
     __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255))
     discord_id = db.Column(db.String(255))
     vk_id = db.Column(db.String(255))
@@ -18,7 +18,7 @@ class User(db.Model):
     subscriptions = db.relationship('UserSubscription', back_populates='user')
     reminders = db.relationship('Reminder', back_populates='user')
     payments = db.relationship('Payment', back_populates='user')
-    notification_time = db.Column(db.Time)  # Добавляем новое поле
+    notification_time = db.Column(db.Time)
 
 class Subscription(db.Model):
     __tablename__ = 'subscriptions'

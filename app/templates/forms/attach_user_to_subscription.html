@@ -1,7 +1,7 @@
 <details>
     <summary><h2>Attach User to Subscription</h2></summary>
-    <form id="attachSubscriptionForm" method="post">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <form id="attachSubscriptionForm" method="post" action="{{ url_for('subscription_bp.attach_user_to_subscription') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <label for="user_id">User:</label>
         <select id="user_id" name="user_id" required>
             {% for user in users %}
@@ -25,6 +25,6 @@
         <label for="is_paused">Is Paused:</label>
         <input type="checkbox" id="is_paused" name="is_paused">
 
-        <button type="button" onclick="attachUserToSubscription()">Attach User to Subscription</button>
+        <button type="submit">Attach User to Subscription</button>
     </form>
 </details>

@@ -1,16 +1,15 @@
-<h2>Users</h2>
 <ul>
     {% for user in users %}
     <li>
         {{ user.name }} ({{ user.preferred_platform }}) {{ user.balance }}
         <form method="post" action="{{ url_for('user_bp.delete_user', user_id=user.id) }}" style="display:inline;">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <button type="submit">Delete</button>
         </form>
         <button onclick="document.getElementById('editUserForm{{ user.id }}').style.display='block'">Edit</button>
         <div id="editUserForm{{ user.id }}" style="display:none;">
             <form method="post" action="{{ url_for('user_bp.update_user', user_id=user.id) }}">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 {% include 'forms/user_form.html' %}
                 <button type="submit">Save</button>
             </form>
@@ -22,7 +21,7 @@
                 <li id="userSubscription{{ user_subscription.id }}">
                     {{ user_subscription.subscription.name }} ({{ user_subscription.subscription.description }})
                     <form method="post" action="{{ url_for('subscription_bp.update_user_subscription', user_subscription_id=user_subscription.id) }}" style="display:inline;">
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                         <input type="number" name="amount" value="{{ user_subscription.amount }}" step="0.01" required> RUB
                         <input type="checkbox" name="is_manual" {% if user_subscription.is_manual %}checked{% endif %}> Manual
                         <button type="submit">Update</button>

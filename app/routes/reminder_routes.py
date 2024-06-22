@@ -8,7 +8,7 @@ reminder_bp = Blueprint('reminder_bp', __name__)
 csrf = CSRFProtect()
 @reminder_bp.route('/reminders')
 def reminders():
-    reminders = Reminder.query.order_by(Reminder.reminder_date.desc()).all()
+    # Update this line to order by ID in descending order
     return render_template('partials/reminders.html', reminders=reminders)
 
 @reminder_bp.route('/add_reminder', methods=['POST'])

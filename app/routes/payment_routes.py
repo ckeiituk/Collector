@@ -11,10 +11,6 @@ csrf = CSRFProtect()
 
 @payment_bp.route('/payments')
 def payments():
-    payments = Payment.query.order_by(Payment.created_at.desc()).all()
-    payments_by_date = defaultdict(list)
-    for payment in payments:
-        payments_by_date[payment.created_at.date()].append(payment)
     return render_template('partials/payments.html', payments_by_date=payments_by_date)
 
 @payment_bp.route('/add_payment', methods=['POST'])

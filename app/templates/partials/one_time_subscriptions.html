@@ -29,7 +29,7 @@
   <tr id="editSubscriptionForm{{ subscription.id }}" style="display:none;">
     <td colspan="6">
       <form id="editSubscriptionFormElement{{ subscription.id }}">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <label for="name">Name:</label>
         <input type="text" name="name" placeholder="Name" value="{{ subscription.name }}" required>
         <label for="description">Description:</label>
@@ -64,6 +64,7 @@
       <details>
         <summary>Attach User to Subscription</summary>
         <form id="attachSubscriptionFormOneTime{{ subscription.id }}" method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
           <input type="hidden" name="subscription_id" value="{{ subscription.id }}">
           <label for="user_id">User:</label>
           <select id="user_id" name="user_id" required>

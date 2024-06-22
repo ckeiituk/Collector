@@ -29,7 +29,7 @@
   <tr id="editSubscriptionForm{{ subscription.id }}" style="display:none;">
     <td colspan="6">
       <form id="editSubscriptionFormElement{{ subscription.id }}">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <label for="name">Name:</label>
         <input type="text" name="name" placeholder="Name" value="{{ subscription.name }}" required>
         <label for="description">Description:</label>
@@ -44,7 +44,7 @@
           <option value="annual" {% if subscription.period == 'annual' %}selected{% endif %}>Annual</option>
           <option value="one-time" {% if subscription.period == 'one-time' %}selected{% endif %}>One-time</option>
         </select>
-        <button type="button" onclick="editSubscription({{ subscription.id }})">Save Changes</button>
+        <button type="button" onclick="editSubscription('editSubscriptionFormElement{{ subscription.id }}', {{ subscription.id }})">Save Changes</button>
       </form>
     </td>
   </tr>
@@ -52,9 +52,9 @@
     <td colspan="6">
       <details>
         <summary>Users</summary>
-        <ul id="userList{{ subscription.id }}">
+        <ul>
           {% for user_subscription in subscription.user_subscriptions %}
-          <li id="userSubscription{{ user_subscription.id }}">
+          <li>
             {{ user_subscription.user.name }} - {{ user_subscription.amount }} RUB
             <button type="button" onclick="detachUserFromSubscription({{ user_subscription.id }}, {{ subscription.id }})">Detach</button>
           </li>
@@ -64,6 +64,7 @@
       <details>
         <summary>Attach User to Subscription</summary>
         <form id="attachSubscriptionFormRegular{{ subscription.id }}" method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
           <input type="hidden" name="subscription_id" value="{{ subscription.id }}">
           <label for="user_id">User:</label>
           <select id="user_id" name="user_id" required>

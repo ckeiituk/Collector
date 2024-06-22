@@ -208,7 +208,6 @@ function addUser() {
         });
 }
 
-
 function createPayment() {
     const form = document.getElementById('addPaymentForm');
     const formData = new FormData(form);
