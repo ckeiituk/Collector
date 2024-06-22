@@ -40,22 +40,21 @@ function detachUserFromSubscription(userSubscriptionId, subscriptionId) {
             'X-CSRFToken': getCsrfToken()
         }
     })
-        .then(response => response.json().then(data => {
-            console.log('Server response:', data);
-            if (!response.ok) {
-                throw new Error(data.message);
-            }
-            return data;
-        }))
+        .then(response => response.json())
         .then(data => {
-            alert(data.message);
-            location.reload(); // Перезагрузка страницы после успешного выполнения
+            if (data.message) {
+                alert(data.message);
+                location.reload(); // Reload the page on success
+            } else {
+                alert('Failed to detach user from subscription');
+            }
         })
         .catch(error => {
             console.error('Error:', error);
             alert('An error occurred: ' + error.message);
         });
 }
+
 
 function editSubscription(formId, subscriptionId) {
     const form = document.getElementById(formId);

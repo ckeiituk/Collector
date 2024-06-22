@@ -44,7 +44,7 @@
           <option value="annual" {% if subscription.period == 'annual' %}selected{% endif %}>Annual</option>
           <option value="one-time" {% if subscription.period == 'one-time' %}selected{% endif %}>One-time</option>
         </select>
-        <button type="button" onclick="editSubscription('editSubscriptionFormElement{{ subscription.id }}', {{ subscription.id }})">Save Changes</button>
+        <button type="button" onclick="editSubscription({{ subscription.id }})">Save Changes</button>
       </form>
     </td>
   </tr>
@@ -52,20 +52,18 @@
     <td colspan="6">
       <details>
         <summary>Users</summary>
-        <ul>
+        <ul id="userList{{ subscription.id }}">
           {% for user_subscription in subscription.user_subscriptions %}
-          <li>
+          <li id="userSubscription{{ user_subscription.id }}">
             {{ user_subscription.user.name }} - {{ user_subscription.amount }} RUB
-            <form method="post" action="{{ url_for('subscription_bp.detach_user_from_subscription', user_subscription_id=user_subscription.id, subscription_id=subscription.id) }}" style="display:inline;">
-              <button type="submit">Detach</button>
-            </form>
+            <button type="button" onclick="detachUserFromSubscription({{ user_subscription.id }}, {{ subscription.id }})">Detach</button>
           </li>
           {% endfor %}
         </ul>
       </details>
       <details>
         <summary>Attach User to Subscription</summary>
-        <form id="attachSubscriptionFormRegular{{ subscription.id }}" method="post" action="{{ url_for('subscription_bp.attach_user_to_subscription') }}">
+        <form id="attachSubscriptionFormRegular{{ subscription.id }}" method="post">
           <input type="hidden" name="subscription_id" value="{{ subscription.id }}">
           <label for="user_id">User:</label>
           <select id="user_id" name="user_id" required>

@@ -165,3 +165,4 @@ def detach_user_from_subscription(user_subscription_id, subscription_id):
         db.session.rollback()
         return jsonify({'message': str(e)}), 500
 
+

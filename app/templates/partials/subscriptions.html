@@ -54,7 +54,7 @@
         <summary>Users</summary>
         <ul>
           {% for user_subscription in subscription.user_subscriptions %}
-          <li>
+          <li id="userSubscription{{ user_subscription.id }}">
             {{ user_subscription.user.name }} - {{ user_subscription.amount }} RUB
             <button type="button" onclick="detachUserFromSubscription({{ user_subscription.id }}, {{ subscription.id }})">Detach</button>
           </li>
