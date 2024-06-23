@@ -17,7 +17,7 @@ def get_schedule():
     elif schedule_type == 'interval':
         return timedelta(minutes=1)
     elif schedule_type == 'daily':
-        return crontab(minute=0, hour=0)
+        return crontab(minute=9, hour=22)
     else:
         raise ValueError("Invalid reminder_schedule_type in config")
 
@@ -32,7 +32,7 @@ celery.conf.beat_schedule = {
     },
 }
 
-celery.conf.timezone = 'UTC'
+celery.conf.timezone = 'Europe/Moscow'
 celery.conf.broker_connection_retry_on_startup = True
 
 @celery.task

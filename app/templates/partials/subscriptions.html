@@ -27,6 +27,9 @@
     </td>
   </tr>
   <tr id="editSubscriptionForm{{ subscription.id }}" style="display:none;">
+
+  </tr>
+  <tr>
     <td colspan="6">
       <form id="editSubscriptionFormElement{{ subscription.id }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -47,8 +50,6 @@
         <button type="button" onclick="editSubscription({{ subscription.id }})">Save Changes</button>
       </form>
     </td>
-  </tr>
-  <tr>
     <td colspan="6">
       <details>
         <summary>Users</summary>

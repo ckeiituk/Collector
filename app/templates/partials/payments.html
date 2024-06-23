@@ -2,7 +2,6 @@
 <table>
   <thead>
   <tr>
-    <th>Date</th>
     <th>User</th>
     <th>Amount</th>
     <th>Comment</th>
@@ -17,7 +16,6 @@
   </tr>
   {% for payment in payments %}
   <tr>
-    <td></td>
     <td>{{ payment.user.name }}</td>
     <td>{{ payment.amount }} RUB</td>
     <td>{{ payment.comment | safe }}</td>

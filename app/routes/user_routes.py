@@ -17,7 +17,7 @@ def index():
     users = User.query.order_by(User.id.asc()).all()
     one_time_subscriptions = Subscription.query.filter_by(period='one-time').order_by(Subscription.id.asc()).all()
     regular_subscriptions = Subscription.query.filter(Subscription.period != 'one-time').order_by(Subscription.id.asc()).all()
-    payments = Payment.query.order_by(Payment.created_at.desc()).all()
+    payments = Payment.query.order_by(Payment.id.desc()).all()
     reminders = Reminder.query.order_by(Reminder.id.desc()).all()
     now = datetime.utcnow()
     payments_by_date = defaultdict(list)
