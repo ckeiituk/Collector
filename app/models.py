@@ -27,13 +27,9 @@ class Subscription(db.Model):
     description = db.Column(db.Text)
     monthly_amount = db.Column(db.Numeric(10, 2))
     is_variable = db.Column(db.Boolean)
-    period = db.Column(db.String(10))  # Already present
+    period = db.Column(db.String(10))
     is_paused = db.Column(db.Boolean, default=False)
-    user_subscriptions = relationship('UserSubscription', back_populates='subscription')
-
-    @property
-    def is_one_time(self):
-        return self.period == 'one-time'
+    user_subscriptions = relationship('UserSubscription', back_populates='subscription', cascade='all, delete-orphan')
 
 class UserSubscription(db.Model):
     __tablename__ = 'user_subscriptions'

@@ -90,6 +90,7 @@ def delete_subscription(id):
         db.session.commit()
         return jsonify({'message': 'Subscription deleted successfully!'})
     except Exception as e:
+        db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
 @subscription_bp.route('/pause_subscription/<int:subscription_id>', methods=['POST'])
