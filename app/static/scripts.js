@@ -141,7 +141,7 @@ function addSubscription() {
         jsonData[key] = value;
     });
 
-    // Проверка обязательных полей
+    // Ensure required fields are not empty
     if (!jsonData['name'] || !jsonData['description'] || !jsonData['monthly_amount'] || !jsonData['period']) {
         alert('All fields are required.');
         return;
@@ -152,10 +152,10 @@ function addSubscription() {
     fetch('/subscriptions/add_subscription', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json',  // Set the Content-Type to application/json
             'X-CSRFToken': getCsrfToken()
         },
-        body: JSON.stringify(jsonData)
+        body: JSON.stringify(jsonData)  // Convert the data to JSON string
     })
         .then(response => {
             if (!response.ok) {
@@ -165,7 +165,7 @@ function addSubscription() {
         })
         .then(data => {
             alert(data.message);
-            location.reload(); // Перезагрузка страницы после успешного выполнения
+            location.reload(); // Reload the page on success
         })
         .catch(error => {
             console.error('Error:', error);
@@ -323,49 +323,13 @@ function createReminder(paymentId) {
 }
 
 
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', () => {
     setTodayDate('reminder_date');
 });
 
 function setTodayDate(elementId) {
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById(elementId).value = today;
+    document.getElementById(elementId).value = new Date().toISOString().split('T')[0];
 }
-
-function addReminder() {
-    const form = document.getElementById('addReminderForm');
-    const formData = new FormData(form);
-    const jsonData = {};
-
-    formData.forEach((value, key) => {
-        jsonData[key] = value;
-    });
-
-    fetch('/reminders/add_reminder', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCsrfToken()
-        },
-        body: JSON.stringify(jsonData)
-    })
-        .then(response => response.json().then(data => {
-            console.log('Server response:', data);
-            if (!response.ok) {
-                throw new Error(data.message);
-            }
-            return data;
-        }))
-        .then(data => {
-            alert(data.message);
-            location.reload(); // Перезагрузка страницы после успешного выполнения
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred: ' + error.message);
-        });
-}
-
 function deleteReminder(reminderId) {
     fetch(`/reminders/delete_reminder/${reminderId}`, {
         method: 'POST',
@@ -390,12 +354,6 @@ function deleteReminder(reminderId) {
             alert('An error occurred: ' + error.message);
         });
 }
-
-function getCsrfToken() {
-    const csrfMetaTag = document.querySelector('meta[name="csrf-token"]');
-    return csrfMetaTag ? csrfMetaTag.getAttribute('content') : '';
-}
-
 
 function getCsrfToken() {
     const csrfMetaTag = document.querySelector('meta[name="csrf-token"]');
