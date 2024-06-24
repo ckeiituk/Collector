@@ -1,18 +1,13 @@
 <details>
-    <summary><h2>Attach User to Subscription</h2></summary>
-    <form id="attachSubscriptionForm" method="post" action="{{ url_for('subscription_bp.attach_user_to_subscription') }}">
+    <summary>Attach User to Subscription</summary>
+    <form id="attachSubscriptionForm{{ subscription.id }}" method="post">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="subscription_id" value="{{ subscription.id }}"> <!-- Убедитесь, что этот элемент присутствует -->
+
         <label for="user_id">User:</label>
         <select id="user_id" name="user_id" required>
             {% for user in users %}
             <option value="{{ user.id }}">{{ user.name }}</option>
-            {% endfor %}
-        </select>
-
-        <label for="subscription_id">Subscription:</label>
-        <select id="subscription_id" name="subscription_id" required>
-            {% for subscription in one_time_subscriptions + regular_subscriptions %}
-            <option value="{{ subscription.id }}">{{ subscription.name }}</option>
             {% endfor %}
         </select>
 
@@ -25,6 +20,6 @@
         <label for="is_paused">Is Paused:</label>
         <input type="checkbox" id="is_paused" name="is_paused">
 
-        <button type="button" onclick="attachUserToSubscription()">Attach User to Subscription</button>
+        <button type="button" onclick="attachUserToSubscription('attachSubscriptionForm{{ subscription.id }}')">Attach User to Subscription</button>
     </form>
 </details>

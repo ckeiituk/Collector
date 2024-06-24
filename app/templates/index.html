@@ -26,11 +26,12 @@
 {% include 'partials/payments.html' %}
 {% include 'partials/reminders.html' %}
 
-{% include 'forms/add_user.html' %}
-{% include 'forms/add_subscription.html' %}
-{% include 'forms/add_payment.html' %}
-{% include 'forms/add_reminder.html' %}
+{% for subscription in one_time_subscriptions %}
 {% include 'forms/attach_user_to_subscription.html' %}
+{% endfor %}
+{% for subscription in regular_subscriptions %}
+{% include 'forms/attach_user_to_subscription.html' %}
+{% endfor %}
 
 </body>
 </html>

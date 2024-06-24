@@ -1,11 +1,17 @@
-function attachUserToSubscription() {
-    const form = document.getElementById('attachSubscriptionForm');
+function attachUserToSubscription(formId) {
+    const form = document.getElementById(formId);
     const formData = new FormData(form);
     const jsonData = {};
 
     formData.forEach((value, key) => {
         jsonData[key] = value;
     });
+
+    // Ensure required fields are present
+    if (!jsonData['user_id'] || !jsonData['subscription_id'] || !jsonData['next_due_date'] || !jsonData['amount']) {
+        alert('All fields are required.');
+        return;
+    }
 
     fetch('/subscriptions/attach_user_to_subscription', {
         method: 'POST',
@@ -24,7 +30,7 @@ function attachUserToSubscription() {
         }))
         .then(data => {
             alert(data.message);
-            location.reload(); // Перезагрузка страницы после успешного выполнения
+            location.reload(); // Reload the page after successful completion
         })
         .catch(error => {
             console.error('Error:', error);
