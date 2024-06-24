@@ -18,6 +18,7 @@
             <summary>Subscriptions</summary>
             <ul>
                 {% for user_subscription in user.subscriptions %}
+                {% if not (user_subscription.subscription.is_paused and user_subscription.subscription.period == 'one-time') %}
                 <li id="userSubscription{{ user_subscription.id }}">
                     {{ user_subscription.subscription.name }} ({{ user_subscription.subscription.description }})
                     <form method="post" action="{{ url_for('subscription_bp.update_user_subscription', user_subscription_id=user_subscription.id) }}" style="display:inline;">
@@ -28,6 +29,7 @@
                     </form>
                     <button type="button" onclick="detachUserFromSubscription({{ user_subscription.id }}, {{ user_subscription.subscription.id }})">Detach</button>
                 </li>
+                {% endif %}
                 {% endfor %}
             </ul>
         </details>

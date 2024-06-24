@@ -18,10 +18,18 @@ def toggle_subscription_pause():
     subscription_id = data.get('id')
     subscription = Subscription.query.get_or_404(subscription_id)
     subscription.is_paused = not subscription.is_paused
+
+    # Обновление всех связанных user_subscriptions только в случае займов
+    if subscription.period == 'one-time':
+        user_subscriptions = UserSubscription.query.filter_by(subscription_id=subscription_id).all()
+        for user_subscription in user_subscriptions:
+            user_subscription.is_paused = subscription.is_paused
+
     db.session.commit()
 
     status = 'paused' if subscription.is_paused else 'resumed'
     return jsonify({'message': f'Subscription {status} successfully.'})
+
 
 
 def subscription_list():
