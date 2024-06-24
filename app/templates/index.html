@@ -18,6 +18,7 @@
 </ul>
 {% endif %}
 {% endwith %}
+
 <h1>User Management System</h1>
 
 {% include 'partials/users.html' %}
@@ -26,12 +27,14 @@
 {% include 'partials/payments.html' %}
 {% include 'partials/reminders.html' %}
 
-{% for subscription in one_time_subscriptions %}
-{% include 'forms/attach_user_to_subscription.html' %}
-{% endfor %}
-{% for subscription in regular_subscriptions %}
-{% include 'forms/attach_user_to_subscription.html' %}
-{% endfor %}
+{% include 'forms/add_user.html' %}
+{% include 'forms/add_subscription.html' %}
+{% include 'forms/add_payment.html' %}
+{% include 'forms/add_reminder.html' %}
 
+<!-- Single form for attaching users to subscriptions -->
+{% with form_id = "attachSubscriptionFormGeneral", subscription = None %}
+{% include 'forms/attach_user_to_subscription.html' %}
+{% endwith %}
 </body>
 </html>

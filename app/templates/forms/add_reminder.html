@@ -1,5 +1,5 @@
 <details>
-  <summary><h2>Add Reminder</h2></summary>
+  <summary>Add Reminder</summary>
   <form id="addReminderForm" method="post" action="{{ url_for('reminder_bp.add_reminder') }}">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <label for="user_id">User:</label>

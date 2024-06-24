@@ -174,4 +174,12 @@ def detach_user_from_subscription(user_subscription_id, subscription_id):
         db.session.rollback()
         return jsonify({'message': str(e)}), 500
 
+@subscription_bp.route('/get_unattached_users/<int:subscription_id>', methods=['GET'])
+def get_unattached_users(subscription_id):
+    attached_users = db.session.query(User.id).join(UserSubscription).filter(UserSubscription.subscription_id == subscription_id).all()
+    attached_user_ids = [user_id for (user_id,) in attached_users]
+    unattached_users = User.query.filter(User.id.notin_(attached_user_ids)).all()
+    return jsonify({'users': [{'id': user.id, 'name': user.name} for user in unattached_users]})
+
+
 

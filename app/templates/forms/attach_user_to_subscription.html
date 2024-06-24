@@ -1,8 +1,24 @@
 <details>
     <summary>Attach User to Subscription</summary>
-    <form id="attachSubscriptionForm{{ subscription.id }}" method="post">
+    <form id="{{ form_id }}" method="post">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-        <input type="hidden" name="subscription_id" value="{{ subscription.id }}"> <!-- Убедитесь, что этот элемент присутствует -->
+        {% if subscription %}
+        <input type="hidden" name="subscription_id" value="{{ subscription.id }}">
+        {% else %}
+        <label for="subscription_id">Subscription:</label>
+        <select id="subscription_id" name="subscription_id" required>
+            <optgroup label="One-time Subscriptions">
+                {% for sub in one_time_subscriptions %}
+                <option value="{{ sub.id }}">{{ sub.name }}</option>
+                {% endfor %}
+            </optgroup>
+            <optgroup label="Regular Subscriptions">
+                {% for sub in regular_subscriptions %}
+                <option value="{{ sub.id }}">{{ sub.name }}</option>
+                {% endfor %}
+            </optgroup>
+        </select>
+        {% endif %}
 
         <label for="user_id">User:</label>
         <select id="user_id" name="user_id" required>
@@ -20,6 +36,6 @@
         <label for="is_paused">Is Paused:</label>
         <input type="checkbox" id="is_paused" name="is_paused">
 
-        <button type="button" onclick="attachUserToSubscription('attachSubscriptionForm{{ subscription.id }}')">Attach User to Subscription</button>
+        <button type="button" onclick="attachUserToSubscription('{{ form_id }}')">Attach User to Subscription</button>
     </form>
 </details>
