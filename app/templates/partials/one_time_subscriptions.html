@@ -22,7 +22,7 @@
     <td>
       <button type="button" onclick="loadEditForm('subscription', '{{ subscription.id }}')"><i class="fas fa-edit"></i> Edit</button>
       <button type="button" onclick="toggleSubscriptionPause({{ subscription.id }})">
-        <i class="fas fa-pause"></i> {{ 'Pause' if not subscription.is_paused else 'Resume' }}
+        <i class="fas fa-pause"></i> Pause
       </button>
       <button type="button" onclick="deleteSubscription({{ subscription.id }})"><i class="fas fa-trash"></i> Delete</button>
       <button type="button" onclick="openAttachUserForm('subscription', '{{ subscription.id }}')"><i class="fas fa-user-plus"></i> Attach</button>
@@ -73,7 +73,7 @@
     <td>
       <button type="button" onclick="loadEditForm('subscription', '{{ subscription.id }}')"><i class="fas fa-edit"></i> Edit</button>
       <button type="button" onclick="toggleSubscriptionPause({{ subscription.id }})">
-        <i class="fas fa-pause"></i> {{ 'Pause' if not subscription.is_paused else 'Resume' }}
+        <i class="fas fa-play"></i> Resume
       </button>
       <button type="button" onclick="deleteSubscription({{ subscription.id }})"><i class="fas fa-trash"></i> Delete</button>
       <button type="button" onclick="openAttachUserForm('subscription', '{{ subscription.id }}')"><i class="fas fa-user-plus"></i> Attach</button>

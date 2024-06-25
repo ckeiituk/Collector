@@ -5,7 +5,7 @@
     <th>ID</th>
     <th>Name</th>
     <th>Description</th>
-    <th>Amount</th>
+    <th>Monthly Amount</th>
     <th>Period</th>
     <th>Actions</th>
   </tr>
@@ -20,11 +20,15 @@
     <td>{{ subscription.period }}</td>
     <td>
       <button type="button" onclick="loadEditForm('subscription', '{{ subscription.id }}')"><i class="fas fa-edit"></i> Edit</button>
-      <button type="button" onclick="toggleSubscriptionPause('{{ subscription.id }}')">
-        <i class="fas fa-pause"></i> {{ 'Pause' if not subscription.is_paused else 'Resume' }}
+      <button type="button" onclick="toggleSubscriptionPause({{ subscription.id }})">
+        {% if subscription.is_paused %}
+        <i class="fas fa-play"></i> Resume
+        {% else %}
+        <i class="fas fa-pause"></i> Pause
+        {% endif %}
       </button>
       <button type="button" onclick="deleteSubscription({{ subscription.id }})"><i class="fas fa-trash"></i> Delete</button>
-      <button type="button" onclick="openAttachUserForm('subscription', '{{ subscription.id }}')"><i class="fas fa-user-plus"></i> Attach</button>
+      <button type="button" onclick="openAttachUserForm('subscription', '{{ subscription.id }}')"><i class="fas fa-user-plus"></i> Attach User</button>
       <button class="toggle-button" onclick="toggleDetails('details-users-{{ subscription.id }}')"><i class="fas fa-users"></i> Users</button>
     </td>
   </tr>

@@ -29,6 +29,10 @@
                 <button type="submit"><i class="fas fa-trash"></i> Delete</button>
             </form>
             <button class="toggle-button" onclick="toggleDetails('details-subscriptions-{{ user.id }}')"><i class="fas fa-eye"></i> Subscriptions</button>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="8">
             <details id="details-subscriptions-{{ user.id }}" class="table-details">
                 <summary><i class="fas fa-list"></i> Subscriptions</summary>
                 <ul>
@@ -38,7 +42,7 @@
                         {{ user_subscription.subscription.name }} ({{ user_subscription.subscription.description }})
                         <form method="post" action="{{ url_for('subscription_bp.update_user_subscription', user_subscription_id=user_subscription.id) }}" style="display:inline;">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                            <input type="number" name="amount" value="{{ user_subscription.amount }}" step="0.01" required> RUB
+                            <input type="number" name="amount" value="{{ user_subscription.amount }}" step="0.01" required>
                             <input type="checkbox" name="is_manual" {% if user_subscription.is_manual %}checked{% endif %}> Manual
                             <button type="submit"><i class="fas fa-save"></i> Update</button>
                         </form>

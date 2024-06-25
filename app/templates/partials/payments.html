@@ -12,19 +12,29 @@
   <tbody>
   {% for date, payments in payments_by_date.items() %}
   <tr>
-    <td colspan="6"><strong>{{ date }}</strong></td>
+    <td colspan="5"><strong>{{ date }}</strong></td>
   </tr>
   {% for payment in payments %}
   <tr>
     <td>{{ payment.user.name }}</td>
     <td>{{ payment.amount }} RUB</td>
     <td>{{ payment.comment | safe }}</td>
-    <td>{{ payment.status }}</td>
+    <td>
+      {% if payment.status == 'pending' %}
+      <i class="fas fa-times-circle" style="color: red;"></i> Pending
+      {% else %}
+      <i class="fas fa-check-circle" style="color: green;"></i> Paid
+      {% endif %}
+    </td>
     <td>
       <button type="button" onclick="loadEditForm('payment', '{{ payment.id }}')"><i class="fas fa-edit"></i> Edit</button>
       <button type="button" onclick="deletePayment({{ payment.id }})"><i class="fas fa-trash"></i> Delete</button>
       <button type="button" onclick="updatePaymentStatus({{ payment.id }})">
-        <i class="fas fa-check"></i> {{ 'Mark as Paid' if payment.status == 'pending' else 'Mark as Pending' }}
+        {% if payment.status == 'pending' %}
+        <i class="fas fa-check"></i> Mark as Paid
+        {% else %}
+        <i class="fas fa-times"></i> Mark as Pending
+        {% endif %}
       </button>
       {% if payment.status == 'pending' %}
       <button type="button" onclick="createReminder({{ payment.id }})"><i class="fas fa-bell"></i> Create Reminder</button>
