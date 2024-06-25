@@ -1,3 +1,53 @@
+// Function to switch between main content tabs
+function openTab(event, tabName) {
+    // Hide all tab contents
+    const tabContents = document.getElementsByClassName("tab-content");
+    for (let i = 0; i < tabContents.length; i++) {
+        tabContents[i].style.display = "none";
+    }
+
+    // Remove the active class from all tab buttons
+    const tabButtons = document.getElementsByClassName("tab-button");
+    for (let i = 0; i < tabButtons.length; i++) {
+        tabButtons[i].classList.remove("active");
+    }
+
+    // Show the current tab content and add active class to the clicked button
+    document.getElementById(tabName).style.display = "block";
+    event.currentTarget.classList.add("active");
+}
+
+// Function to switch between sidebar tabs
+function openSidebarTab(event, tabName) {
+    // Hide all sidebar tab contents
+    const sidebarTabContents = document.getElementsByClassName("sidebar-tab-content");
+    for (let i = 0; i < sidebarTabContents.length; i++) {
+        sidebarTabContents[i].style.display = "none";
+    }
+
+    // Remove the active class from all sidebar tab buttons
+    const sidebarTabButtons = document.getElementsByClassName("sidebar-tab-button");
+    for (let i = 0; i < sidebarTabButtons.length; i++) {
+        sidebarTabButtons[i].classList.remove("active");
+    }
+
+    // Show the current sidebar tab content and add active class to the clicked button
+    document.getElementById(tabName).style.display = "block";
+    event.currentTarget.classList.add("active");
+}
+
+// Initialize the first tab to be visible on page load
+document.addEventListener('DOMContentLoaded', (event) => {
+    document.querySelector('.tab-button').click();
+    document.querySelector('.sidebar-tab-button').click();
+});
+
+// Function to set today's date
+function setTodayDate(elementId) {
+    document.getElementById(elementId).value = new Date().toISOString().split('T')[0];
+}
+
+// Function to toggle details in user subscriptions
 function toggleDetails(id) {
     const details = document.getElementById(id);
     if (details.hasAttribute('open')) {
@@ -7,6 +57,7 @@ function toggleDetails(id) {
     }
 }
 
+// Function to attach user to subscription
 function attachUserToSubscription(formId) {
     const form = document.getElementById(formId);
     const formData = new FormData(form);
@@ -47,6 +98,7 @@ function attachUserToSubscription(formId) {
         });
 }
 
+// Function to detach user from subscription
 function detachUserFromSubscription(userSubscriptionId, subscriptionId) {
     fetch(`/subscriptions/detach_user_subscription/${userSubscriptionId}/${subscriptionId}`, {
         method: 'POST',
@@ -70,7 +122,7 @@ function detachUserFromSubscription(userSubscriptionId, subscriptionId) {
         });
 }
 
-
+// Function to edit subscription
 function editSubscription(formId, subscriptionId) {
     const form = document.getElementById(formId);
     if (!form) {
@@ -109,6 +161,7 @@ function editSubscription(formId, subscriptionId) {
         });
 }
 
+// Function to toggle subscription pause
 function toggleSubscriptionPause(subscriptionId) {
     fetch('/subscriptions/toggle_subscription_pause', {
         method: 'POST',
@@ -129,6 +182,7 @@ function toggleSubscriptionPause(subscriptionId) {
         });
 }
 
+// Function to delete subscription
 function deleteSubscription(subscriptionId) {
     fetch(`/subscriptions/delete_subscription/${subscriptionId}`, {
         method: 'POST',
@@ -147,6 +201,8 @@ function deleteSubscription(subscriptionId) {
             alert('An error occurred: ' + error.message);
         });
 }
+
+// Function to add a subscription
 function addSubscription() {
     const form = document.getElementById('addSubscriptionForm');
     const formData = new FormData(form);
@@ -188,6 +244,7 @@ function addSubscription() {
         });
 }
 
+// Function to add a user
 function addUser() {
     const form = document.getElementById('addUserForm');
     const formData = new FormData(form);
@@ -223,6 +280,7 @@ function addUser() {
         });
 }
 
+// Function to create a payment
 function createPayment() {
     const form = document.getElementById('addPaymentForm');
     const formData = new FormData(form);
@@ -256,6 +314,7 @@ function createPayment() {
         });
 }
 
+// Function to delete a payment
 function deletePayment(paymentId) {
     fetch(`/payments/delete_payment/${paymentId}`, {
         method: 'POST',
@@ -283,6 +342,7 @@ function deletePayment(paymentId) {
         });
 }
 
+// Function to update payment status
 function updatePaymentStatus(paymentId) {
     fetch(`/payments/update_payment_status/${paymentId}`, {
         method: 'POST',
@@ -310,6 +370,7 @@ function updatePaymentStatus(paymentId) {
         });
 }
 
+// Function to create a reminder
 function createReminder(paymentId) {
     fetch(`/payments/create_reminder/${paymentId}`, {
         method: 'POST',
@@ -337,14 +398,7 @@ function createReminder(paymentId) {
         });
 }
 
-
-document.addEventListener('DOMContentLoaded', () => {
-    setTodayDate('reminder_date');
-});
-
-function setTodayDate(elementId) {
-    document.getElementById(elementId).value = new Date().toISOString().split('T')[0];
-}
+// Function to delete a reminder
 function deleteReminder(reminderId) {
     fetch(`/reminders/delete_reminder/${reminderId}`, {
         method: 'POST',
@@ -370,7 +424,13 @@ function deleteReminder(reminderId) {
         });
 }
 
+// Function to get CSRF token
 function getCsrfToken() {
     const csrfMetaTag = document.querySelector('meta[name="csrf-token"]');
     return csrfMetaTag ? csrfMetaTag.getAttribute('content') : '';
 }
+
+// Initialize today's date for reminder form on page load
+document.addEventListener('DOMContentLoaded', () => {
+    setTodayDate('reminder_date');
+});

@@ -23,21 +23,55 @@
 
 <div class="container">
   <div class="main-content">
-    {% include 'partials/users.html' %}
-    {% include 'partials/one_time_subscriptions.html' %}
-    {% include 'partials/regular_subscriptions.html' %}
-    {% include 'partials/payments.html' %}
-    {% include 'partials/reminders.html' %}
+    <div class="tab-buttons">
+      <button class="tab-button active" onclick="openTab(event, 'users')">Users</button>
+      <button class="tab-button" onclick="openTab(event, 'one_time_subscriptions')">One-time Subscriptions</button>
+      <button class="tab-button" onclick="openTab(event, 'regular_subscriptions')">Regular Subscriptions</button>
+      <button class="tab-button" onclick="openTab(event, 'payments')">Payments</button>
+      <button class="tab-button" onclick="openTab(event, 'reminders')">Reminders</button>
+    </div>
+
+    <div id="users" class="tab-content">
+      {% include 'partials/users.html' %}
+    </div>
+    <div id="one_time_subscriptions" class="tab-content" style="display:none;">
+      {% include 'partials/one_time_subscriptions.html' %}
+    </div>
+    <div id="regular_subscriptions" class="tab-content" style="display:none;">
+      {% include 'partials/regular_subscriptions.html' %}
+    </div>
+    <div id="payments" class="tab-content" style="display:none;">
+      {% include 'partials/payments.html' %}
+    </div>
+    <div id="reminders" class="tab-content" style="display:none;">
+      {% include 'partials/reminders.html' %}
+    </div>
   </div>
 
   <div class="sidebar">
-    {% include 'forms/add_user.html' %}
-    {% include 'forms/add_subscription.html' %}
-    {% include 'forms/add_payment.html' %}
-    {% include 'forms/add_reminder.html' %}
+    <div class="sidebar-tab-buttons">
+      <button class="sidebar-tab-button active" onclick="openSidebarTab(event, 'add_user')">Add User</button>
+      <button class="sidebar-tab-button" onclick="openSidebarTab(event, 'add_subscription')">Add Subscription</button>
+      <button class="sidebar-tab-button" onclick="openSidebarTab(event, 'add_payment')">Add Payment</button>
+      <button class="sidebar-tab-button" onclick="openSidebarTab(event, 'add_reminder')">Add Reminder</button>
+    </div>
+    <div id="add_user" class="sidebar-tab-content">
+      {% include 'forms/add_user.html' %}
+    </div>
+    <div id="add_subscription" class="sidebar-tab-content" style="display:none;">
+      {% include 'forms/add_subscription.html' %}
+    </div>
+    <div id="add_payment" class="sidebar-tab-content" style="display:none;">
+      {% include 'forms/add_payment.html' %}
+    </div>
+    <div id="add_reminder" class="sidebar-tab-content" style="display:none;">
+      {% include 'forms/add_reminder.html' %}
+    </div>
     <!-- Single form for attaching users to subscriptions -->
     {% with form_id = "attachSubscriptionFormGeneral", subscription = None %}
-    {% include 'forms/attach_user_to_subscription.html' %}
+    <div id="attach_subscription" class="sidebar-tab-content" style="display:none;">
+      {% include 'forms/attach_user_to_subscription.html' %}
+    </div>
     {% endwith %}
   </div>
 </div>

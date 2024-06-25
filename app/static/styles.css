@@ -3,41 +3,88 @@ body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, figcaption, blockquote, dl,
     margin: 0;
     padding: 0;
 }
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     line-height: 1.6;
-    background-color: #f8f9fa;
+    background-color: #f0f2f5;
     padding: 20px;
     color: #333;
 }
 
-/* Container for centering the content */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+h1.centered {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2.5em;
+    color: #333;
 }
 
-/* Headings */
-h1 {
-    font-size: 2em;
-    margin-bottom: 20px;
-    color: #007bff;
+.container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.main-content {
+    flex: 3;
+    padding-right: 20px;
+}
+
+.sidebar {
+    flex: 1;
+    position: sticky;
+    top: 20px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    background-color: #fff;
+    border-left: 1px solid #ddd;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 h2 {
-    font-size: 1.5em;
+    font-size: 1.8em;
     margin-bottom: 15px;
-    color: #0056b3;
+    color: #007bff;
 }
 
 h3 {
-    font-size: 1.2em;
+    font-size: 1.4em;
     margin-bottom: 10px;
     color: #333;
+}
+
+/* Tab button styles */
+.tab-buttons, .sidebar-tab-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-button, .sidebar-tab-button {
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.tab-button:hover, .tab-button.active,
+.sidebar-tab-button:hover, .sidebar-tab-button.active {
+    background-color: #0056b3;
+}
+
+/* Tab content styles */
+.tab-content, .sidebar-tab-content {
+    display: none;
+}
+
+.tab-content.active, .sidebar-tab-content.active {
+    display: block;
 }
 
 /* Table styles */
@@ -45,6 +92,9 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 table, th, td {
@@ -57,7 +107,16 @@ th, td {
 }
 
 th {
-    background-color: #f2f2f2;
+    background-color: #007bff;
+    color: white;
+}
+
+td {
+    background-color: #fff;
+}
+
+tr:nth-child(even) td {
+    background-color: #f9f9f9;
 }
 
 /* Buttons */
@@ -100,6 +159,7 @@ form select {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    background-color: #fff;
 }
 
 form input[type="checkbox"] {
@@ -191,19 +251,6 @@ details ul li {
     border-radius: 4px;
 }
 
-/* Table row for edit form */
-tr.edit-form-row {
-    background-color: #f9f9f9;
-}
-
-.edit-form-row td {
-    padding: 0;
-}
-
-.edit-form-row form {
-    padding: 20px;
-}
-
 /* Button row styles */
 .button-row {
     display: flex;
@@ -212,54 +259,6 @@ tr.edit-form-row {
 }
 
 /* Responsive styles */
-@media (max-width: 768px) {
-    body {
-        padding: 10px;
-    }
-
-    .container {
-        padding: 10px;
-    }
-
-    form label, form input, form select, form textarea, form button {
-        width: 100%;
-        display: block;
-    }
-
-    form input[type="checkbox"] {
-        margin-bottom: 10px;
-    }
-}
-
-/* Center the heading */
-.centered {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-/* Sidebar styles */
-.container {
-    display: flex;
-    justify-content: space-between;
-}
-
-.main-content {
-    flex: 3;
-    padding-right: 20px;
-}
-
-.sidebar {
-    flex: 1;
-    position: sticky;
-    top: 0;
-    max-height: 100vh;
-    overflow-y: auto;
-    background-color: #fff;
-    border-left: 1px solid #ddd;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
 @media (max-width: 768px) {
     .container {
         flex-direction: column;
