@@ -14,6 +14,16 @@ document.addEventListener('DOMContentLoaded', () => {
     setTodayDate('reminder_date');
 });
 
+// Function to update the reminder list
+function updateReminderList() {
+    fetch('/reminders/get_reminders_partial')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('reminders').innerHTML = data.reminders_html;
+        })
+        .catch(error => console.error('Error loading the reminder list:', error));
+}
+
 // Function to delete a reminder
 function deleteReminder(reminderId) {
     fetch(`/reminders/delete_reminder/${reminderId}`, {
@@ -32,35 +42,7 @@ function deleteReminder(reminderId) {
         }))
         .then(data => {
             alert(data.message);
-            location.reload(); // Перезагрузка страницы после успешного выполнения
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred: ' + error.message);
-        });
-}
-
-// Function to create a reminder
-function createReminder(paymentId) {
-    fetch(`/payments/create_reminder/${paymentId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCsrfToken()
-        }
-    })
-        .then(response => {
-            return response.text().then(text => {
-                console.log('Server response:', text);
-                if (!response.ok) {
-                    throw new Error(text);
-                }
-                return JSON.parse(text);
-            });
-        })
-        .then(data => {
-            alert(data.message);
-            location.reload(); // Перезагрузка страницы после успешного выполнения
+            updateReminderList(); // Update the reminder list dynamically
         })
         .catch(error => {
             console.error('Error:', error);
@@ -98,10 +80,73 @@ function editReminder(formId, reminderId) {
         })
         .then(data => {
             alert(data.message);
-            location.reload();
+            updateReminderList(); // Update the reminder list dynamically
         })
         .catch(error => {
             console.error('Error:', error);
             alert('An error occurred: ' + error.message);
         });
 }
+
+// Function to create a reminder
+function createReminder(paymentId) {
+    fetch(`/payments/create_reminder/${paymentId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify({})
+    })
+        .then(response => {
+            return response.json().then(data => {
+                console.log('Server response:', data);
+                if (!response.ok) {
+                    throw new Error(data.message);
+                }
+                return data;
+            });
+        })
+        .then(data => {
+            alert(data.message);
+            updateReminderList(); // Update the reminder list dynamically
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred: ' + error.message);
+        });
+}
+
+function addReminder() {
+    const form = document.getElementById('addReminderForm');
+    const formData = new FormData(form);
+    const jsonData = {};
+
+    formData.forEach((value, key) => {
+        jsonData[key] = value;
+    });
+
+    fetch('/reminders/add_reminder', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify(jsonData)
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw new Error(err.message) });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert(data.message);
+            updateReminderList(); // Update the reminder list dynamically
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred: ' + error.message);
+        });
+}
+

@@ -24,10 +24,7 @@
         <td>{{ user.balance }}</td>
         <td>
             <button type="button" onclick="loadEditForm('user', '{{ user.id }}')"><i class="fas fa-edit"></i> Edit</button>
-            <form method="post" action="{{ url_for('user_bp.delete_user', user_id=user.id) }}" style="display:inline;">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                <button type="submit"><i class="fas fa-trash"></i> Delete</button>
-            </form>
+            <button type="button" onclick="deleteUser({{ user.id }})"><i class="fas fa-trash"></i> Delete</button>
             <button class="toggle-button" onclick="toggleDetails('details-subscriptions-{{ user.id }}')"><i class="fas fa-eye"></i> Subscriptions</button>
         </td>
     </tr>
@@ -40,7 +37,7 @@
                     {% if not (user_subscription.subscription.is_paused and user_subscription.subscription.period == 'one-time') %}
                     <li id="userSubscription{{ user_subscription.id }}">
                         {{ user_subscription.subscription.name }} ({{ user_subscription.subscription.description }})
-                        <form method="post" action="{{ url_for('subscription_bp.update_user_subscription', user_subscription_id=user_subscription.id) }}" style="display:inline;">
+                        <form id="updateUserSubscriptionForm-{{ user_subscription.id }}" onsubmit="updateUserSubscription(event, {{ user_subscription.id }})" style="display:inline;">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                             <input type="number" name="amount" value="{{ user_subscription.amount }}" step="0.01" required>
                             <input type="checkbox" name="is_manual" {% if user_subscription.is_manual %}checked{% endif %}> Manual

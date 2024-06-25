@@ -1,3 +1,48 @@
+// Function to add a subscription
+function addSubscription() {
+    const form = document.getElementById('addSubscriptionForm');
+    const formData = new FormData(form);
+    const jsonData = {};
+
+    formData.forEach((value, key) => {
+        jsonData[key] = value;
+    });
+
+    fetch('/subscriptions/add_subscription', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify(jsonData)
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw new Error(err.message) });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert(data.message);
+            updateSubscriptionList(); // Update the subscription lists dynamically
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred: ' + error.message);
+        });
+}
+
+// Function to update the subscription lists
+function updateSubscriptionList() {
+    fetch('/subscriptions/get_subscriptions_partial')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('one_time_subscriptions').innerHTML = data.one_time_subscriptions;
+            document.getElementById('regular_subscriptions').innerHTML = data.regular_subscriptions;
+        })
+        .catch(error => console.error('Error loading the subscription lists:', error));
+}
+
 // Function to toggle subscription pause
 function toggleSubscriptionPause(subscriptionId) {
     fetch('/subscriptions/toggle_subscription_pause', {
@@ -11,7 +56,7 @@ function toggleSubscriptionPause(subscriptionId) {
         .then(response => response.json())
         .then(data => {
             alert(data.message);
-            location.reload();
+            updateSubscriptionList(); // Update the subscription lists dynamically
         })
         .catch(error => {
             console.error('Error:', error);
@@ -31,7 +76,7 @@ function deleteSubscription(subscriptionId) {
         .then(response => response.json())
         .then(data => {
             alert(data.message);
-            location.reload();
+            updateSubscriptionList(); // Update the subscription lists dynamically
         })
         .catch(error => {
             console.error('Error:', error);
@@ -39,48 +84,7 @@ function deleteSubscription(subscriptionId) {
         });
 }
 
-// Function to add a subscription
-function addSubscription() {
-    const form = document.getElementById('addSubscriptionForm');
-    const formData = new FormData(form);
-    const jsonData = {};
-
-    formData.forEach((value, key) => {
-        jsonData[key] = value;
-    });
-
-    // Ensure required fields are not empty
-    if (!jsonData['name'] || !jsonData['description'] || !jsonData['monthly_amount'] || !jsonData['period']) {
-        alert('All fields are required.');
-        return;
-    }
-
-    console.log("Sending JSON data:", JSON.stringify(jsonData));
-
-    fetch('/subscriptions/add_subscription', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',  // Set the Content-Type to application/json
-            'X-CSRFToken': getCsrfToken()
-        },
-        body: JSON.stringify(jsonData)  // Convert the data to JSON string
-    })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(err => { throw new Error(err.message) });
-            }
-            return response.json();
-        })
-        .then(data => {
-            alert(data.message);
-            location.reload(); // Reload the page on success
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred: ' + error.message);
-        });
-}
-
+// Function to edit a subscription
 function editSubscription(formId, subscriptionId) {
     const form = document.getElementById(formId);
     if (!form) {
@@ -111,7 +115,7 @@ function editSubscription(formId, subscriptionId) {
         })
         .then(data => {
             alert(data.message);
-            location.reload();
+            updateSubscriptionList(); // Update the subscription lists dynamically
         })
         .catch(error => {
             console.error('Error:', error);
@@ -132,7 +136,7 @@ function detachUserFromSubscription(userSubscriptionId, subscriptionId) {
         .then(data => {
             if (data.message) {
                 alert(data.message);
-                location.reload(); // Reload the page on success
+                updateSubscriptionList(); // Update the subscription lists dynamically
             } else {
                 alert('Failed to detach user from subscription');
             }
@@ -176,7 +180,7 @@ function attachUserToSubscription(formId) {
         }))
         .then(data => {
             alert(data.message);
-            location.reload(); // Reload the page after successful completion
+            updateSubscriptionList(); // Update the subscription lists dynamically
         })
         .catch(error => {
             console.error('Error:', error);

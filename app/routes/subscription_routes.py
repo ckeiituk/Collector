@@ -122,13 +122,18 @@ def unpause_subscription(subscription_id):
 @subscription_bp.route('/update_user_subscription/<int:user_subscription_id>', methods=['POST'])
 def update_user_subscription(user_subscription_id):
     user_subscription = UserSubscription.query.get_or_404(user_subscription_id)
-    new_amount = request.form.get('amount')
-    is_manual = 'is_manual' in request.form
-    user_subscription.amount = Decimal(new_amount).quantize(Decimal('1'), rounding=ROUND_UP)
-    user_subscription.is_manual = is_manual
-    db.session.commit()
-    flash('User subscription updated successfully!', 'success')
-    return redirect(url_for('user_bp.index'))
+    data = request.get_json()
+
+    try:
+        user_subscription.amount = Decimal(data.get('amount', user_subscription.amount))
+        user_subscription.is_manual = data.get('is_manual', user_subscription.is_manual) == 'on'
+
+        db.session.commit()
+
+        return jsonify({'message': 'User subscription updated successfully!'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': str(e)}), 500
 
 
 @subscription_bp.route('/attach_user_to_subscription', methods=['POST'])
@@ -193,3 +198,18 @@ def get_attach_user_form(subscription_id):
     subscription = Subscription.query.get_or_404(subscription_id)
     users = User.query.all()
     return render_template('forms/attach_user_to_subscription.html', subscription=subscription, users=users, csrf_token=generate_csrf())
+
+@subscription_bp.route('/get_subscriptions_partial', methods=['GET'])
+def get_subscriptions_partial():
+    one_time_subscriptions = Subscription.query.filter_by(period='one-time').all()
+    regular_subscriptions = Subscription.query.filter(Subscription.period != 'one-time').all()
+
+    one_time_subscriptions_html = render_template('partials/one_time_subscriptions.html', one_time_subscriptions=one_time_subscriptions)
+    regular_subscriptions_html = render_template('partials/regular_subscriptions.html', regular_subscriptions=regular_subscriptions)
+
+    return jsonify({
+        'one_time_subscriptions': one_time_subscriptions_html,
+        'regular_subscriptions': regular_subscriptions_html
+    })
+
+

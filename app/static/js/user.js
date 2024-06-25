@@ -1,3 +1,39 @@
+// Function to update user subscription
+function updateUserSubscription(event, userSubscriptionId) {
+    event.preventDefault(); // Prevent form from submitting normally
+
+    const form = document.getElementById(`updateUserSubscriptionForm-${userSubscriptionId}`);
+    const formData = new FormData(form);
+    const jsonData = {};
+
+    formData.forEach((value, key) => {
+        jsonData[key] = value;
+    });
+
+    fetch(`/update_user_subscription/${userSubscriptionId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify(jsonData)
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw new Error(err.message) });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert(data.message);
+            updateUserList(); // Update the user list dynamically
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred: ' + error.message);
+        });
+}
+
 // Function to add a user
 function addUser() {
     const form = document.getElementById('addUserForm');
@@ -26,7 +62,7 @@ function addUser() {
         })
         .then(data => {
             alert(data.message);
-            location.reload(); // Перезагрузка страницы после успешного выполнения
+            updateUserList(); // Update the user list dynamically
         })
         .catch(error => {
             console.error('Error:', error);
@@ -67,10 +103,55 @@ function editUser(userId) {
         })
         .then(data => {
             alert(data.message);
-            location.reload();
+            updateUserList(); // Update the user list dynamically
         })
         .catch(error => {
             console.error('Error:', error);
             alert('An error occurred: ' + error.message);
         });
+}
+
+// Function to delete a user
+function deleteUser(userId) {
+    if (!confirm("Are you sure you want to delete this user?")) {
+        return;
+    }
+
+    fetch(`/delete_user/${userId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfToken()
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw new Error(err.message) });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert(data.message);
+            updateUserList(); // Update the user list dynamically
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred: ' + error.message);
+        });
+}
+
+// Utility function to get CSRF token from meta tag
+function getCsrfToken() {
+    const csrfMetaTag = document.querySelector('meta[name="csrf-token"]');
+    return csrfMetaTag ? csrfMetaTag.getAttribute('content') : '';
+}
+
+// Function to update the user list
+function updateUserList() {
+    fetch('/get_users_partial')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('users').innerHTML = data.users_html;
+        })
+        .catch(error => console.error('Error loading the user list:', error));
 }

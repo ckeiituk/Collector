@@ -1,5 +1,29 @@
 <form id="addUserForm">
   <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-  {% include 'forms/user_form.html' %}
-  <button type="button" onclick="addUser()"><i class="fas fa-save"></i> Save</button>
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name" required>
+
+  <label for="discord_id">Discord ID:</label>
+  <input type="text" id="discord_id" name="discord_id">
+
+  <label for="vk_id">VK ID:</label>
+  <input type="text" id="vk_id" name="vk_id">
+
+  <label for="telegram_id">Telegram ID:</label>
+  <input type="text" id="telegram_id" name="telegram_id">
+
+  <label for="preferred_platform">Preferred Platform:</label>
+  <select id="preferred_platform" name="preferred_platform" required>
+    <option value="discord">Discord</option>
+    <option value="vk">VK</option>
+    <option value="telegram">Telegram</option>
+  </select>
+
+  <label for="notification_time">Notification Time:</label>
+  <input type="time" id="notification_time" name="notification_time" required>
+
+  <label for="balance">Balance:</label>
+  <input type="number" id="balance" name="balance" step="0.01" required>
+
+  <button type="button" onclick="addUser()"><i class="fas fa-save"></i> Add User</button>
 </form>

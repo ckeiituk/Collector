@@ -103,3 +103,12 @@ def edit_payment(payment_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
+
+@payment_bp.route('/get_payments_partial', methods=['GET'])
+def get_payments_partial():
+    payments = Payment.query.order_by(Payment.created_at.desc()).all()
+    payments_by_date = defaultdict(list)
+    for payment in payments:
+        payments_by_date[payment.created_at.date()].append(payment)
+    payments_html = render_template('partials/payments.html', payments_by_date=payments_by_date)
+    return jsonify({'payments_html': payments_html})

@@ -1,4 +1,4 @@
-<form id="addReminderForm" method="post" action="{{ url_for('reminder_bp.add_reminder') }}">
+<form id="addReminderForm">
   <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
   <label for="user_id">User:</label>
   <select id="user_id" name="user_id" required>
@@ -16,5 +16,5 @@
     <option value="sent">Sent</option>
   </select>
 
-  <button type="submit"><i class="fas fa-save"></i> Add Reminder</button>
+  <button type="button" onclick="addReminder()"><i class="fas fa-save"></i> Add Reminder</button>
 </form>

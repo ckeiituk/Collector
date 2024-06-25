@@ -24,12 +24,22 @@ function createPayment() {
         })
         .then(data => {
             alert(data.message);
-            location.reload(); // Перезагрузка страницы после успешного выполнения
+            updatePaymentList(); // Update the payment list dynamically
         })
         .catch(error => {
             console.error('Error:', error);
             alert('An error occurred: ' + error.message);
         });
+}
+
+// Function to update the payment list
+function updatePaymentList() {
+    fetch('/payments/get_payments_partial')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('payments').innerHTML = data.payments_html;
+        })
+        .catch(error => console.error('Error loading the payment list:', error));
 }
 
 // Function to delete a payment
@@ -42,17 +52,16 @@ function deletePayment(paymentId) {
         }
     })
         .then(response => {
-            return response.text().then(text => {
-                console.log('Server response:', text);
+            return response.json().then(data => {
                 if (!response.ok) {
-                    throw new Error(text);
+                    throw new Error(data.message);
                 }
-                return JSON.parse(text);
+                return data;
             });
         })
         .then(data => {
             alert(data.message);
-            location.reload(); // Перезагрузка страницы после успешного выполнения
+            updatePaymentList(); // Update the payment list dynamically
         })
         .catch(error => {
             console.error('Error:', error);
@@ -70,17 +79,16 @@ function updatePaymentStatus(paymentId) {
         }
     })
         .then(response => {
-            return response.text().then(text => {
-                console.log('Server response:', text);
+            return response.json().then(data => {
                 if (!response.ok) {
-                    throw new Error(text);
+                    throw new Error(data.message);
                 }
-                return JSON.parse(text);
+                return data;
             });
         })
         .then(data => {
             alert(data.message);
-            location.reload(); // Перезагрузка страницы после успешного выполнения
+            updatePaymentList(); // Update the payment list dynamically
         })
         .catch(error => {
             console.error('Error:', error);
@@ -118,7 +126,7 @@ function editPayment(formId, paymentId) {
         })
         .then(data => {
             alert(data.message);
-            location.reload();
+            updatePaymentList(); // Update the payment list dynamically
         })
         .catch(error => {
             console.error('Error:', error);
