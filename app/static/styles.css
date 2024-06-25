@@ -280,3 +280,49 @@ details ul li {
 .button i, .sidebar-tab-button i, .tab-button i {
     margin-right: 8px;
 }
+
+/* Стили для всех таблиц */
+table {
+    border-collapse: collapse; /* Удаляет промежутки между границами */
+    width: 100%;
+}
+
+/* Стили для ячеек таблицы */
+th, td {
+    padding: 10px; /* Внутренний отступ */
+    border: 1px solid #ddd; /* Границы ячеек */
+}
+
+/* Стили для строк таблицы, содержащих элементы <details> */
+table.details-table th, table.details-table td {
+    padding: 5px 10px; /* Уменьшенный внутренний отступ */
+    border: 1px solid #ddd; /* Границы ячеек */
+}
+
+/* Стили для элементов <details> внутри таблиц */
+table.details-table details {
+    margin: 0; /* Убирает внешний отступ */
+    padding: 0; /* Убирает внутренний отступ */
+    border-bottom: 1px solid #ccc; /* Линия между элементами */
+}
+
+/* Стили для элемента <summary> внутри <details> */
+table.details-table details summary {
+    padding: 5px; /* Небольшой внутренний отступ */
+    cursor: pointer; /* Курсор указателя */
+    background-color: #f0f0f0; /* Фоновый цвет */
+}
+
+/* Анимация для плавного открытия и закрытия элементов <details> */
+table.details-table details[open] > * {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

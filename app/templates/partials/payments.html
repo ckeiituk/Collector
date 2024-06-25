@@ -16,7 +16,7 @@
   </tr>
   {% for payment in payments %}
   <tr>
-    <td>{{ payment.user.name }}</td>
+    <td>{{ payment.user.name }} {{ payment.id }}</td>
     <td>{{ payment.amount }} RUB</td>
     <td>{{ payment.comment | safe }}</td>
     <td>

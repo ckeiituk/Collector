@@ -17,6 +17,8 @@ function openTab(event, tabName) {
     event.currentTarget.classList.add("active");
 }
 
+
+
 function openAttachUserForm(entity, id) {
     let url;
     if (entity === 'subscription') {
