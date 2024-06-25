@@ -83,4 +83,23 @@ def create_reminder(payment_id):
 @payment_bp.route('/get_payment_form/<int:payment_id>', methods=['GET'])
 def get_payment_form(payment_id):
     payment = Payment.query.get_or_404(payment_id)
-    return render_template('forms/edit_payment.html', payment=payment, csrf_token=generate_csrf())
+    users = User.query.all()
+    return render_template('forms/edit_payment.html', payment=payment, users=users, csrf_token=generate_csrf())
+
+@payment_bp.route('/edit_payment/<int:payment_id>', methods=['POST'])
+def edit_payment(payment_id):
+    payment = Payment.query.get_or_404(payment_id)
+    data = request.get_json()
+
+    try:
+        payment.user_id = data.get('user_id', payment.user_id)
+        payment.amount = Decimal(data.get('amount', payment.amount))
+        payment.status = data.get('status', payment.status)
+        payment.comment = data.get('comment', payment.comment)
+
+        db.session.commit()
+
+        return jsonify({'message': 'Payment updated successfully!'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500

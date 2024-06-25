@@ -21,6 +21,6 @@
             <option value="one-time" {% if subscription.period == 'one-time' %}selected{% endif %}>One-time</option>
         </select>
 
-        <button type="submit"><i class="fas fa-save"></i> Save</button>
+        <button type="button" onclick="editSubscription('editSubscriptionForm', '{{ subscription.id }}')"><i class="fas fa-save"></i> Save</button>
     </form>
 </div>

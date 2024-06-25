@@ -46,6 +46,7 @@ def get_reminder_form(reminder_id):
     reminder = Reminder.query.get_or_404(reminder_id)
     return render_template('forms/edit_reminder.html', reminder=reminder, csrf_token=generate_csrf())
 
+"""
 @reminder_bp.route('/update_reminder/<int:reminder_id>', methods=['POST'])
 def update_reminder(reminder_id):
     reminder = Reminder.query.get_or_404(reminder_id)
@@ -54,3 +55,21 @@ def update_reminder(reminder_id):
     db.session.commit()
     flash('Reminder updated successfully!', 'success')
     return redirect(url_for('user_bp.index'))
+"""
+
+@reminder_bp.route('/edit_reminder/<int:reminder_id>', methods=['POST'])
+def edit_reminder(reminder_id):
+    reminder = Reminder.query.get_or_404(reminder_id)
+    data = request.get_json()
+
+    try:
+        reminder.reminder_date = data.get('reminder_date', reminder.reminder_date)
+        reminder.status = data.get('status', reminder.status)
+
+        db.session.commit()
+
+        return jsonify({'message': 'Reminder updated successfully!'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+

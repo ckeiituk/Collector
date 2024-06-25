@@ -60,6 +60,8 @@ def add_user():
         db.session.rollback()
         return jsonify({'success': False, 'message': str(e)})
 
+
+
 @user_bp.route('/update_user/<int:user_id>', methods=['POST'])
 def update_user(user_id):
     user = User.query.get_or_404(user_id)
@@ -74,6 +76,7 @@ def update_user(user_id):
     flash('User updated successfully!', 'success')
     return redirect(url_for('user_bp.index'))
 
+
 @user_bp.route('/delete_user/<int:user_id>', methods=['POST'])
 def delete_user(user_id):
     user = User.query.get_or_404(user_id)
@@ -86,3 +89,25 @@ def delete_user(user_id):
 def get_user_form(user_id):
     user = User.query.get_or_404(user_id)
     return render_template('forms/edit_user.html', user=user, csrf_token=generate_csrf())
+
+@user_bp.route('/edit_user/<int:user_id>', methods=['POST'])
+def edit_user(user_id):
+    user = User.query.get_or_404(user_id)
+    data = request.get_json()
+
+    try:
+        user.name = data.get('name', user.name)
+        user.discord_id = data.get('discord_id', user.discord_id)
+        user.vk_id = data.get('vk_id', user.vk_id)
+        user.telegram_id = data.get('telegram_id', user.telegram_id)
+        user.preferred_platform = data.get('preferred_platform', user.preferred_platform)
+        user.notification_time = data.get('notification_time', user.notification_time)
+        user.balance = Decimal(data.get('balance', user.balance))
+
+        db.session.commit()
+
+        return jsonify({'message': 'User updated successfully!'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+

@@ -22,6 +22,6 @@
         <label for="comment">Comment:</label>
         <textarea id="comment" name="comment" rows="4" required>{{ payment.comment }}</textarea>
 
-        <button type="submit"><i class="fas fa-save"></i> Save</button>
+        <button type="button" onclick="editPayment('editPaymentForm', '{{ payment.id }}')"><i class="fas fa-save"></i> Save</button>
     </form>
 </div>
