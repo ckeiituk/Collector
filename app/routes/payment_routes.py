@@ -1,6 +1,6 @@
 from datetime import datetime
 from decimal import Decimal
-from flask_wtf.csrf import CSRFProtect
+from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from collections import defaultdict
 
@@ -79,3 +79,8 @@ def create_reminder(payment_id):
     db.session.add(reminder)
     db.session.commit()
     return jsonify({'message': 'Reminder created successfully!'}), 200
+
+@payment_bp.route('/get_payment_form/<int:payment_id>', methods=['GET'])
+def get_payment_form(payment_id):
+    payment = Payment.query.get_or_404(payment_id)
+    return render_template('forms/edit_payment.html', payment=payment, csrf_token=generate_csrf())

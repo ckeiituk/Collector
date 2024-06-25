@@ -1,7 +1,7 @@
 # app/routes/reminder_routes.py
 
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
-from flask_wtf.csrf import CSRFProtect
+from flask_wtf.csrf import CSRFProtect, generate_csrf
 from app.models import db, Reminder
 
 reminder_bp = Blueprint('reminder_bp', __name__)
@@ -40,3 +40,17 @@ def delete_reminder(reminder_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'message': str(e)}), 500
+
+@reminder_bp.route('/get_reminder_form/<int:reminder_id>', methods=['GET'])
+def get_reminder_form(reminder_id):
+    reminder = Reminder.query.get_or_404(reminder_id)
+    return render_template('forms/edit_reminder.html', reminder=reminder, csrf_token=generate_csrf())
+
+@reminder_bp.route('/update_reminder/<int:reminder_id>', methods=['POST'])
+def update_reminder(reminder_id):
+    reminder = Reminder.query.get_or_404(reminder_id)
+    reminder.reminder_date = request.form.get('reminder_date')
+    reminder.status = request.form.get('status')
+    db.session.commit()
+    flash('Reminder updated successfully!', 'success')
+    return redirect(url_for('user_bp.index'))

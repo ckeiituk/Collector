@@ -1,8 +1,6 @@
-<details>
-  <summary>Add User</summary>
-  <form id="addUserForm">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-    {% include 'forms/user_form.html' %}
-    <button type="button" onclick="addUser()">Save</button>
-  </form>
-</details>
+<!-- app/templates/forms/add_user.html -->
+<form id="addUserForm">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  {% include 'forms/user_form.html' %}
+  <button type="button" onclick="addUser()">Save</button>
+</form>

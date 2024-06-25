@@ -81,3 +81,8 @@ def delete_user(user_id):
     db.session.commit()
     flash(f'User {user.name} deleted successfully!', 'success')
     return redirect(url_for('user_bp.index'))
+
+@user_bp.route('/get_user_form/<int:user_id>', methods=['GET'])
+def get_user_form(user_id):
+    user = User.query.get_or_404(user_id)
+    return render_template('forms/edit_user.html', user=user, csrf_token=generate_csrf())

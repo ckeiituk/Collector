@@ -49,6 +49,7 @@
   </div>
 
   <div class="sidebar">
+
     <div class="sidebar-tab-buttons">
       <button class="sidebar-tab-button active" onclick="openSidebarTab(event, 'add_user')">Add User</button>
       <button class="sidebar-tab-button" onclick="openSidebarTab(event, 'add_subscription')">Add Subscription</button>
@@ -67,14 +68,10 @@
     <div id="add_reminder" class="sidebar-tab-content" style="display:none;">
       {% include 'forms/add_reminder.html' %}
     </div>
-    <!-- Single form for attaching users to subscriptions -->
-    {% with form_id = "attachSubscriptionFormGeneral", subscription = None %}
-    <div id="attach_subscription" class="sidebar-tab-content" style="display:none;">
-      {% include 'forms/attach_user_to_subscription.html' %}
-    </div>
-    {% endwith %}
+    <!-- New section for edit user form -->
+    <div id="edit_user" class="sidebar-tab-content" style="display:none;"></div>
+    <div id="attach_user_to_subscription" class="sidebar-tab-content" style="display:none;"></div>
   </div>
-</div>
 
 </body>
 </html>

@@ -1,0 +1,21 @@
+<!-- app/templates/forms/edit_payment.html -->
+<form id="editPaymentForm">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label for="user_id">User:</label>
+    <select id="user_id" name="user_id" required>
+        {% for user in users %}
+        <option value="{{ user.id }}" {% if payment.user_id == user.id %}selected{% endif %}>{{ user.name }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="amount">Amount:</label>
+    <input type="number" id="amount" name="amount" value="{{ payment.amount }}" step="0.01" required>
+
+    <label for="status">Status:</label>
+    <select id="status" name="status" required>
+        <option value="pending" {% if payment.status == 'pending' %}selected{% endif %}>Pending</option>
+        <option value="paid" {% if payment.status == 'paid' %}selected{% endif %}>Paid</option>
+    </select>
+
+    <button type="submit">Save</button>
+</form>

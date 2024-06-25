@@ -3,7 +3,7 @@ from decimal import Decimal, ROUND_UP
 
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from flask import current_app as app
-from flask_wtf.csrf import CSRFProtect
+from flask_wtf.csrf import CSRFProtect, generate_csrf
 
 from app.models import db, Subscription, User, UserSubscription
 import json
@@ -181,5 +181,13 @@ def get_unattached_users(subscription_id):
     unattached_users = User.query.filter(User.id.notin_(attached_user_ids)).all()
     return jsonify({'users': [{'id': user.id, 'name': user.name} for user in unattached_users]})
 
+@subscription_bp.route('/get_subscription_form/<int:subscription_id>', methods=['GET'])
+def get_subscription_form(subscription_id):
+    subscription = Subscription.query.get_or_404(subscription_id)
+    return render_template('forms/edit_subscription.html', subscription=subscription, csrf_token=generate_csrf())
 
-
+@subscription_bp.route('/get_attach_user_form/<int:subscription_id>', methods=['GET'])
+def get_attach_user_form(subscription_id):
+    subscription = Subscription.query.get_or_404(subscription_id)
+    users = User.query.all()
+    return render_template('forms/attach_user_to_subscription.html', subscription=subscription, users=users, csrf_token=generate_csrf())

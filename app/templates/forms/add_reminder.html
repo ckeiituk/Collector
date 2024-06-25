@@ -1,23 +1,20 @@
-<details>
-  <summary>Add Reminder</summary>
-  <form id="addReminderForm" method="post" action="{{ url_for('reminder_bp.add_reminder') }}">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-    <label for="user_id">User:</label>
-    <select id="user_id" name="user_id" required>
-      {% for user in users %}
-      <option value="{{ user.id }}">{{ user.name }}</option>
-      {% endfor %}
-    </select>
+<form id="addReminderForm" method="post" action="{{ url_for('reminder_bp.add_reminder') }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <label for="user_id">User:</label>
+  <select id="user_id" name="user_id" required>
+    {% for user in users %}
+    <option value="{{ user.id }}">{{ user.name }}</option>
+    {% endfor %}
+  </select>
 
-    <label for="reminder_date">Reminder Date:</label>
-    <input type="date" id="reminder_date" name="reminder_date" required>
+  <label for="reminder_date">Reminder Date:</label>
+  <input type="date" id="reminder_date" name="reminder_date" required>
 
-    <label for="status">Status:</label>
-    <select id="status" name="status" required>
-      <option value="pending">Pending</option>
-      <option value="sent">Sent</option>
-    </select>
+  <label for="status">Status:</label>
+  <select id="status" name="status" required>
+    <option value="pending">Pending</option>
+    <option value="sent">Sent</option>
+  </select>
 
-    <button type="submit">Add Reminder</button>
-  </form>
-</details>
+  <button type="submit">Add Reminder</button>
+</form>
