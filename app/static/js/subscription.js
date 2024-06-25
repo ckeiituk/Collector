@@ -24,7 +24,7 @@ function addSubscription() {
         })
         .then(data => {
             alert(data.message);
-            updateSubscriptionList(); // Update the subscription lists dynamically
+            updateLists(); // Update the lists dynamically
         })
         .catch(error => {
             console.error('Error:', error);
@@ -32,16 +32,7 @@ function addSubscription() {
         });
 }
 
-// Function to update the subscription lists
-function updateSubscriptionList() {
-    fetch('/subscriptions/get_subscriptions_partial')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('one_time_subscriptions').innerHTML = data.one_time_subscriptions;
-            document.getElementById('regular_subscriptions').innerHTML = data.regular_subscriptions;
-        })
-        .catch(error => console.error('Error loading the subscription lists:', error));
-}
+
 
 // Function to toggle subscription pause
 function toggleSubscriptionPause(subscriptionId) {
@@ -136,6 +127,7 @@ function detachUserFromSubscription(userSubscriptionId, subscriptionId) {
         .then(data => {
             if (data.message) {
                 alert(data.message);
+                updateUserList();
                 updateSubscriptionList(); // Update the subscription lists dynamically
             } else {
                 alert('Failed to detach user from subscription');

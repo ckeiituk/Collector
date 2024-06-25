@@ -24,7 +24,7 @@ function createPayment() {
         })
         .then(data => {
             alert(data.message);
-            updatePaymentList(); // Update the payment list dynamically
+            updateLists(); // Update lists dynamically
         })
         .catch(error => {
             console.error('Error:', error);
@@ -32,15 +32,7 @@ function createPayment() {
         });
 }
 
-// Function to update the payment list
-function updatePaymentList() {
-    fetch('/payments/get_payments_partial')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('payments').innerHTML = data.payments_html;
-        })
-        .catch(error => console.error('Error loading the payment list:', error));
-}
+
 
 // Function to delete a payment
 function deletePayment(paymentId) {

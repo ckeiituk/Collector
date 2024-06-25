@@ -14,15 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTodayDate('reminder_date');
 });
 
-// Function to update the reminder list
-function updateReminderList() {
-    fetch('/reminders/get_reminders_partial')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('reminders').innerHTML = data.reminders_html;
-        })
-        .catch(error => console.error('Error loading the reminder list:', error));
-}
+
 
 // Function to delete a reminder
 function deleteReminder(reminderId) {
@@ -109,7 +101,7 @@ function createReminder(paymentId) {
         })
         .then(data => {
             alert(data.message);
-            updateReminderList(); // Update the reminder list dynamically
+            updateLists(); // Update the lists dynamically
         })
         .catch(error => {
             console.error('Error:', error);

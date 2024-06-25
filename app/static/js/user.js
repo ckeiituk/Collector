@@ -62,7 +62,7 @@ function addUser() {
         })
         .then(data => {
             alert(data.message);
-            updateUserList(); // Update the user list dynamically
+            updateLists() // Update the lists dynamically
         })
         .catch(error => {
             console.error('Error:', error);
@@ -138,20 +138,4 @@ function deleteUser(userId) {
             console.error('Error:', error);
             alert('An error occurred: ' + error.message);
         });
-}
-
-// Utility function to get CSRF token from meta tag
-function getCsrfToken() {
-    const csrfMetaTag = document.querySelector('meta[name="csrf-token"]');
-    return csrfMetaTag ? csrfMetaTag.getAttribute('content') : '';
-}
-
-// Function to update the user list
-function updateUserList() {
-    fetch('/get_users_partial')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('users').innerHTML = data.users_html;
-        })
-        .catch(error => console.error('Error loading the user list:', error));
 }
