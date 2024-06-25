@@ -118,7 +118,6 @@ details {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    position: relative;
 }
 
 details summary {
@@ -157,6 +156,32 @@ details ul li {
     margin-bottom: 10px;
 }
 
+/* Table-specific details */
+.table-details {
+    display: none; /* Hide by default */
+}
+
+.table-details[open] {
+    display: block; /* Show when open */
+}
+
+/* Toggle button styles */
+.toggle-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.toggle-button:hover {
+    background-color: #0056b3;
+}
+
 /* Specific form container */
 .form-container {
     margin-bottom: 20px;
@@ -179,6 +204,13 @@ tr.edit-form-row {
     padding: 20px;
 }
 
+/* Button row styles */
+.button-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
 /* Responsive styles */
 @media (max-width: 768px) {
     body {
@@ -196,5 +228,52 @@ tr.edit-form-row {
 
     form input[type="checkbox"] {
         margin-bottom: 10px;
+    }
+}
+
+/* Center the heading */
+.centered {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Sidebar styles */
+.container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.main-content {
+    flex: 3;
+    padding-right: 20px;
+}
+
+.sidebar {
+    flex: 1;
+    position: sticky;
+    top: 0;
+    max-height: 100vh;
+    overflow-y: auto;
+    background-color: #fff;
+    border-left: 1px solid #ddd;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .main-content {
+        padding-right: 0;
+    }
+
+    .sidebar {
+        position: static;
+        max-height: none;
+        overflow-y: visible;
+        border-left: none;
+        box-shadow: none;
     }
 }

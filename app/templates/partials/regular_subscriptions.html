@@ -50,8 +50,12 @@
   </tr>
   <tr>
     <td colspan="6">
-      <details>
-        <summary>Users</summary>
+      <div class="button-row">
+        <button class="toggle-button" onclick="toggleDetails('details-users-{{ subscription.id }}')">Users</button>
+        <button class="toggle-button" onclick="toggleDetails('details-attach-{{ subscription.id }}')">Attach User to Subscription</button>
+      </div>
+      <details id="details-users-{{ subscription.id }}" class="table-details">
+        <summary>Users:</summary>
         <ul>
           {% for user_subscription in subscription.user_subscriptions %}
           <li>
@@ -61,8 +65,8 @@
           {% endfor %}
         </ul>
       </details>
-      <details>
-        <summary>Attach User to Subscription</summary>
+      <details id="details-attach-{{ subscription.id }}" class="table-details">
+        <summary>Attach:</summary>
         <form id="attachSubscriptionFormRegular{{ subscription.id }}" method="post">
           <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
           <input type="hidden" name="subscription_id" value="{{ subscription.id }}">

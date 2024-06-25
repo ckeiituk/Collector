@@ -14,7 +14,8 @@
                 <button type="submit">Save</button>
             </form>
         </div>
-        <details>
+        <button class="toggle-button" onclick="toggleDetails('details-subscriptions-{{ user.id }}')">Subscriptions</button>
+        <details id="details-subscriptions-{{ user.id }}" class="table-details">
             <summary>Subscriptions</summary>
             <ul>
                 {% for user_subscription in user.subscriptions %}

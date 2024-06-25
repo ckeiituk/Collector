@@ -1,3 +1,12 @@
+function toggleDetails(id) {
+    const details = document.getElementById(id);
+    if (details.hasAttribute('open')) {
+        details.removeAttribute('open');
+    } else {
+        details.setAttribute('open', 'open');
+    }
+}
+
 function attachUserToSubscription(formId) {
     const form = document.getElementById(formId);
     const formData = new FormData(form);

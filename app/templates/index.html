@@ -19,22 +19,28 @@
 {% endif %}
 {% endwith %}
 
-<h1>User Management System</h1>
+<h1 class="centered">User Management System</h1>
 
-{% include 'partials/users.html' %}
-{% include 'partials/one_time_subscriptions.html' %}
-{% include 'partials/regular_subscriptions.html' %}
-{% include 'partials/payments.html' %}
-{% include 'partials/reminders.html' %}
+<div class="container">
+  <div class="main-content">
+    {% include 'partials/users.html' %}
+    {% include 'partials/one_time_subscriptions.html' %}
+    {% include 'partials/regular_subscriptions.html' %}
+    {% include 'partials/payments.html' %}
+    {% include 'partials/reminders.html' %}
+  </div>
 
-{% include 'forms/add_user.html' %}
-{% include 'forms/add_subscription.html' %}
-{% include 'forms/add_payment.html' %}
-{% include 'forms/add_reminder.html' %}
+  <div class="sidebar">
+    {% include 'forms/add_user.html' %}
+    {% include 'forms/add_subscription.html' %}
+    {% include 'forms/add_payment.html' %}
+    {% include 'forms/add_reminder.html' %}
+    <!-- Single form for attaching users to subscriptions -->
+    {% with form_id = "attachSubscriptionFormGeneral", subscription = None %}
+    {% include 'forms/attach_user_to_subscription.html' %}
+    {% endwith %}
+  </div>
+</div>
 
-<!-- Single form for attaching users to subscriptions -->
-{% with form_id = "attachSubscriptionFormGeneral", subscription = None %}
-{% include 'forms/attach_user_to_subscription.html' %}
-{% endwith %}
 </body>
 </html>

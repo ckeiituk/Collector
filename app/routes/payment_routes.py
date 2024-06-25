@@ -15,36 +15,41 @@ def payments():
 
 @payment_bp.route('/add_payment', methods=['POST'])
 def add_payment():
-    data = request.get_json()
-    user_id = int(data.get('user_id'))
-    status = data.get('status')
+    try:
+        data = request.get_json()
+        user_id = int(data.get('user_id'))
+        status = data.get('status')
 
-    user = User.query.get_or_404(user_id)
-    subscriptions = user.subscriptions
-    total_amount = Decimal(0)
-    comment_parts = []
+        user = User.query.get_or_404(user_id)
+        subscriptions = user.subscriptions
+        total_amount = Decimal(0)
+        comment_parts = []
 
-    for user_subscription in subscriptions:
-        if not user_subscription.is_paused:
-            total_amount += user_subscription.amount
-            comment_parts.append(f"{user_subscription.subscription.name} - {user_subscription.amount:.2f} RUB")
+        for user_subscription in subscriptions:
+            if not user_subscription.is_paused:
+                total_amount += user_subscription.amount
+                comment_parts.append(f"{user_subscription.subscription.name} - {user_subscription.amount:.2f} RUB")
 
-    balance = Decimal(user.balance)
-    final_amount = total_amount - balance
-    comment = " | ".join(comment_parts)
-    comment += f" | Общая сумма ({total_amount:.2f} RUB) - Баланс({balance:.2f} RUB) = Итого: {final_amount:.2f} RUB"
+        balance = Decimal(user.balance)
+        final_amount = total_amount - balance
+        comment = " | ".join(comment_parts)
+        comment += f" | Общая сумма ({total_amount:.2f} RUB) - Баланс({balance:.2f} RUB) = Итого: {final_amount:.2f} RUB"
 
-    if status == 'pending' and balance >= total_amount:
-        status = 'paid'
-        final_amount = Decimal(0)
-        balance -= total_amount
-        user.balance = balance
+        if status == 'pending' and balance >= total_amount:
+            status = 'paid'
+            final_amount = Decimal(0)
+            balance -= total_amount
+            user.balance = balance
 
-    new_payment = Payment(user_id=user.id, amount=final_amount, status=status, comment=comment)
-    db.session.add(new_payment)
-    db.session.commit()
+        new_payment = Payment(user_id=user.id, amount=final_amount, status=status, comment=comment)
+        db.session.add(new_payment)
+        db.session.commit()
 
-    return jsonify({'message': 'Payment added successfully!'}), 200
+        return jsonify({'message': 'Payment added successfully!'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': str(e)}), 500
+
 
 
 @payment_bp.route('/delete_payment/<int:payment_id>', methods=['POST'])
