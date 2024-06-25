@@ -15,8 +15,8 @@
         <td>{{ reminder.reminder_date }}</td>
         <td>{{ reminder.status }}</td>
         <td>
-            <button type="button" onclick="loadEditForm('reminder', '{{ reminder.id }}')">Edit</button>
-            <button type="button" onclick="deleteReminder({{ reminder.id }})">Delete</button>
+            <button type="button" onclick="loadEditForm('reminder', '{{ reminder.id }}')"><i class="fas fa-edit"></i> Edit</button>
+            <button type="button" onclick="deleteReminder({{ reminder.id }})"><i class="fas fa-trash"></i> Delete</button>
         </td>
     </tr>
     {% endfor %}

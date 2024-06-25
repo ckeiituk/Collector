@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Management System</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <script src="{{ url_for('static', filename='scripts.js') }}"></script>
   <meta name="csrf-token" content="{{ csrf_token }}">
 </head>
@@ -19,16 +20,15 @@
 {% endif %}
 {% endwith %}
 
-<h1 class="centered">User Management System</h1>
-
 <div class="container">
   <div class="main-content">
+    <h1 class="centered">User Management System</h1>
     <div class="tab-buttons">
-      <button class="tab-button active" onclick="openTab(event, 'users')">Users</button>
-      <button class="tab-button" onclick="openTab(event, 'one_time_subscriptions')">One-time Subscriptions</button>
-      <button class="tab-button" onclick="openTab(event, 'regular_subscriptions')">Regular Subscriptions</button>
-      <button class="tab-button" onclick="openTab(event, 'payments')">Payments</button>
-      <button class="tab-button" onclick="openTab(event, 'reminders')">Reminders</button>
+      <button class="tab-button active" onclick="openTab(event, 'users')"><i class="fas fa-users"></i> Пользователи</button>
+      <button class="tab-button" onclick="openTab(event, 'one_time_subscriptions')"><i class="fas fa-wallet"></i> Займы</button>
+      <button class="tab-button" onclick="openTab(event, 'regular_subscriptions')"><i class="fas fa-calendar-alt"></i> Подписки</button>
+      <button class="tab-button" onclick="openTab(event, 'payments')"><i class="fas fa-credit-card"></i> Платежи</button>
+      <button class="tab-button" onclick="openTab(event, 'reminders')"><i class="fas fa-bell"></i> Напоминания</button>
     </div>
 
     <div id="users" class="tab-content">
@@ -51,10 +51,10 @@
   <div class="sidebar">
 
     <div class="sidebar-tab-buttons">
-      <button class="sidebar-tab-button active" onclick="openSidebarTab(event, 'add_user')">Add User</button>
-      <button class="sidebar-tab-button" onclick="openSidebarTab(event, 'add_subscription')">Add Subscription</button>
-      <button class="sidebar-tab-button" onclick="openSidebarTab(event, 'add_payment')">Add Payment</button>
-      <button class="sidebar-tab-button" onclick="openSidebarTab(event, 'add_reminder')">Add Reminder</button>
+      <button class="sidebar-tab-button active" onclick="openSidebarTab(event, 'add_user')"><i class="fas fa-user-plus"></i> Add User</button>
+      <button class="sidebar-tab-button" onclick="openSidebarTab(event, 'add_subscription')"><i class="fas fa-plus-circle"></i> Add Sub</button>
+      <button class="sidebar-tab-button" onclick="openSidebarTab(event, 'add_payment')"><i class="fas fa-money-check-alt"></i> Add Payment</button>
+      <button class="sidebar-tab-button" onclick="openSidebarTab(event, 'add_reminder')"><i class="fas fa-clock"></i> Add Reminder</button>
     </div>
     <div id="add_user" class="sidebar-tab-content">
       {% include 'forms/add_user.html' %}
@@ -72,6 +72,7 @@
     <div id="edit_user" class="sidebar-tab-content" style="display:none;"></div>
     <div id="attach_user_to_subscription" class="sidebar-tab-content" style="display:none;"></div>
   </div>
+</div>
 
 </body>
 </html>

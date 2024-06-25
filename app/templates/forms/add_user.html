@@ -1,6 +1,5 @@
-<!-- app/templates/forms/add_user.html -->
 <form id="addUserForm">
   <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
   {% include 'forms/user_form.html' %}
-  <button type="button" onclick="addUser()">Save</button>
+  <button type="button" onclick="addUser()"><i class="fas fa-save"></i> Save</button>
 </form>

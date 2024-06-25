@@ -1,14 +1,17 @@
 <!-- app/templates/forms/edit_reminder.html -->
-<form method="post" action="{{ url_for('reminder_bp.update_reminder', reminder_id=reminder.id) }}" class="form-container">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-    <label for="reminder_date">Reminder Date:</label>
-    <input type="date" id="reminder_date" name="reminder_date" value="{{ reminder.reminder_date.strftime('%Y-%m-%d') }}" required>
+<div>
+    <h2 id="formHeader">{{ reminder.user.name }} / {{ reminder.id }}</h2>
+    <form method="post" action="{{ url_for('reminder_bp.update_reminder', reminder_id=reminder.id) }}" class="form-container">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <label for="reminder_date">Reminder Date:</label>
+        <input type="date" id="reminder_date" name="reminder_date" value="{{ reminder.reminder_date.strftime('%Y-%m-%d') }}" required>
 
-    <label for="status">Status:</label>
-    <select id="status" name="status" required>
-        <option value="pending" {% if reminder.status == 'pending' %}selected{% endif %}>Pending</option>
-        <option value="sent" {% if reminder.status == 'sent' %}selected{% endif %}>Sent</option>
-    </select>
+        <label for="status">Status:</label>
+        <select id="status" name="status" required>
+            <option value="pending" {% if reminder.status == 'pending' %}selected{% endif %}>Pending</option>
+            <option value="sent" {% if reminder.status == 'sent' %}selected{% endif %}>Sent</option>
+        </select>
 
-    <button type="submit">Save</button>
-</form>
+        <button type="submit">Save</button>
+    </form>
+</div>

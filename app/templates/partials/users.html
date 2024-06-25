@@ -23,14 +23,14 @@
         <td>{{ user.notification_time }}</td>
         <td>{{ user.balance }}</td>
         <td>
-            <button type="button" onclick="loadEditForm('user', '{{ user.id }}')">Edit</button>
+            <button type="button" onclick="loadEditForm('user', '{{ user.id }}')"><i class="fas fa-edit"></i> Edit</button>
             <form method="post" action="{{ url_for('user_bp.delete_user', user_id=user.id) }}" style="display:inline;">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                <button type="submit">Delete</button>
+                <button type="submit"><i class="fas fa-trash"></i> Delete</button>
             </form>
-            <button class="toggle-button" onclick="toggleDetails('details-subscriptions-{{ user.id }}')">Subscriptions</button>
+            <button class="toggle-button" onclick="toggleDetails('details-subscriptions-{{ user.id }}')"><i class="fas fa-eye"></i> Subscriptions</button>
             <details id="details-subscriptions-{{ user.id }}" class="table-details">
-                <summary>Subscriptions</summary>
+                <summary><i class="fas fa-list"></i> Subscriptions</summary>
                 <ul>
                     {% for user_subscription in user.subscriptions %}
                     {% if not (user_subscription.subscription.is_paused and user_subscription.subscription.period == 'one-time') %}
@@ -40,16 +40,15 @@
                             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                             <input type="number" name="amount" value="{{ user_subscription.amount }}" step="0.01" required> RUB
                             <input type="checkbox" name="is_manual" {% if user_subscription.is_manual %}checked{% endif %}> Manual
-                            <button type="submit">Update</button>
+                            <button type="submit"><i class="fas fa-save"></i> Update</button>
                         </form>
-                        <button type="button" onclick="detachUserFromSubscription({{ user_subscription.id }}, {{ user_subscription.subscription.id }})">Detach</button>
+                        <button type="button" onclick="detachUserFromSubscription({{ user_subscription.id }}, {{ user_subscription.subscription.id }})"><i class="fas fa-unlink"></i> Detach</button>
                     </li>
                     {% endif %}
                     {% endfor %}
                 </ul>
             </details>
         </td>
-
     </tr>
     {% endfor %}
     </tbody>

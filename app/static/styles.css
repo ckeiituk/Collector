@@ -276,3 +276,7 @@ details ul li {
         box-shadow: none;
     }
 }
+
+.button i, .sidebar-tab-button i, .tab-button i {
+    margin-right: 8px;
+}

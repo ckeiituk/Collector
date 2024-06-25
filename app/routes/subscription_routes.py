@@ -32,10 +32,12 @@ def toggle_subscription_pause():
 
 
 
+@subscription_bp.route('/subscriptions')
 def subscription_list():
     one_time_subscriptions = Subscription.query.filter_by(period='one-time').all()
     regular_subscriptions = Subscription.query.filter(Subscription.period != 'one-time').all()
-    return render_template('partials/subscriptions.html', one_time_subscriptions=one_time_subscriptions, regular_subscriptions=regular_subscriptions)
+    # Передаем данные в 'index.html' и используем соответствующие частичные шаблоны для отображения данных
+    return render_template('index.html', one_time_subscriptions=one_time_subscriptions, regular_subscriptions=regular_subscriptions)
 @subscription_bp.route('/add_subscription', methods=['POST'])
 def add_subscription():
     data = request.get_json()

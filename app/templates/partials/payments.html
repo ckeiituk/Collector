@@ -21,13 +21,13 @@
     <td>{{ payment.comment | safe }}</td>
     <td>{{ payment.status }}</td>
     <td>
-      <button type="button" onclick="loadEditForm('payment', '{{ payment.id }}')">Edit</button>
-      <button type="button" onclick="deletePayment({{ payment.id }})">Delete</button>
+      <button type="button" onclick="loadEditForm('payment', '{{ payment.id }}')"><i class="fas fa-edit"></i> Edit</button>
+      <button type="button" onclick="deletePayment({{ payment.id }})"><i class="fas fa-trash"></i> Delete</button>
       <button type="button" onclick="updatePaymentStatus({{ payment.id }})">
-        {{ 'Mark as Paid' if payment.status == 'pending' else 'Mark as Pending' }}
+        <i class="fas fa-check"></i> {{ 'Mark as Paid' if payment.status == 'pending' else 'Mark as Pending' }}
       </button>
       {% if payment.status == 'pending' %}
-      <button type="button" onclick="createReminder({{ payment.id }})">Create Reminder</button>
+      <button type="button" onclick="createReminder({{ payment.id }})"><i class="fas fa-bell"></i> Create Reminder</button>
       {% endif %}
     </td>
   </tr>

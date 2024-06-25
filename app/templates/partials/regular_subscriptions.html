@@ -19,24 +19,24 @@
     <td>{{ subscription.monthly_amount }} RUB</td>
     <td>{{ subscription.period }}</td>
     <td>
-      <button type="button" onclick="loadEditForm('subscription', '{{ subscription.id }}')">Edit</button>
+      <button type="button" onclick="loadEditForm('subscription', '{{ subscription.id }}')"><i class="fas fa-edit"></i> Edit</button>
       <button type="button" onclick="toggleSubscriptionPause('{{ subscription.id }}')">
-        {{ 'Pause' if not subscription.is_paused else 'Resume' }}
+        <i class="fas fa-pause"></i> {{ 'Pause' if not subscription.is_paused else 'Resume' }}
       </button>
-      <button type="button" onclick="deleteSubscription({{ subscription.id }})">Delete</button>
-      <button type="button" onclick="openAttachUserForm('subscription', '{{ subscription.id }}')">Attach</button>
-      <button class="toggle-button" onclick="toggleDetails('details-users-{{ subscription.id }}')">Users</button>
+      <button type="button" onclick="deleteSubscription({{ subscription.id }})"><i class="fas fa-trash"></i> Delete</button>
+      <button type="button" onclick="openAttachUserForm('subscription', '{{ subscription.id }}')"><i class="fas fa-user-plus"></i> Attach</button>
+      <button class="toggle-button" onclick="toggleDetails('details-users-{{ subscription.id }}')"><i class="fas fa-users"></i> Users</button>
     </td>
   </tr>
   <tr>
     <td colspan="6">
       <details id="details-users-{{ subscription.id }}" class="table-details">
-        <summary>Users:</summary>
+        <summary><i class="fas fa-users"></i> Users:</summary>
         <ul>
           {% for user_subscription in subscription.user_subscriptions %}
           <li>
             {{ user_subscription.user.name }} - {{ user_subscription.amount }} RUB
-            <button type="button" onclick="detachUserFromSubscription({{ user_subscription.id }}, {{ subscription.id }})">Detach</button>
+            <button type="button" onclick="detachUserFromSubscription({{ user_subscription.id }}, {{ subscription.id }})"><i class="fas fa-unlink"></i> Detach</button>
           </li>
           {% endfor %}
         </ul>
