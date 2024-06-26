@@ -12,11 +12,23 @@ body {
     color: #333;
 }
 
+h1.centered, h2, h3 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
 h1.centered {
     text-align: center;
-    margin-bottom: 20px;
     font-size: 2.5em;
-    color: #333;
+}
+
+h2 {
+    font-size: 1.8em;
+    color: #007bff;
+}
+
+h3 {
+    font-size: 1.4em;
 }
 
 .container {
@@ -43,26 +55,13 @@ h1.centered {
     border-radius: 8px;
 }
 
-h2 {
-    font-size: 1.8em;
-    margin-bottom: 15px;
-    color: #007bff;
-}
-
-h3 {
-    font-size: 1.4em;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-/* Tab button styles */
-.tab-buttons, .sidebar-tab-buttons {
+.tab-buttons, .sidebar-tab-buttons, .button-row {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
 }
 
-.tab-button, .sidebar-tab-button {
+.tab-button, .sidebar-tab-button, .toggle-button, button {
     padding: 10px 15px;
     font-size: 14px;
     cursor: pointer;
@@ -74,11 +73,11 @@ h3 {
 }
 
 .tab-button:hover, .tab-button.active,
-.sidebar-tab-button:hover, .sidebar-tab-button.active {
+.sidebar-tab-button:hover, .sidebar-tab-button.active,
+.toggle-button:hover, button:hover {
     background-color: #0056b3;
 }
 
-/* Tab content styles */
 .tab-content, .sidebar-tab-content {
     display: none;
 }
@@ -87,7 +86,6 @@ h3 {
     display: block;
 }
 
-/* Table styles */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -119,24 +117,6 @@ tr:nth-child(even) td {
     background-color: #f9f9f9;
 }
 
-/* Buttons */
-button {
-    padding: 10px 15px;
-    font-size: 14px;
-    cursor: pointer;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-    margin-right: 5px;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-/* Form styles */
 form {
     margin-top: 20px;
 }
@@ -147,12 +127,9 @@ form label {
     font-weight: bold;
 }
 
-form input[type="text"],
-form input[type="number"],
-form input[type="date"],
-form input[type="time"],
-form textarea,
-form select {
+form input[type="text"], form input[type="number"],
+form input[type="date"], form input[type="time"],
+form textarea, form select {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
@@ -171,7 +148,6 @@ form button {
     width: auto;
 }
 
-/* Details element styles */
 details {
     margin-top: 20px;
     background-color: #f9f9f9;
@@ -216,33 +192,14 @@ details ul li {
     margin-bottom: 10px;
 }
 
-/* Table-specific details */
 .table-details {
-    display: none; /* Hide by default */
+    display: none;
 }
 
 .table-details[open] {
-    display: block; /* Show when open */
+    display: block;
 }
 
-/* Toggle button styles */
-.toggle-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-bottom: 10px;
-    display: inline-block;
-}
-
-.toggle-button:hover {
-    background-color: #0056b3;
-}
-
-/* Specific form container */
 .form-container {
     margin-bottom: 20px;
     padding: 20px;
@@ -251,14 +208,6 @@ details ul li {
     border-radius: 4px;
 }
 
-/* Button row styles */
-.button-row {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-/* Responsive styles */
 @media (max-width: 768px) {
     .container {
         flex-direction: column;
@@ -281,39 +230,23 @@ details ul li {
     margin-right: 8px;
 }
 
-/* Стили для всех таблиц */
-table {
-    border-collapse: collapse; /* Удаляет промежутки между границами */
-    width: 100%;
-}
-
-/* Стили для ячеек таблицы */
-th, td {
-    padding: 10px; /* Внутренний отступ */
-    border: 1px solid #ddd; /* Границы ячеек */
-}
-
-/* Стили для строк таблицы, содержащих элементы <details> */
 table.details-table th, table.details-table td {
-    padding: 5px 10px; /* Уменьшенный внутренний отступ */
-    border: 1px solid #ddd; /* Границы ячеек */
+    padding: 5px 10px;
+    border: 1px solid #ddd;
 }
 
-/* Стили для элементов <details> внутри таблиц */
 table.details-table details {
-    margin: 0; /* Убирает внешний отступ */
-    padding: 0; /* Убирает внутренний отступ */
-    border-bottom: 1px solid #ccc; /* Линия между элементами */
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #ccc;
 }
 
-/* Стили для элемента <summary> внутри <details> */
 table.details-table details summary {
-    padding: 5px; /* Небольшой внутренний отступ */
-    cursor: pointer; /* Курсор указателя */
-    background-color: #f0f0f0; /* Фоновый цвет */
+    padding: 5px;
+    cursor: pointer;
+    background-color: #f0f0f0;
 }
 
-/* Анимация для плавного открытия и закрытия элементов <details> */
 table.details-table details[open] > * {
     animation: fadeIn 0.5s ease;
 }
@@ -325,4 +258,63 @@ table.details-table details[open] > * {
     to {
         opacity: 1;
     }
+}
+
+.details-content {
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+}
+
+.details-content.visible {
+    opacity: 1;
+}
+
+table td button, .toggle-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0 3px;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: #333;
+}
+
+table td button i, .toggle-button i {
+    font-size: 1.2em;
+    color: inherit;
+}
+
+table td button[title]:hover::after, .toggle-button[title]:hover::after {
+    content: attr(title);
+    background-color: #333;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    position: absolute;
+    white-space: nowrap;
+    z-index: 10;
+    top: -5px;
+    left: 105%;
+    font-size: 0.9em;
+    max-width: 200px;
+}
+
+table td.actions {
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+table td.actions button {
+    margin: 0 2px;
+}
+
+.sidebar-tab-buttons {
+    justify-content: center;
+    margin-bottom: 20px;
 }

@@ -196,8 +196,10 @@ def get_subscription_form(subscription_id):
 @subscription_bp.route('/get_attach_user_form/<int:subscription_id>', methods=['GET'])
 def get_attach_user_form(subscription_id):
     subscription = Subscription.query.get_or_404(subscription_id)
-    users = User.query.all()
-    return render_template('forms/attach_user_to_subscription.html', subscription=subscription, users=users, csrf_token=generate_csrf())
+    attached_users = db.session.query(User.id).join(UserSubscription).filter(UserSubscription.subscription_id == subscription_id).all()
+    attached_user_ids = [user_id for (user_id,) in attached_users]
+    unattached_users = User.query.filter(User.id.notin_(attached_user_ids)).all()
+    return render_template('forms/attach_user_to_subscription.html', subscription=subscription, users=unattached_users, csrf_token=generate_csrf())
 
 @subscription_bp.route('/get_subscriptions_partial', methods=['GET'])
 def get_subscriptions_partial():

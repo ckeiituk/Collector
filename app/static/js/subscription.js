@@ -23,16 +23,13 @@ function addSubscription() {
             return response.json();
         })
         .then(data => {
-            alert(data.message);
+            showToast(data.message);
             updateLists(); // Update the lists dynamically
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred: ' + error.message);
+            showToast('An error occurred: ' + error.message, true);
         });
 }
-
-
 
 // Function to toggle subscription pause
 function toggleSubscriptionPause(subscriptionId) {
@@ -46,12 +43,12 @@ function toggleSubscriptionPause(subscriptionId) {
     })
         .then(response => response.json())
         .then(data => {
-            alert(data.message);
+            showToast(data.message);
+            updateUserList();
             updateSubscriptionList(); // Update the subscription lists dynamically
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred: ' + error.message);
+            showToast('An error occurred: ' + error.message, true);
         });
 }
 
@@ -66,12 +63,11 @@ function deleteSubscription(subscriptionId) {
     })
         .then(response => response.json())
         .then(data => {
-            alert(data.message);
+            showToast(data.message);
             updateSubscriptionList(); // Update the subscription lists dynamically
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred: ' + error.message);
+            showToast('An error occurred: ' + error.message, true);
         });
 }
 
@@ -105,12 +101,11 @@ function editSubscription(formId, subscriptionId) {
             return response.json();
         })
         .then(data => {
-            alert(data.message);
+            showToast(data.message);
             updateSubscriptionList(); // Update the subscription lists dynamically
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred: ' + error.message);
+            showToast('An error occurred: ' + error.message, true);
         });
 }
 
@@ -126,16 +121,15 @@ function detachUserFromSubscription(userSubscriptionId, subscriptionId) {
         .then(response => response.json())
         .then(data => {
             if (data.message) {
-                alert(data.message);
+                showToast(data.message);
                 updateUserList();
                 updateSubscriptionList(); // Update the subscription lists dynamically
             } else {
-                alert('Failed to detach user from subscription');
+                showToast('Failed to detach user from subscription', true);
             }
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred: ' + error.message);
+            showToast('An error occurred: ' + error.message, true);
         });
 }
 
@@ -151,7 +145,7 @@ function attachUserToSubscription(formId) {
 
     // Ensure required fields are present
     if (!jsonData['user_id'] || !jsonData['subscription_id'] || !jsonData['next_due_date'] || !jsonData['amount']) {
-        alert('All fields are required.');
+        showToast('All fields are required.', true);
         return;
     }
 
@@ -171,11 +165,11 @@ function attachUserToSubscription(formId) {
             return data;
         }))
         .then(data => {
-            alert(data.message);
+            showToast(data.message);
+            updateUserList();
             updateSubscriptionList(); // Update the subscription lists dynamically
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred: ' + error.message);
+            showToast('An error occurred: ' + error.message, true);
         });
 }

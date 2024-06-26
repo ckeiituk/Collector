@@ -1,22 +1,28 @@
-// Function to switch between main content tabs
-function openTab(event, tabName) {
-    // Hide all tab contents
-    const tabContents = document.getElementsByClassName("tab-content");
-    for (let i = 0; i < tabContents.length; i++) {
-        tabContents[i].style.display = "none";
+// Function to switch between sidebar tabs
+function openSidebarTab(event, tabName) {
+    // Hide all sidebar tab contents
+    const sidebarTabContents = document.getElementsByClassName("sidebar-tab-content");
+    for (const content of sidebarTabContents) {
+        content.style.display = "none";
     }
 
-    // Remove the active class from all tab buttons
-    const tabButtons = document.getElementsByClassName("tab-button");
-    for (let i = 0; i < tabButtons.length; i++) {
-        tabButtons[i].classList.remove("active");
+    // Remove the active class from all sidebar tab buttons
+    const sidebarTabButtons = document.getElementsByClassName("sidebar-tab-button");
+    for (const button of sidebarTabButtons) {
+        button.classList.remove("active");
     }
 
-    // Show the current tab content and add active class to the clicked button
-    document.getElementById(tabName).style.display = "block";
+    // Show the selected sidebar tab content
+    const selectedSidebarTabContent = document.getElementById(tabName);
+    if (selectedSidebarTabContent) {
+        selectedSidebarTabContent.style.display = "block";
+    }
+
+    // Add the active class to the clicked sidebar tab button
     event.currentTarget.classList.add("active");
 }
 
+// Function to open the form for attaching a user to a subscription
 function openAttachUserForm(entity, id) {
     let url;
     if (entity === 'subscription') {
@@ -50,7 +56,7 @@ function openAttachUserForm(entity, id) {
         .catch(error => console.error('Error loading the form:', error));
 }
 
-
+// Function to load the edit form for different types of entities
 function loadEditForm(type, id) {
     let url;
     switch (type) {
@@ -79,24 +85,27 @@ function loadEditForm(type, id) {
         .catch(error => console.error(`Error loading ${type} edit form:`, error));
 }
 
-function openSidebarTab(event, tabName) {
-    // Hide all sidebar tab contents
-    const sidebarTabContents = document.getElementsByClassName("sidebar-tab-content");
-    for (let i = 0; i < sidebarTabContents.length; i++) {
-        sidebarTabContents[i].style.display = "none";
+function openTab(event, tabName) {
+    // Hide all tab contents
+    const tabContents = document.getElementsByClassName("tab-content");
+    for (const content of tabContents) {
+        content.style.display = "none";
     }
 
-    // Remove the active class from all sidebar tab buttons
-    const sidebarTabButtons = document.getElementsByClassName("sidebar-tab-button");
-    for (let i = 0; i < sidebarTabButtons.length; i++) {
-        sidebarTabButtons[i].classList.remove("active");
+    // Remove the active class from all tab buttons
+    const tabButtons = document.getElementsByClassName("tab-button");
+    for (const button of tabButtons) {
+        button.classList.remove("active");
     }
 
-    // Show the current sidebar tab content and add active class to the clicked button
-    document.getElementById(tabName).style.display = "block";
-    if (event) {
-        event.currentTarget.classList.add("active");
+    // Show the selected tab content
+    const selectedTabContent = document.getElementById(tabName);
+    if (selectedTabContent) {
+        selectedTabContent.style.display = "block";
     }
+
+    // Add the active class to the clicked tab button
+    event.currentTarget.classList.add("active");
 }
 
 // Initialize the first tab to be visible on page load
@@ -104,8 +113,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     document.querySelector('.tab-button').click();
     document.querySelector('.sidebar-tab-button').click();
 });
-
-
 
 // Function to toggle details in user subscriptions
 function toggleDetails(id) {
@@ -116,32 +123,3 @@ function toggleDetails(id) {
         details.setAttribute('open', 'open');
     }
 }
-
-
-
-
-
-// Function to edit subscription
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

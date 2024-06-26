@@ -25,12 +25,11 @@ function updateUserSubscription(event, userSubscriptionId) {
             return response.json();
         })
         .then(data => {
-            alert(data.message);
+            showToast(data.message);
             updateUserList(); // Update the user list dynamically
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred: ' + error.message);
+            showToast('An error occurred: ' + error.message, true);
         });
 }
 
@@ -61,12 +60,11 @@ function addUser() {
             return response.json();
         })
         .then(data => {
-            alert(data.message);
-            updateLists() // Update the lists dynamically
+            showToast(data.message);
+            updateLists(); // Update the lists dynamically
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred: ' + error.message);
+            showToast('An error occurred: ' + error.message, true);
         });
 }
 
@@ -102,12 +100,11 @@ function editUser(userId) {
             return response.json();
         })
         .then(data => {
-            alert(data.message);
+            showToast(data.message);
             updateUserList(); // Update the user list dynamically
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred: ' + error.message);
+            showToast('An error occurred: ' + error.message, true);
         });
 }
 
@@ -131,11 +128,10 @@ function deleteUser(userId) {
             return response.json();
         })
         .then(data => {
-            alert(data.message);
+            showToast(data.message);
             updateUserList(); // Update the user list dynamically
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred: ' + error.message);
+            showToast('An error occurred: ' + error.message, true);
         });
 }

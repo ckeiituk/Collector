@@ -5,7 +5,7 @@
         <th>User</th>
         <th>Reminder Date</th>
         <th>Status</th>
-        <th>Actions</th>
+        <th class="actions">Actions</th> <!-- Добавлен класс actions -->
     </tr>
     </thead>
     <tbody>
@@ -14,9 +14,13 @@
         <td>{{ reminder.user.name }} / {{ reminder.id }}</td>
         <td>{{ reminder.reminder_date }}</td>
         <td>{{ reminder.status }}</td>
-        <td>
-            <button type="button" onclick="loadEditForm('reminder', '{{ reminder.id }}')"><i class="fas fa-edit"></i> Edit</button>
-            <button type="button" onclick="deleteReminder({{ reminder.id }})"><i class="fas fa-trash"></i> Delete</button>
+        <td class="actions"> <!-- Добавлен класс actions -->
+            <button type="button" class="action-button" data-tippy-content="Edit" onclick="loadEditForm('reminder', '{{ reminder.id }}')">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button type="button" class="action-button" data-tippy-content="Delete" onclick="deleteReminder({{ reminder.id }})">
+                <i class="fas fa-trash"></i>
+            </button>
         </td>
     </tr>
     {% endfor %}

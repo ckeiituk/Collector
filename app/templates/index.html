@@ -6,24 +6,37 @@
   <title>User Management System</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Подключаем новые JavaScript файлы -->
+  <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <script src="https://unpkg.com/@popperjs/core@2"></script>
+  <script src="https://unpkg.com/tippy.js@6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
   <script src="{{ url_for('static', filename='js/utils.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/ui.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/subscription.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/user.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/reminder.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/payment.js') }}" defer></script>
-  <!-- Подключаем новые JavaScript файлы -->
   <meta name="csrf-token" content="{{ csrf_token }}">
 </head>
 <body>
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-<ul>
-  {% for message in messages %}
-  <li>{{ message }}</li>
-  {% endfor %}
-</ul>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    {% for message in messages %}
+    Toastify({
+      text: "{{ message }}",
+      duration: 5000,
+      close: true,
+      gravity: "top",
+      position: "right",
+      backgroundColor: "#007bff",
+      stopOnFocus: true,
+    }).showToast();
+    {% endfor %}
+  });
+</script>
 {% endif %}
 {% endwith %}
 
@@ -56,12 +69,19 @@
   </div>
 
   <div class="sidebar">
-
-    <div class="sidebar-tab-buttons">
-      <button class="sidebar-tab-button active" onclick="openSidebarTab(event, 'add_user')"><i class="fas fa-user-plus"></i> Add User</button>
-      <button class="sidebar-tab-button" onclick="openSidebarTab(event, 'add_subscription')"><i class="fas fa-plus-circle"></i> Add Sub</button>
-      <button class="sidebar-tab-button" onclick="openSidebarTab(event, 'add_payment')"><i class="fas fa-money-check-alt"></i> Add Payment</button>
-      <button class="sidebar-tab-button" onclick="openSidebarTab(event, 'add_reminder')"><i class="fas fa-clock"></i> Add Reminder</button>
+    <div class="sidebar-tab-buttons" >
+      <button class="sidebar-tab-button" data-tippy-content="Add User" onclick="openSidebarTab(event, 'add_user')">
+        <i class="fas fa-user-plus"></i>
+      </button>
+      <button class="sidebar-tab-button" data-tippy-content="Add Subscription" onclick="openSidebarTab(event, 'add_subscription')">
+        <i class="fas fa-plus-circle"></i>
+      </button>
+      <button class="sidebar-tab-button" data-tippy-content="Add Payment" onclick="openSidebarTab(event, 'add_payment')">
+        <i class="fas fa-credit-card"></i>
+      </button>
+      <button class="sidebar-tab-button" data-tippy-content="Add Reminder" onclick="openSidebarTab(event, 'add_reminder')">
+        <i class="fas fa-bell"></i>
+      </button>
     </div>
     <div id="add_user" class="sidebar-tab-content">
       {% include 'forms/add_user.html' %}
@@ -75,7 +95,6 @@
     <div id="add_reminder" class="sidebar-tab-content" style="display:none;">
       {% include 'forms/add_reminder.html' %}
     </div>
-    <!-- New section for edit user form -->
     <div id="edit_user" class="sidebar-tab-content" style="display:none;"></div>
     <div id="attach_user_to_subscription" class="sidebar-tab-content" style="display:none;"></div>
   </div>

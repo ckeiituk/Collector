@@ -23,17 +23,13 @@ function createPayment() {
             return response.json();
         })
         .then(data => {
-            alert(data.message);
+            showToast(data.message);
             updateLists(); // Update lists dynamically
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred: ' + error.message);
+            showToast('An error occurred: ' + error.message, true);
         });
 }
-
-
-
 // Function to delete a payment
 function deletePayment(paymentId) {
     fetch(`/payments/delete_payment/${paymentId}`, {
@@ -52,15 +48,13 @@ function deletePayment(paymentId) {
             });
         })
         .then(data => {
-            alert(data.message);
+            showToast(data.message);
             updatePaymentList(); // Update the payment list dynamically
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred: ' + error.message);
+            showToast('An error occurred: ' + error.message, true);
         });
 }
-
 // Function to update payment status
 function updatePaymentStatus(paymentId) {
     fetch(`/payments/update_payment_status/${paymentId}`, {
@@ -79,15 +73,14 @@ function updatePaymentStatus(paymentId) {
             });
         })
         .then(data => {
-            alert(data.message);
+            showToast(data.message);
             updatePaymentList(); // Update the payment list dynamically
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred: ' + error.message);
+            showToast('An error occurred: ' + error.message, true);
         });
 }
-
+// Function to edit a payment
 function editPayment(formId, paymentId) {
     const form = document.getElementById(formId);
     if (!form) {
@@ -117,11 +110,10 @@ function editPayment(formId, paymentId) {
             return response.json();
         })
         .then(data => {
-            alert(data.message);
+            showToast(data.message);
             updatePaymentList(); // Update the payment list dynamically
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred: ' + error.message);
+            showToast('An error occurred: ' + error.message, true);
         });
 }

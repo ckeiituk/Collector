@@ -9,7 +9,7 @@
         <th>Preferred Platform</th>
         <th>Notification Time</th>
         <th>Balance</th>
-        <th>Actions</th>
+        <th class="actions">Actions</th> <!-- Добавлен класс actions -->
     </tr>
     </thead>
     <tbody>
@@ -22,10 +22,16 @@
         <td>{{ user.preferred_platform }}</td>
         <td>{{ user.notification_time }}</td>
         <td>{{ user.balance }}</td>
-        <td>
-            <button type="button" onclick="loadEditForm('user', '{{ user.id }}')"><i class="fas fa-edit"></i> Edit</button>
-            <button type="button" onclick="deleteUser({{ user.id }})"><i class="fas fa-trash"></i> Delete</button>
-            <button class="toggle-button" onclick="toggleDetails('details-subscriptions-{{ user.id }}')"><i class="fas fa-eye"></i> Subscriptions</button>
+        <td class="actions">
+            <button type="button" class="action-button" data-tippy-content="Edit" onclick="loadEditForm('user', '{{ user.id }}')">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button type="button" class="action-button" data-tippy-content="Delete" onclick="deleteUser({{ user.id }})">
+                <i class="fas fa-trash"></i>
+            </button>
+            <button class="toggle-button action-button" data-tippy-content="Subscriptions" onclick="toggleDetails('details-subscriptions-{{ user.id }}')">
+                <i class="fas fa-eye"></i>
+            </button>
         </td>
     </tr>
     <tr class="details-row">
@@ -41,9 +47,20 @@
                             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                             <input type="number" name="amount" value="{{ user_subscription.amount }}" step="0.01" required>
                             <input type="checkbox" name="is_manual" {% if user_subscription.is_manual %}checked{% endif %}> Manual
-                            <button type="submit"><i class="fas fa-save"></i> Update</button>
+                            <button type="submit" class="action-button" data-tippy-content="Update">
+                                <i class="fas fa-save"></i>
+                            </button>
                         </form>
-                        <button type="button" onclick="detachUserFromSubscription({{ user_subscription.id }}, {{ user_subscription.subscription.id }})"><i class="fas fa-unlink"></i> Detach</button>
+                        <button type="button" class="action-button" data-tippy-content="Detach" onclick="detachUserFromSubscription({{ user_subscription.id }}, {{ user_subscription.subscription.id }})">
+                            <i class="fas fa-unlink"></i>
+                        </button>
+                        <button type="button" class="action-button" data-tippy-content="{% if user_subscription.subscription.is_paused %}Resume{% else %}Pause{% endif %}" onclick="toggleSubscriptionPause({{ user_subscription.subscription.id }})">
+                            {% if user_subscription.subscription.is_paused %}
+                            <i class="fas fa-play"></i>
+                            {% else %}
+                            <i class="fas fa-pause"></i>
+                            {% endif %}
+                        </button>
                     </li>
                     {% endif %}
                     {% endfor %}

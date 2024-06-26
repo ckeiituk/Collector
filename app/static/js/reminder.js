@@ -1,21 +1,13 @@
-// reminder.js
-
 // Function to set today's date
-
-// Initialize today's date for reminder form on page load
 function setTodayDate(elementId) {
     const input = document.getElementById(elementId);
     if (input) {
         input.value = new Date().toISOString().split('T')[0];
     }
 }
-
 document.addEventListener('DOMContentLoaded', () => {
     setTodayDate('reminder_date');
 });
-
-
-
 // Function to delete a reminder
 function deleteReminder(reminderId) {
     fetch(`/reminders/delete_reminder/${reminderId}`, {
@@ -33,15 +25,14 @@ function deleteReminder(reminderId) {
             return data;
         }))
         .then(data => {
-            alert(data.message);
+            showToast(data.message);
             updateReminderList(); // Update the reminder list dynamically
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred: ' + error.message);
+            showToast('An error occurred: ' + error.message, true);
         });
 }
-
+// Function to edit a reminder
 function editReminder(formId, reminderId) {
     const form = document.getElementById(formId);
     if (!form) {
@@ -71,15 +62,13 @@ function editReminder(formId, reminderId) {
             return response.json();
         })
         .then(data => {
-            alert(data.message);
+            showToast(data.message);
             updateReminderList(); // Update the reminder list dynamically
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred: ' + error.message);
+            showToast('An error occurred: ' + error.message, true);
         });
 }
-
 // Function to create a reminder
 function createReminder(paymentId) {
     fetch(`/payments/create_reminder/${paymentId}`, {
@@ -100,15 +89,14 @@ function createReminder(paymentId) {
             });
         })
         .then(data => {
-            alert(data.message);
+            showToast(data.message);
             updateLists(); // Update the lists dynamically
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred: ' + error.message);
+            showToast('An error occurred: ' + error.message, true);
         });
 }
-
+// Function to add a reminder
 function addReminder() {
     const form = document.getElementById('addReminderForm');
     const formData = new FormData(form);
@@ -133,12 +121,10 @@ function addReminder() {
             return response.json();
         })
         .then(data => {
-            alert(data.message);
+            showToast(data.message);
             updateReminderList(); // Update the reminder list dynamically
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred: ' + error.message);
+            showToast('An error occurred: ' + error.message, true);
         });
 }
-
