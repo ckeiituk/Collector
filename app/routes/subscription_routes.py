@@ -237,4 +237,3 @@ def toggle_user_subscription_pause():
 
     status = 'paused' if user_subscription.is_paused else 'resumed'
     return jsonify({'message': f'User subscription {status} successfully.'})
-

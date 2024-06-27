@@ -310,6 +310,7 @@ table td button[title]:hover::after, .toggle-button[title]:hover::after {
 }
 
 table td.actions {
+    text-align: center;
     white-space: nowrap;
     vertical-align: middle;
 }

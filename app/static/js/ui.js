@@ -115,6 +115,58 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 // Function to toggle details in user subscriptions
+function toggleUserSubscriptions(userId) {
+    const userRow = document.getElementById(`user-row-${userId}`);
+    const existingDetailRow = document.getElementById(`details-row-${userId}`);
+
+    if (existingDetailRow) {
+        existingDetailRow.remove();
+    } else {
+        fetch(`/user_subscriptions/${userId}`)
+            .then(response => response.json())
+            .then(subscriptions => {
+                const detailRow = document.createElement('tr');
+                detailRow.id = `details-row-${userId}`;
+                detailRow.innerHTML = `
+                    <td colspan="8">
+                        <ul>
+                            ${renderUserSubscriptions(subscriptions)}
+                        </ul>
+                    </td>
+                `;
+                userRow.insertAdjacentElement('afterend', detailRow);
+            })
+            .catch(error => {
+                console.error('Error fetching subscriptions:', error);
+            });
+    }
+}
+
+function renderUserSubscriptions(subscriptions) {
+    let subscriptionsHtml = '';
+    subscriptions.forEach(subscription => {
+        subscriptionsHtml += `
+            <li id="userSubscription${subscription.id}">
+                ${subscription.name} (${subscription.description})
+                <form id="updateUserSubscriptionForm-${subscription.id}" onsubmit="updateUserSubscription(event, ${subscription.id})" style="display:inline;">
+                    <input type="hidden" name="csrf_token" value="${subscription.csrf_token}">
+                    <input type="number" name="amount" value="${subscription.amount}" step="0.01" required>
+                    <input type="checkbox" name="is_manual" ${subscription.is_manual ? 'checked' : ''}> Manual
+                    <button type="submit" class="action-button" data-tippy-content="Update">
+                        <i class="fas fa-save"></i>
+                    </button>
+                </form>
+                <button type="button" class="action-button" data-tippy-content="Detach" onclick="detachUserFromSubscription(${subscription.id}, ${subscription.subscription_id})">
+                    <i class="fas fa-unlink"></i>
+                </button>
+                <button type="button" class="action-button" data-tippy-content="${subscription.is_paused ? 'Resume' : 'Pause'}" onclick="toggleUserSubscriptionPause(${subscription.id})">
+                    <i class="fas fa-${subscription.is_paused ? 'play' : 'pause'}"></i>
+                </button>
+            </li>
+        `;
+    });
+    return subscriptionsHtml;
+}
 function toggleDetails(id) {
     const details = document.getElementById(id);
     if (details.hasAttribute('open')) {
@@ -123,5 +175,16 @@ function toggleDetails(id) {
         details.setAttribute('open', 'open');
     }
 }
+
+// Function to toggle subscription users
+function toggleSubscriptionUsers(subscriptionId) {
+    const userRow = document.getElementById(`subscription-users-${subscriptionId}`);
+    if (userRow.style.display === "none") {
+        userRow.style.display = "table-row";
+    } else {
+        userRow.style.display = "none";
+    }
+}
+
 
 

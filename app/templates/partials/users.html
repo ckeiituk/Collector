@@ -9,12 +9,12 @@
         <th class="centered-header">Preferred Platform</th>
         <th class="centered-header">Notification Time</th>
         <th class="centered-header">Balance</th>
-        <th class="actions">Actions</th> <!-- Добавлен класс actions -->
+        <th class="actions">Actions</th>
     </tr>
     </thead>
     <tbody>
     {% for user in users %}
-    <tr>
+    <tr id="user-row-{{ user.id }}">
         <td>{{ user.id }}.{{ user.name }}</td>
         <td>{{ user.discord_id }}</td>
         <td>{{ user.vk_id }}</td>
@@ -29,43 +29,9 @@
             <button type="button" class="action-button" data-tippy-content="Delete" onclick="deleteUser({{ user.id }})">
                 <i class="fas fa-trash"></i>
             </button>
-            <button class="toggle-button action-button" data-tippy-content="Subscriptions" onclick="toggleDetails('details-subscriptions-{{ user.id }}')">
+            <button class="toggle-button action-button" data-tippy-content="Subscriptions" onclick="toggleUserSubscriptions('{{ user.id }}')">
                 <i class="fas fa-eye"></i>
             </button>
-        </td>
-    </tr>
-    <tr class="details-row">
-        <td colspan="8">
-            <details id="details-subscriptions-{{ user.id }}" class="table-details">
-                <summary><i class="fas fa-list"></i> Subscriptions</summary>
-                <ul>
-                    {% for user_subscription in user.subscriptions %}
-                    {% if not (user_subscription.subscription.is_paused and user_subscription.subscription.period == 'one-time') %}
-                    <li id="userSubscription{{ user_subscription.id }}">
-                        {{ user_subscription.subscription.name }} ({{ user_subscription.subscription.description }})
-                        <form id="updateUserSubscriptionForm-{{ user_subscription.id }}" onsubmit="updateUserSubscription(event, {{ user_subscription.id }})" style="display:inline;">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                            <input type="number" name="amount" value="{{ user_subscription.amount }}" step="0.01" required>
-                            <input type="checkbox" name="is_manual" {% if user_subscription.is_manual %}checked{% endif %}> Manual
-                            <button type="submit" class="action-button" data-tippy-content="Update">
-                                <i class="fas fa-save"></i>
-                            </button>
-                        </form>
-                        <button type="button" class="action-button" data-tippy-content="Detach" onclick="detachUserFromSubscription({{ user_subscription.id }}, {{ user_subscription.subscription.id }})">
-                            <i class="fas fa-unlink"></i>
-                        </button>
-            <button type="button" class="action-button" data-tippy-content="{% if user_subscription.is_paused %}Resume{% else %}Pause{% endif %}" onclick="toggleUserSubscriptionPause({{ user_subscription.id }})">
-              {% if user_subscription.is_paused %}
-              <i class="fas fa-play"></i>
-              {% else %}
-              <i class="fas fa-pause"></i>
-              {% endif %}
-            </button>
-                    </li>
-                    {% endif %}
-                    {% endfor %}
-                </ul>
-            </details>
         </td>
     </tr>
     {% endfor %}

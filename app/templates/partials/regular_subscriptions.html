@@ -1,49 +1,48 @@
+<!-- app/templates/partials/regular_subscriptions.html -->
 <h2>Regular Subscriptions</h2>
 <table class="details-table">
   <thead>
-  <tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Monthly Amount</th>
-    <th>Period</th>
-    <th>Actions</th>
-  </tr>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Monthly Amount</th>
+      <th>Period</th>
+      <th>Actions</th>
+    </tr>
   </thead>
   <tbody>
-  {% for subscription in regular_subscriptions %}
-  <tr>
-    <td>{{ subscription.id }}</td>
-    <td>{{ subscription.name }}</td>
-    <td>{{ subscription.description }}</td>
-    <td>{{ subscription.monthly_amount }} RUB</td>
-    <td>{{ subscription.period }}</td>
-    <td class="actions">
-      <button type="button" class="action-button" data-tippy-content="Edit" onclick="loadEditForm('subscription', '{{ subscription.id }}')">
-        <i class="fas fa-edit"></i>
-      </button>
-      <button type="button" class="action-button" data-tippy-content="{% if subscription.is_paused %}Resume{% else %}Pause{% endif %}" onclick="toggleSubscriptionPause({{ subscription.id }})">
-        {% if subscription.is_paused %}
-        <i class="fas fa-play"></i>
-        {% else %}
-        <i class="fas fa-pause"></i>
-        {% endif %}
-      </button>
-      <button type="button" class="action-button" data-tippy-content="Delete" onclick="deleteSubscription({{ subscription.id }})">
-        <i class="fas fa-trash"></i>
-      </button>
-      <button type="button" class="action-button" data-tippy-content="Attach User" onclick="openAttachUserForm('subscription', '{{ subscription.id }}')">
-        <i class="fas fa-user-plus"></i>
-      </button>
-      <button type="button" class="action-button" data-tippy-content="Users" onclick="toggleDetails('details-users-{{ subscription.id }}')">
-        <i class="fas fa-users"></i>
-      </button>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="6">
-      <details id="details-users-{{ subscription.id }}" class="table-details">
-        <summary><i class="fas fa-users"></i> Users:</summary>
+    {% for subscription in regular_subscriptions %}
+    <tr>
+      <td>{{ subscription.id }}</td>
+      <td>{{ subscription.name }}</td>
+      <td>{{ subscription.description }}</td>
+      <td>{{ subscription.monthly_amount }} RUB</td>
+      <td>{{ subscription.period }}</td>
+      <td class="actions">
+        <button type="button" class="action-button" data-tippy-content="Edit" onclick="loadEditForm('subscription', '{{ subscription.id }}')">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button type="button" class="action-button" data-tippy-content="{% if subscription.is_paused %}Resume{% else %}Pause{% endif %}" onclick="toggleSubscriptionPause({{ subscription.id }})">
+          {% if subscription.is_paused %}
+          <i class="fas fa-play"></i>
+          {% else %}
+          <i class="fas fa-pause"></i>
+          {% endif %}
+        </button>
+        <button type="button" class="action-button" data-tippy-content="Delete" onclick="deleteSubscription({{ subscription.id }})">
+          <i class="fas fa-trash"></i>
+        </button>
+        <button type="button" class="action-button" data-tippy-content="Attach User" onclick="openAttachUserForm('subscription', '{{ subscription.id }}')">
+          <i class="fas fa-user-plus"></i>
+        </button>
+        <button type="button" class="action-button" data-tippy-content="Users" onclick="toggleSubscriptionUsers('{{ subscription.id }}')">
+          <i class="fas fa-eye"></i>
+        </button>
+      </td>
+    </tr>
+    <tr id="subscription-users-{{ subscription.id }}" style="display: none;">
+      <td colspan="6">
         <ul>
           {% for user_subscription in subscription.user_subscriptions %}
           <li>
@@ -61,9 +60,8 @@
           </li>
           {% endfor %}
         </ul>
-      </details>
-    </td>
-  </tr>
-  {% endfor %}
+      </td>
+    </tr>
+    {% endfor %}
   </tbody>
 </table>
