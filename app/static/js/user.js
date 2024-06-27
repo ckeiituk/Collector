@@ -135,3 +135,24 @@ function deleteUser(userId) {
             showToast('An error occurred: ' + error.message, true);
         });
 }
+
+// Function to toggle user subscription pause
+function toggleUserSubscriptionPause(userSubscriptionId) {
+    fetch('/subscriptions/toggle_user_subscription_pause', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify({ id: userSubscriptionId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        showToast(data.message);
+        updateUserList();
+        updateSubscriptionList(); // Update the subscription lists dynamically
+    })
+    .catch(error => {
+        showToast('An error occurred: ' + error.message, true);
+    });
+}

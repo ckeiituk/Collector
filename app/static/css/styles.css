@@ -101,12 +101,12 @@ table, th, td {
 
 th, td {
     padding: 12px;
-    text-align: left;
 }
 
 th {
     background-color: #007bff;
     color: white;
+    text-align: center;  /* Center align table headers */
 }
 
 td {
@@ -115,6 +115,11 @@ td {
 
 tr:nth-child(even) td {
     background-color: #f9f9f9;
+}
+
+/* Center align status column in payments table */
+.payments-table td.status {
+    text-align: center;
 }
 
 form {
@@ -305,7 +310,6 @@ table td button[title]:hover::after, .toggle-button[title]:hover::after {
 }
 
 table td.actions {
-    text-align: center;
     white-space: nowrap;
     vertical-align: middle;
 }

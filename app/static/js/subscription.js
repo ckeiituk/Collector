@@ -140,14 +140,12 @@ function attachUserToSubscription(formId) {
     const jsonData = {};
 
     formData.forEach((value, key) => {
-        jsonData[key] = value;
+        if (key === 'is_paused') {
+            jsonData[key] = value === 'on';
+        } else {
+            jsonData[key] = value;
+        }
     });
-
-    // Ensure required fields are present
-    if (!jsonData['user_id'] || !jsonData['subscription_id'] || !jsonData['next_due_date'] || !jsonData['amount']) {
-        showToast('All fields are required.', true);
-        return;
-    }
 
     fetch('/subscriptions/attach_user_to_subscription', {
         method: 'POST',
@@ -157,19 +155,18 @@ function attachUserToSubscription(formId) {
         },
         body: JSON.stringify(jsonData)
     })
-        .then(response => response.json().then(data => {
-            console.log('Server response:', data);
-            if (!response.ok) {
-                throw new Error(data.message);
-            }
-            return data;
-        }))
-        .then(data => {
-            showToast(data.message);
-            updateUserList();
-            updateSubscriptionList(); // Update the subscription lists dynamically
-        })
-        .catch(error => {
-            showToast('An error occurred: ' + error.message, true);
-        });
+    .then(response => response.json().then(data => {
+        if (!response.ok) {
+            throw new Error(data.message);
+        }
+        return data;
+    }))
+    .then(data => {
+        showToast(data.message);
+        updateUserList();
+        updateSubscriptionList();
+    })
+    .catch(error => {
+        showToast('An error occurred: ' + error.message, true);
+    });
 }

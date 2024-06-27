@@ -47,6 +47,9 @@ def add_subscription():
     is_variable = data.get('is_variable', False)
     period = data.get('period')
 
+    # Преобразование значения в boolean
+    is_variable = True if is_variable == 'on' else False
+
     if not all([name, description, monthly_amount, period]):
         return jsonify({'message': 'Missing required fields'}), 400
 
@@ -54,7 +57,7 @@ def add_subscription():
         new_subscription = Subscription(
             name=name,
             description=description,
-            monthly_amount=Decimal(monthly_amount) if monthly_amount else Decimal(0),  # Убедитесь, что monthly_amount не пусто
+            monthly_amount=Decimal(monthly_amount) if monthly_amount else Decimal(0),
             is_variable=is_variable,
             period=period
         )
@@ -73,8 +76,10 @@ def edit_subscription(id):
         subscription.name = data.get('name', subscription.name)
         subscription.description = data.get('description', subscription.description)
         subscription.monthly_amount = Decimal(data.get('monthly_amount', subscription.monthly_amount))
-        subscription.is_variable = data.get('is_variable', subscription.is_variable)
         subscription.period = data.get('period', subscription.period)
+
+        # Преобразование значения в boolean
+        subscription.is_variable = True if data.get('is_variable') == 'on' else False
 
         db.session.commit()
 
@@ -82,6 +87,7 @@ def edit_subscription(id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
+
 
 
 @subscription_bp.route('/delete_subscription/<int:id>', methods=['POST'])
@@ -145,6 +151,10 @@ def attach_user_to_subscription():
     amount = data.get('amount')
     is_paused = data.get('is_paused', False)
 
+    # Преобразование 'is_paused' в булевое значение
+    if isinstance(is_paused, str):
+        is_paused = is_paused.lower() in ['true', '1', 'yes', 'on']
+
     if not all([user_id, subscription_id, next_due_date, amount]):
         return jsonify({'message': 'Missing required fields'}), 400
 
@@ -162,6 +172,7 @@ def attach_user_to_subscription():
     except Exception as e:
         db.session.rollback()
         return jsonify({'message': str(e)}), 500
+
 
 @subscription_bp.route('/detach_user_subscription/<int:user_subscription_id>/<int:subscription_id>', methods=['POST'])
 def detach_user_from_subscription(user_subscription_id, subscription_id):
@@ -214,4 +225,16 @@ def get_subscriptions_partial():
         'regular_subscriptions': regular_subscriptions_html
     })
 
+
+@subscription_bp.route('/toggle_user_subscription_pause', methods=['POST'])
+def toggle_user_subscription_pause():
+    data = request.get_json()
+    user_subscription_id = data.get('id')
+    user_subscription = UserSubscription.query.get_or_404(user_subscription_id)
+    user_subscription.is_paused = not user_subscription.is_paused
+
+    db.session.commit()
+
+    status = 'paused' if user_subscription.is_paused else 'resumed'
+    return jsonify({'message': f'User subscription {status} successfully.'})
 

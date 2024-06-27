@@ -51,6 +51,13 @@
             <button type="button" class="action-button" data-tippy-content="Detach" onclick="detachUserFromSubscription({{ user_subscription.id }}, {{ subscription.id }})">
               <i class="fas fa-unlink"></i>
             </button>
+            <button type="button" class="action-button" data-tippy-content="{% if user_subscription.is_paused %}Resume{% else %}Pause{% endif %}" onclick="toggleUserSubscriptionPause({{ user_subscription.id }})">
+              {% if user_subscription.is_paused %}
+              <i class="fas fa-play"></i>
+              {% else %}
+              <i class="fas fa-pause"></i>
+              {% endif %}
+            </button>
           </li>
           {% endfor %}
         </ul>

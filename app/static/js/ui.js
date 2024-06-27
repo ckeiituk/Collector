@@ -123,3 +123,5 @@ function toggleDetails(id) {
         details.setAttribute('open', 'open');
     }
 }
+
+

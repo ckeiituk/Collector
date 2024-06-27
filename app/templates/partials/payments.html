@@ -1,12 +1,13 @@
+<!-- app/templates/partials/payments.html -->
 <h2>Payments</h2>
 <div class="table-container">
-<table>
+<table class="payments-table">
   <thead>
   <tr>
     <th>User</th>
     <th>Amount</th>
     <th>Comment</th>
-    <th>Status</th>
+    <th class="status">Status</th> <!-- Add class status here -->
     <th class="actions">Actions</th>
   </tr>
   </thead>
@@ -17,10 +18,10 @@
   </tr>
   {% for payment in payments %}
   <tr>
-    <td>{{ payment.user.name }} {{ payment.id }}</td>
+    <td>{{ payment.id }}.{{ payment.user.name }}</td>
     <td>{{ payment.amount }} RUB</td>
     <td>{{ payment.comment | safe }}</td>
-    <td>
+    <td class="status">
       {% if payment.status == 'pending' %}
       <i class="fas fa-times-circle" style="color: red;" title="Pending"></i>
       {% else %}
@@ -45,7 +46,6 @@
         <i class="fas fa-bell"></i>
       </button>
     </td>
-
   </tr>
   {% endfor %}
   {% endfor %}

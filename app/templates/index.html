@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Management System</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/darkmode.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
@@ -17,6 +18,8 @@
   <script src="{{ url_for('static', filename='js/user.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/reminder.js') }}" defer></script>
   <script src="{{ url_for('static', filename='js/payment.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/darkmode.js') }}" defer></script>
+
   <meta name="csrf-token" content="{{ csrf_token }}">
 </head>
 <body>
@@ -82,6 +85,7 @@
       <button class="sidebar-tab-button" data-tippy-content="Add Reminder" onclick="openSidebarTab(event, 'add_reminder')">
         <i class="fas fa-bell"></i>
       </button>
+      <button id="darkmode-toggle" data-tippy-content="Dark Mode" class="sidebar-tab-button">🌓</button>
     </div>
     <div id="add_user" class="sidebar-tab-content">
       {% include 'forms/add_user.html' %}
@@ -99,6 +103,7 @@
     <div id="attach_user_to_subscription" class="sidebar-tab-content" style="display:none;"></div>
   </div>
 </div>
+
 
 </body>
 </html>

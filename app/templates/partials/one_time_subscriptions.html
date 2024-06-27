@@ -7,7 +7,7 @@
     <th>Description</th>
     <th>Amount</th>
     <th>Period</th>
-    <th class="actions">Actions</th> <!-- Добавлен класс actions -->
+    <th class="actions">Actions</th>
   </tr>
   </thead>
   <tbody>
@@ -47,6 +47,13 @@
             {{ user_subscription.user.name }} - {{ user_subscription.amount }} RUB
             <button type="button" class="action-button" data-tippy-content="Detach" onclick="detachUserFromSubscription({{ user_subscription.id }}, {{ subscription.id }})">
               <i class="fas fa-unlink"></i>
+            </button>
+            <button type="button" class="action-button" data-tippy-content="{% if user_subscription.is_paused %}Resume{% else %}Pause{% endif %}" onclick="toggleUserSubscriptionPause({{ user_subscription.id }})">
+              {% if user_subscription.is_paused %}
+              <i class="fas fa-play"></i>
+              {% else %}
+              <i class="fas fa-pause"></i>
+              {% endif %}
             </button>
           </li>
           {% endfor %}
@@ -109,6 +116,14 @@
             <button type="button" class="action-button" data-tippy-content="Detach" onclick="detachUserFromSubscription({{ user_subscription.id }}, {{ subscription.id }})">
               <i class="fas fa-unlink"></i>
             </button>
+            <button type="button" class="action-button" data-tippy-content="{% if user_subscription.is_paused %}Resume{% else %}Pause{% endif %}" onclick="toggleUserSubscriptionPause({{ user_subscription.id }})">
+              {% if user_subscription.is_paused %}
+              <i class="fas fa-play"></i>
+              {% else %}
+              <i class="fas fa-pause"></i>
+              {% endif %}
+            </button>
+          </li>
           </li>
           {% endfor %}
         </ul>

@@ -2,13 +2,13 @@
 <table class="details-table">
     <thead>
     <tr>
-        <th>Name</th>
-        <th>Discord ID</th>
-        <th>VK ID</th>
-        <th>Telegram ID</th>
-        <th>Preferred Platform</th>
-        <th>Notification Time</th>
-        <th>Balance</th>
+        <th class="centered-header">Name</th>
+        <th class="centered-header">Discord ID</th>
+        <th class="centered-header">VK ID</th>
+        <th class="centered-header">Telegram ID</th>
+        <th class="centered-header">Preferred Platform</th>
+        <th class="centered-header">Notification Time</th>
+        <th class="centered-header">Balance</th>
         <th class="actions">Actions</th> <!-- Добавлен класс actions -->
     </tr>
     </thead>
@@ -54,13 +54,13 @@
                         <button type="button" class="action-button" data-tippy-content="Detach" onclick="detachUserFromSubscription({{ user_subscription.id }}, {{ user_subscription.subscription.id }})">
                             <i class="fas fa-unlink"></i>
                         </button>
-                        <button type="button" class="action-button" data-tippy-content="{% if user_subscription.subscription.is_paused %}Resume{% else %}Pause{% endif %}" onclick="toggleSubscriptionPause({{ user_subscription.subscription.id }})">
-                            {% if user_subscription.subscription.is_paused %}
-                            <i class="fas fa-play"></i>
-                            {% else %}
-                            <i class="fas fa-pause"></i>
-                            {% endif %}
-                        </button>
+            <button type="button" class="action-button" data-tippy-content="{% if user_subscription.is_paused %}Resume{% else %}Pause{% endif %}" onclick="toggleUserSubscriptionPause({{ user_subscription.id }})">
+              {% if user_subscription.is_paused %}
+              <i class="fas fa-play"></i>
+              {% else %}
+              <i class="fas fa-pause"></i>
+              {% endif %}
+            </button>
                     </li>
                     {% endif %}
                     {% endfor %}
