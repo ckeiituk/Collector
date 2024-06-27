@@ -24,7 +24,6 @@ h1.centered {
 
 h2 {
     font-size: 1.8em;
-    color: #007bff;
 }
 
 h3 {
@@ -93,6 +92,8 @@ table {
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            /* 11 */
+    border: none; /* Убираем внешнюю границу у таблицы */
 }
 
 table, th, td {
@@ -322,4 +323,13 @@ table td.actions button {
 .sidebar-tab-buttons {
     justify-content: center;
     margin-bottom: 20px;
+}
+
+.payments-table tr:nth-child(even) td,
+.payments-table tr:nth-child(odd) td {
+    background-color: #ffffff; /* Задайте одинаковый цвет для всех строк */
+}
+/*#1e1f26*/
+.payments-table tr.date-row td{
+    background-color: #f9f9f9;
 }

@@ -1,54 +1,54 @@
 <!-- app/templates/partials/payments.html -->
 <h2>Payments</h2>
 <div class="table-container">
-<table class="payments-table">
-  <thead>
-  <tr>
-    <th>User</th>
-    <th>Amount</th>
-    <th>Comment</th>
-    <th class="status">Status</th> <!-- Add class status here -->
-    <th class="actions">Actions</th>
-  </tr>
-  </thead>
-  <tbody>
-  {% for date, payments in payments_by_date.items() %}
-  <tr>
-    <td colspan="5"><strong>{{ date }}</strong></td>
-  </tr>
-  {% for payment in payments %}
-  <tr>
-    <td>{{ payment.id }}.{{ payment.user.name }}</td>
-    <td>{{ payment.amount }} RUB</td>
-    <td>{{ payment.comment | safe }}</td>
-    <td class="status">
-      {% if payment.status == 'pending' %}
-      <i class="fas fa-times-circle" style="color: red;" title="Pending"></i>
-      {% else %}
-      <i class="fas fa-check-circle" style="color: green;" title="Paid"></i>
-      {% endif %}
-    </td>
-    <td class="actions">
-      <button type="button" class="action-button" data-tippy-content="Edit" onclick="loadEditForm('payment', '{{ payment.id }}')">
-        <i class="fas fa-edit"></i>
-      </button>
-      <button type="button" class="action-button" data-tippy-content="Delete" onclick="deletePayment({{ payment.id }})">
-        <i class="fas fa-trash"></i>
-      </button>
-      <button type="button" class="action-button" data-tippy-content="{% if payment.status == 'pending' %}Mark as Paid{% else %}Mark as Pending{% endif %}" onclick="updatePaymentStatus({{ payment.id }})">
-        {% if payment.status == 'pending' %}
-        <i class="fas fa-check"></i>
-        {% else %}
-        <i class="fas fa-times"></i>
-        {% endif %}
-      </button>
-      <button type="button" class="action-button" data-tippy-content="Create Reminder" onclick="createReminder({{ payment.id }})" {% if payment.status != 'pending' %}style="display:none;"{% endif %}>
-        <i class="fas fa-bell"></i>
-      </button>
-    </td>
-  </tr>
-  {% endfor %}
-  {% endfor %}
-  </tbody>
-</table>
+    <table class="payments-table">
+        <thead>
+        <tr>
+            <th>User</th>
+            <th>Amount</th>
+            <th>Comment</th>
+            <th class="status">Status</th>
+            <th class="actions">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for date, payments in payments_by_date.items() %}
+        <tr class="date-row">
+            <td colspan="5"><strong>{{ date }}</strong></td>
+        </tr>
+        {% for payment in payments %}
+        <tr class="payment-row">
+            <td>{{ payment.id }}.{{ payment.user.name }}</td>
+            <td>{{ payment.amount }} RUB</td>
+            <td>{{ payment.comment | safe }}</td>
+            <td class="status">
+                {% if payment.status == 'pending' %}
+                <i class="fas fa-times-circle" style="color: red;" title="Pending"></i>
+                {% else %}
+                <i class="fas fa-check-circle" style="color: green;" title="Paid"></i>
+                {% endif %}
+            </td>
+            <td class="actions">
+                <button type="button" class="action-button" data-tippy-content="Edit" onclick="loadEditForm('payment', '{{ payment.id }}')">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button type="button" class="action-button" data-tippy-content="Delete" onclick="deletePayment({{ payment.id }})">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <button type="button" class="action-button" data-tippy-content="{% if payment.status == 'pending' %}Mark as Paid{% else %}Mark as Pending{% endif %}" onclick="updatePaymentStatus({{ payment.id }})">
+                    {% if payment.status == 'pending' %}
+                    <i class="fas fa-check"></i>
+                    {% else %}
+                    <i class="fas fa-times"></i>
+                    {% endif %}
+                </button>
+                <button type="button" class="action-button" data-tippy-content="Create Reminder" onclick="createReminder({{ payment.id }})" {% if payment.status != 'pending' %}style="display:none;"{% endif %}>
+                    <i class="fas fa-bell"></i>
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
 </div>

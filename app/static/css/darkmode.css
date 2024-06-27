@@ -1,14 +1,19 @@
+:root {
+  --main-color: #4169E1; /*Основной цвет кнопок #7a8ba3(серый) или #5dade2(синий) */
+  --act-color: #2743B3; /*Навелся или текущая вкладка цвет кнопок #5a6978(серый) или #4a8fd4(синий)*/
+}
+
 .dark-mode {
     font-family: 'Roboto', sans-serif;
     line-height: 1.6;
-    background-color: #1e1f26; /* Премиальный темный фон */
+    background-color: #1e1f26;
     padding: 20px;
-    color: #e4e6eb; /* Светлый текст */
+    color: #e4e6eb;
 }
 
 .dark-mode h1.centered, .dark-mode h2, .dark-mode h3 {
     margin-bottom: 20px;
-    color: #e4e6eb; /* Светлый текст */
+    color: #e4e6eb;
 }
 
 .dark-mode h1.centered {
@@ -18,12 +23,11 @@
 
 .dark-mode h2 {
     font-size: 1.8em;
-    color: #7a8ba3; /* Мягкий акцентный цвет */
 }
 
 .dark-mode h3 {
     font-size: 1.4em;
-    color: #7a8ba3; /* Мягкий акцентный цвет */
+    color: var(--main-color);
 }
 
 .dark-mode .container {
@@ -43,10 +47,10 @@
     top: 20px;
     max-height: calc(100vh - 40px);
     overflow-y: auto;
-    background-color: #2c2d33; /* Темный фон сайдбара */
-    border-left: 1px solid #3b3d46; /* Легкий бордер */
+    background-color: #2c2d33;
+    border-left: 1px solid #3b3d46;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     border-radius: 8px;
 }
 
@@ -60,8 +64,8 @@
     padding: 10px 15px;
     font-size: 14px;
     cursor: pointer;
-    background-color: #7a8ba3; /* Мягкий акцентный цвет */
-    color: #ffffff; /* Цвет текста кнопки */
+    background-color: var(--main-color);
+    color: white;
     border: none;
     border-radius: 4px;
     transition: background-color 0.3s ease;
@@ -70,7 +74,7 @@
 .dark-mode .tab-button:hover, .dark-mode .tab-button.active,
 .dark-mode .sidebar-tab-button:hover, .dark-mode .sidebar-tab-button.active,
 .dark-mode .toggle-button:hover, .dark-mode button:hover {
-    background-color: #697a92; /* Более темный акцент при наведении */
+    background-color: var(--act-color);
 }
 
 .dark-mode .tab-content, .dark-mode .sidebar-tab-content {
@@ -87,11 +91,13 @@
     margin-bottom: 20px;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        /* 11 */
+    border: none; /* Убираем внешнюю границу у таблицы */
 }
 
 .dark-mode table, .dark-mode th, .dark-mode td {
-    border: 1px solid #3b3d46; /* Бордер таблицы */
+    border: 1px solid #3b3d46;
 }
 
 .dark-mode th, .dark-mode td {
@@ -99,17 +105,27 @@
 }
 
 .dark-mode th {
-    background-color: #7a8ba3; /* Фон заголовков */
-    color: #ffffff; /* Текст заголовков */
+    background-color: var(--main-color);
+    color: white;
+    text-align: center;
 }
 
 .dark-mode td {
-    background-color: #2c2d33; /* Фон ячеек */
-    color: #e4e6eb; /* Текст ячеек */
+    background-color: #2c2d33;
+    color: #e4e6eb;
 }
 
 .dark-mode tr:nth-child(even) td {
-    background-color: #1e1f26; /* Темный фон строк */
+    background-color: #262830;
+}
+
+.dark-mode .payments-table tr.payment-row:nth-child(odd) {
+    background-color: #262830; /* Темный фон для нечетных строк */
+}
+
+/* Центрирование колонки статуса в таблице платежей */
+.dark-mode .payments-table td.status {
+    text-align: center;
 }
 
 .dark-mode form {
@@ -120,7 +136,6 @@
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
-    color: #e4e6eb; /* Светлый текст */
 }
 
 .dark-mode form input[type="text"], .dark-mode form input[type="number"],
@@ -129,11 +144,11 @@
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
-    border: 1px solid #3b3d46; /* Бордер инпутов */
+    border: 1px solid #3b3d46;
     border-radius: 4px;
     box-sizing: border-box;
-    background-color: #3b3d46; /* Фон инпутов */
-    color: #e4e6eb; /* Текст инпутов */
+    background-color: #3b3d46;
+    color: #e4e6eb;
 }
 
 .dark-mode form input[type="checkbox"] {
@@ -147,17 +162,16 @@
 
 .dark-mode details {
     margin-top: 20px;
-    background-color: #3b3d46; /* Темный фон */
+    background-color: #2c2d33;
     padding: 10px;
-    border: 1px solid #7a8ba3; /* Мягкий акцентный бордер */
+    border: 1px solid #3b3d46;
     border-radius: 4px;
-    color: #e4e6eb; /* Светлый текст */
 }
 
 .dark-mode details summary {
     cursor: pointer;
     font-weight: bold;
-    color: #7a8ba3; /* Мягкий акцентный цвет */
+    color: var(--main-color);
     margin-bottom: 10px;
     display: flex;
     align-items: center;
@@ -165,7 +179,7 @@
 }
 
 .dark-mode details summary:hover {
-    color: #697a92; /* Темный акцент при наведении */
+    color: var(--act-color);
 }
 
 .dark-mode details[open] summary::after {
@@ -201,10 +215,9 @@
 .dark-mode .form-container {
     margin-bottom: 20px;
     padding: 20px;
-    background-color: #3b3d46; /* Темный фон */
-    border: 1px solid #7a8ba3; /* Мягкий акцентный бордер */
+    background-color: #2c2d33;
+    border: 1px solid #3b3d46;
     border-radius: 4px;
-    color: #e4e6eb; /* Светлый текст */
 }
 
 @media (max-width: 768px) {
@@ -237,14 +250,13 @@
 .dark-mode table.details-table details {
     margin: 0;
     padding: 0;
-    border-bottom: 1px solid #7a8ba3;
+    border-bottom: 1px solid var(--act-color);
 }
 
 .dark-mode table.details-table details summary {
     padding: 5px;
     cursor: pointer;
-    background-color: #2c2d33;
-    color: #7a8ba3;
+    background-color: #1e1f26;
 }
 
 .dark-mode table.details-table details[open] > * {
@@ -281,7 +293,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    color: #7a8ba3;
+    color: #e4e6eb;
 }
 
 .dark-mode table td button i, .dark-mode .toggle-button i {
@@ -292,7 +304,7 @@
 .dark-mode table td button[title]:hover::after, .dark-mode .toggle-button[title]:hover::after {
     content: attr(title);
     background-color: #333;
-    color: #e4e6eb;
+    color: #fff;
     padding: 4px 8px;
     border-radius: 4px;
     position: absolute;
@@ -317,4 +329,13 @@
 .dark-mode .sidebar-tab-buttons {
     justify-content: center;
     margin-bottom: 20px;
+}
+
+.dark-mode .payments-table tr:nth-child(even) td,
+.dark-mode .payments-table tr:nth-child(odd) td {
+    background-color: #262830; /* Задайте одинаковый цвет для всех строк */
+}
+/*#1e1f26*/
+.dark-mode .payments-table tr.date-row td{
+    background-color: #2c2d33;
 }
