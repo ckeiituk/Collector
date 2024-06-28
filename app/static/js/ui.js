@@ -114,33 +114,57 @@ document.addEventListener('DOMContentLoaded', (event) => {
     document.querySelector('.sidebar-tab-button').click();
 });
 
-// Function to toggle details in user subscriptions
 function toggleUserSubscriptions(userId) {
+    console.log('toggleUserSubscriptions called for user:', userId);
+
     const userRow = document.getElementById(`user-row-${userId}`);
     const existingDetailRow = document.getElementById(`details-row-${userId}`);
 
-    if (existingDetailRow) {
-        existingDetailRow.remove();
-    } else {
-        fetch(`/user_subscriptions/${userId}`)
-            .then(response => response.json())
-            .then(subscriptions => {
-                const detailRow = document.createElement('tr');
-                detailRow.id = `details-row-${userId}`;
-                detailRow.innerHTML = `
-                    <td colspan="8">
-                        <ul>
-                            ${renderUserSubscriptions(subscriptions)}
-                        </ul>
-                    </td>
-                `;
-                userRow.insertAdjacentElement('afterend', detailRow);
-            })
-            .catch(error => {
-                console.error('Error fetching subscriptions:', error);
-            });
+    if (existingDetailRow && existingDetailRow.style.display === 'table-row') {
+        // Если строка с деталями уже существует и видима, просто скрываем её
+        existingDetailRow.style.display = 'none';
+        return;
     }
+
+    // Если строка не существует или скрыта, отправляем запрос на получение подписок
+    console.log(`Fetching subscriptions for user ${userId}`);
+    fetch(`/user_subscriptions/${userId}`)
+        .then(response => {
+            console.log(`Received response for user ${userId}`, response);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(subscriptions => {
+            console.log(`Subscriptions for user ${userId}:`, subscriptions);
+            let detailRow;
+            if (existingDetailRow) {
+                // Если строка с деталями уже существует, используем её
+                detailRow = existingDetailRow;
+                detailRow.style.display = 'table-row';
+            } else {
+                // Если строки с деталями не существует, создаём новую
+                detailRow = document.createElement('tr');
+                detailRow.id = `details-row-${userId}`;
+                detailRow.className = 'details-row';
+                userRow.insertAdjacentElement('afterend', detailRow);
+            }
+
+            // Заполняем строку с деталями подписками
+            detailRow.innerHTML = `
+                <td colspan="8">
+                    <ul>
+                        ${renderUserSubscriptions(subscriptions)}
+                    </ul>
+                </td>
+            `;
+        })
+        .catch(error => {
+            console.error('Error fetching subscriptions:', error);
+        });
 }
+
 
 function renderUserSubscriptions(subscriptions) {
     let subscriptionsHtml = '';
@@ -167,6 +191,9 @@ function renderUserSubscriptions(subscriptions) {
     });
     return subscriptionsHtml;
 }
+
+
+
 function toggleDetails(id) {
     const details = document.getElementById(id);
     if (details.hasAttribute('open')) {
@@ -176,7 +203,6 @@ function toggleDetails(id) {
     }
 }
 
-// Function to toggle subscription users
 function toggleSubscriptionUsers(subscriptionId) {
     const userRow = document.getElementById(`subscription-users-${subscriptionId}`);
     if (userRow.style.display === "none") {
@@ -185,6 +211,7 @@ function toggleSubscriptionUsers(subscriptionId) {
         userRow.style.display = "none";
     }
 }
+
 
 
 

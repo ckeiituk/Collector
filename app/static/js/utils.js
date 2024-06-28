@@ -4,19 +4,13 @@ function getCsrfToken() {
     return csrfMetaTag ? csrfMetaTag.getAttribute('content') : '';
 }
 
-// Function to update the user list
-function updateUserList(key = true) {
-    let states;
-    if (key) {
-        states = saveDetailsState();
-    }
+function updateUserList() {
+    const toggledUsers = saveUserToggleState();
     fetch('/get_users_partial')
         .then(response => response.json())
         .then(data => {
             document.getElementById('users').innerHTML = data.users_html;
-            if (key && states) {
-                restoreDetailsState(states);
-            }
+            restoreUserToggleState(toggledUsers);
         })
         .catch(error => {
             console.error('Error loading the user list:', error);
@@ -24,26 +18,58 @@ function updateUserList(key = true) {
         });
 }
 
-// Function to update the subscription lists
-function updateSubscriptionList(key = true) {
-    let states;
-    if (key) {
-        states = saveDetailsState();
+function saveUserToggleState() {
+    const toggledUsers = {};
+    document.querySelectorAll('.details-row').forEach(row => {
+        const userId = row.id.replace('details-row-', '');
+        toggledUsers[userId] = row.style.display !== 'none';
+    });
+    return toggledUsers;
+}
+function restoreUserToggleState(toggledUsers) {
+    for (const [userId, isToggled] of Object.entries(toggledUsers)) {
+        const row = document.getElementById(`details-row-${userId}`);
+        if (row) {
+            row.style.display = isToggled ? 'table-row' : 'none';
+        }
     }
+}
+
+
+function saveSubscriptionToggleState() {
+    const toggledSubscriptions = {};
+    document.querySelectorAll('.subscription-users-row').forEach(row => {
+        const subscriptionId = row.id.replace('subscription-users-', '');
+        toggledSubscriptions[subscriptionId] = row.style.display !== 'none';
+    });
+    return toggledSubscriptions;
+}
+
+function restoreSubscriptionToggleState(toggledSubscriptions) {
+    for (const [subscriptionId, isToggled] of Object.entries(toggledSubscriptions)) {
+        const row = document.getElementById(`subscription-users-${subscriptionId}`);
+        if (row) {
+            row.style.display = isToggled ? 'table-row' : 'none';
+        }
+    }
+}
+
+
+function updateSubscriptionList() {
+    const toggledSubscriptions = saveSubscriptionToggleState();
     fetch('/subscriptions/get_subscriptions_partial')
         .then(response => response.json())
         .then(data => {
             document.getElementById('one_time_subscriptions').innerHTML = data.one_time_subscriptions;
             document.getElementById('regular_subscriptions').innerHTML = data.regular_subscriptions;
-            if (key) {
-                restoreDetailsState(states);
-            }
+            restoreSubscriptionToggleState(toggledSubscriptions);
         })
         .catch(error => {
             console.error('Error loading the subscription lists:', error);
             showToast('Error loading the subscription lists: ' + error.message, true);
         });
 }
+
 
 // Function to update the reminder list
 function updateReminderList(key = true) {

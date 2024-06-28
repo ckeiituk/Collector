@@ -124,8 +124,10 @@ def get_users_partial():
     users_html = render_template('partials/users.html', users=users)
     return jsonify({'users_html': users_html})
 
+
 @user_bp.route('/user_subscriptions/<int:user_id>', methods=['GET'])
 def user_subscriptions(user_id):
+    print(f"Fetching subscriptions for user {user_id}")  # Отладка
     user = User.query.get_or_404(user_id)
     user_subscriptions = user.subscriptions
     subscriptions_data = []
@@ -141,5 +143,8 @@ def user_subscriptions(user_id):
                 'is_paused': user_subscription.is_paused,
                 'csrf_token': generate_csrf()  # Generate CSRF token for each form
             })
+    print(f"Subscriptions data for user {user_id}: {subscriptions_data}")  # Отладка
     return jsonify(subscriptions_data)
+
+
 

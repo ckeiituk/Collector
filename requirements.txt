@@ -5,6 +5,7 @@ flask_wtf
 flask_sqlalchemy
 setuptools
 psycopg2
+redis
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE users TO ckeiituk;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE reminders TO ckeiituk;
