@@ -31,71 +31,25 @@ function addSubscription() {
         });
 }
 
-function updateUserSubscription(event, subscriptionId) {
-    event.preventDefault();
-    const form = document.getElementById(`updateUserSubscriptionForm-${subscriptionId}`);
-    const formData = new FormData(form);
-
-    fetch(`/update_user_subscription/${subscriptionId}`, {
+// Function to toggle subscription pause
+function toggleSubscriptionPause(subscriptionId) {
+    fetch('/subscriptions/toggle_subscription_pause', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRFToken': formData.get('csrf_token')
+            'X-CSRFToken': getCsrfToken()
         },
-        body: JSON.stringify(Object.fromEntries(formData))
+        body: JSON.stringify({ id: subscriptionId })
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.message) {
-            alert(data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error updating user subscription:', error);
-    });
-}
-
-function detachUserFromSubscription(userSubscriptionId, subscriptionId) {
-    fetch(`/detach_user_subscription/${userSubscriptionId}/${subscriptionId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token() }}'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.message) {
-            document.getElementById(`userSubscription${userSubscriptionId}`).remove();
-            alert(data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error detaching user from subscription:', error);
-    });
-}
-
-function toggleUserSubscriptionPause(userSubscriptionId) {
-    fetch(`/toggle_user_subscription_pause`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token() }}'
-        },
-        body: JSON.stringify({ id: userSubscriptionId })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.message) {
-            alert(data.message);
-            const pauseButton = document.querySelector(`#userSubscription${userSubscriptionId} .action-button[data-tippy-content="${data.message.includes('paused') ? 'Resume' : 'Pause'}"]`);
-            pauseButton.dataset.tippyContent = data.message.includes('paused') ? 'Resume' : 'Pause';
-            pauseButton.querySelector('i').className = `fas fa-${data.message.includes('paused') ? 'play' : 'pause'}`;
-        }
-    })
-    .catch(error => {
-        console.error('Error toggling user subscription pause:', error);
-    });
+        .then(response => response.json())
+        .then(data => {
+            showToast(data.message);
+            updateUserList();
+            updateSubscriptionList(); // Update the subscription lists dynamically
+        })
+        .catch(error => {
+            showToast('An error occurred: ' + error.message, true);
+        });
 }
 
 // Function to delete subscription
@@ -149,6 +103,30 @@ function editSubscription(formId, subscriptionId) {
         .then(data => {
             showToast(data.message);
             updateSubscriptionList(); // Update the subscription lists dynamically
+        })
+        .catch(error => {
+            showToast('An error occurred: ' + error.message, true);
+        });
+}
+
+// Function to detach user from subscription
+function detachUserFromSubscription(userSubscriptionId, subscriptionId) {
+    fetch(`/subscriptions/detach_user_subscription/${userSubscriptionId}/${subscriptionId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfToken()
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                showToast(data.message);
+                updateUserList();
+                updateSubscriptionList(); // Update the subscription lists dynamically
+            } else {
+                showToast('Failed to detach user from subscription', true);
+            }
         })
         .catch(error => {
             showToast('An error occurred: ' + error.message, true);

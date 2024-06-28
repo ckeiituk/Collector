@@ -36,7 +36,33 @@
     </tr>
     <tr id="details-row-{{ user.id }}" class="details-row" style="display: none;">
         <td colspan="8">
-            <!-- Subscription details will be populated here by JavaScript -->
+            <ul>
+                {% for user_subscription in user.subscriptions %}
+                {% if not (user_subscription.subscription.is_paused and user_subscription.subscription.period == 'one-time') %}
+                <li id="userSubscription{{ user_subscription.id }}">
+                    {{ user_subscription.subscription.name }} ({{ user_subscription.subscription.description }})
+                    <form id="updateUserSubscriptionForm-{{ user_subscription.id }}" onsubmit="updateUserSubscription(event, {{ user_subscription.id }})" style="display:inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <input type="number" name="amount" value="{{ user_subscription.amount }}" step="0.01" required>
+                        <input type="checkbox" name="is_manual" {% if user_subscription.is_manual %}checked{% endif %}> Manual
+                        <button type="submit" class="action-button" data-tippy-content="Update">
+                            <i class="fas fa-save"></i>
+                        </button>
+                    </form>
+                    <button type="button" class="action-button" data-tippy-content="Detach" onclick="detachUserFromSubscription({{ user_subscription.id }}, {{ user_subscription.subscription.id }})">
+                        <i class="fas fa-unlink"></i>
+                    </button>
+                    <button type="button" class="action-button" data-tippy-content="{% if user_subscription.is_paused %}Resume{% else %}Pause{% endif %}" onclick="toggleUserSubscriptionPause({{ user_subscription.id }})">
+                      {% if user_subscription.is_paused %}
+                      <i class="fas fa-play"></i>
+                      {% else %}
+                      <i class="fas fa-pause"></i>
+                      {% endif %}
+                    </button>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
         </td>
     </tr>
     {% endfor %}

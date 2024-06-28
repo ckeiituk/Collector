@@ -115,104 +115,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 function toggleUserSubscriptions(userId) {
-    console.log('toggleUserSubscriptions called for user:', userId);
-
-    const userRow = document.getElementById(`user-row-${userId}`);
-    const existingDetailRow = document.getElementById(`details-row-${userId}`);
-
-    if (existingDetailRow && existingDetailRow.style.display === 'table-row') {
-        // Если строка с деталями уже существует и видима, просто скрываем её
-        existingDetailRow.style.display = 'none';
-        return;
-    }
-
-    // Если строка не существует или скрыта, отправляем запрос на получение подписок
-    console.log(`Fetching subscriptions for user ${userId}`);
-    fetch(`/user_subscriptions/${userId}`)
-        .then(response => {
-            console.log(`Received response for user ${userId}`, response);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(subscriptions => {
-            console.log(`Subscriptions for user ${userId}:`, subscriptions);
-            let detailRow;
-            if (existingDetailRow) {
-                // Если строка с деталями уже существует, используем её
-                detailRow = existingDetailRow;
-                detailRow.style.display = 'table-row';
-            } else {
-                // Если строки с деталями не существует, создаём новую
-                detailRow = document.createElement('tr');
-                detailRow.id = `details-row-${userId}`;
-                detailRow.className = 'details-row';
-                userRow.insertAdjacentElement('afterend', detailRow);
-            }
-
-            // Заполняем строку с деталями подписками
-            detailRow.innerHTML = `
-                <td colspan="8">
-                    <ul>
-                        ${renderUserSubscriptions(subscriptions)}
-                    </ul>
-                </td>
-            `;
-
-            // Инициализируем Tippy.js на вновь созданных элементах
-            tippy('.action-button', {
-                content(reference) {
-                    return reference.getAttribute('data-tippy-content');
-                },
-                placement: 'top',
-                arrow: true,
-                theme: 'light',
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching subscriptions:', error);
-        });
-}
-
-
-
-function renderUserSubscriptions(subscriptions) {
-    let subscriptionsHtml = '';
-    subscriptions.forEach(subscription => {
-        subscriptionsHtml += `
-            <li id="userSubscription${subscription.id}">
-                ${subscription.name} (${subscription.description})
-                <form id="updateUserSubscriptionForm-${subscription.id}" onsubmit="updateUserSubscription(event, ${subscription.id})" style="display:inline;">
-                    <input type="hidden" name="csrf_token" value="${subscription.csrf_token}">
-                    <input type="number" name="amount" value="${subscription.amount}" step="0.01" required>
-                    <input type="checkbox" name="is_manual" ${subscription.is_manual ? 'checked' : ''}> Manual
-                    <button type="submit" class="action-button" data-tippy-content="Update">
-                        <i class="fas fa-save"></i>
-                    </button>
-                </form>
-                <button type="button" class="action-button" data-tippy-content="Detach" onclick="detachUserFromSubscription(${subscription.id}, ${subscription.subscription_id})">
-                    <i class="fas fa-unlink"></i>
-                </button>
-                <button type="button" class="action-button" data-tippy-content="${subscription.is_paused ? 'Resume' : 'Pause'}" onclick="toggleUserSubscriptionPause(${subscription.id})">
-                    <i class="fas fa-${subscription.is_paused ? 'play' : 'pause'}"></i>
-                </button>
-            </li>
-        `;
-    });
-    return subscriptionsHtml;
-}
-
-
-
-function toggleDetails(id) {
-    const details = document.getElementById(id);
-    if (details.hasAttribute('open')) {
-        details.removeAttribute('open');
+    const userRow = document.getElementById(`details-row-${userId}`);
+    if (userRow.style.display === "none") {
+        userRow.style.display = "table-row";
     } else {
-        details.setAttribute('open', 'open');
+        userRow.style.display = "none";
     }
 }
+
 
 function toggleSubscriptionUsers(subscriptionId) {
     const userRow = document.getElementById(`subscription-users-${subscriptionId}`);

@@ -125,26 +125,4 @@ def get_users_partial():
     return jsonify({'users_html': users_html})
 
 
-@user_bp.route('/user_subscriptions/<int:user_id>', methods=['GET'])
-def user_subscriptions(user_id):
-    print(f"Fetching subscriptions for user {user_id}")  # Отладка
-    user = User.query.get_or_404(user_id)
-    user_subscriptions = user.subscriptions
-    subscriptions_data = []
-    for user_subscription in user_subscriptions:
-        if not (user_subscription.subscription.is_paused and user_subscription.subscription.period == 'one-time'):
-            subscriptions_data.append({
-                'id': user_subscription.id,
-                'subscription_id': user_subscription.subscription.id,
-                'name': user_subscription.subscription.name,
-                'description': user_subscription.subscription.description,
-                'amount': str(user_subscription.amount),
-                'is_manual': user_subscription.is_manual,
-                'is_paused': user_subscription.is_paused,
-                'csrf_token': generate_csrf()  # Generate CSRF token for each form
-            })
-    print(f"Subscriptions data for user {user_id}: {subscriptions_data}")  # Отладка
-    return jsonify(subscriptions_data)
-
-
 
