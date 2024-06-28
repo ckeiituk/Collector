@@ -1,0 +1,162 @@
+Отлично! Рад слышать, что все заработало после изменения прав доступа. Вот итоговая инструкция с учетом этого важного шага.
+
+### Итоговая инструкция по настройке Apache для Flask-приложения
+
+#### 1. Установка необходимых пакетов
+
+Убедитесь, что у вас установлены Apache, модуль WSGI для Apache, Python и Flask. Если они еще не установлены, выполните следующие команды:
+
+```bash
+sudo apt update
+sudo apt install apache2
+sudo apt install libapache2-mod-wsgi-py3
+sudo apt install python3-pip
+```
+
+#### 2. Установка Flask
+
+Установите Flask и другие зависимости вашего приложения с помощью pip. Войдите в вашу виртуальную среду и установите зависимости:
+
+```bash
+cd /home/collector/Collector
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+#### 3. Проверка структуры проекта
+
+Убедитесь, что структура вашего проекта выглядит следующим образом:
+
+```
+/home/collector/Collector/
+├── app/
+│   ├── celery_factory.py
+│   ├── factory.py
+│   ├── tasks.py
+│   ├── celery.py
+│   ├── utils.py
+│   ├── __init__.py
+│   ├── models.py
+│   ├── database.py
+│   ├── static/
+│   │   ├── js/
+│   │   │   ├── ui.js
+│   │   │   ├── user.js
+│   │   │   ├── utils.js
+│   │   │   ├── payment.js
+│   │   │   ├── subscription.js
+│   │   │   ├── reminder.js
+│   │   │   ├── darkmode.js
+│   │   └── css/
+│   │       ├── styles.css
+│   │       ├── darkmode.css
+│   ├── routes/
+│   │   ├── reminder_routes.py
+│   │   ├── user_routes.py
+│   │   ├── payment_routes.py
+│   │   ├── __init__.py
+│   │   ├── subscription_routes.py
+│   ├── templates/
+│   │   ├── index.html
+│   │   ├── partials/
+│   │   │   ├── payments.html
+│   │   │   ├── regular_subscriptions.html
+│   │   │   ├── one_time_subscriptions.html
+│   │   │   ├── reminders.html
+│   │   │   ├── users.html
+│   │   ├── forms/
+│   │       ├── add_user.html
+│   │       ├── edit_payment.html
+│   │       ├── add_payment.html
+│   │       ├── attach_user_to_subscription.html
+│   │       ├── edit_user.html
+│   │       ├── add_reminder.html
+│   │       ├── edit_reminder.html
+│   │       ├── add_subscription.html
+│   │       ├── edit_subscription.html
+├── config.py
+├── requirements.txt
+├── run.py
+└── TODO.txt
+```
+
+#### 4. Создание и настройка файла WSGI
+
+Создайте файл WSGI в директории вашего проекта `/home/collector/Collector/collector.wsgi` со следующим содержимым:
+
+```python
+import sys
+import logging
+
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+
+sys.path.insert(0, "/home/collector/Collector")
+
+try:
+    from run import app as application
+    logging.info("WSGI script successfully imported the Flask app from run.py")
+except Exception as e:
+    logging.error("Error while importing app: %s", e)
+    raise
+```
+
+#### 5. Конфигурационный файл Apache
+
+Создайте или обновите конфигурационный файл Apache `/etc/apache2/sites-available/collector.conf`:
+
+```apache
+<VirtualHost *:80>
+    ServerAdmin webmaster@localhost
+
+    WSGIDaemonProcess collector python-path=/home/collector/Collector:/home/collector/Collector/.venv/lib/python3.12/site-packages
+    WSGIProcessGroup collector
+    WSGIScriptAlias / /home/collector/Collector/collector.wsgi
+
+    <Directory /home/collector/Collector>
+        Require all granted
+    </Directory>
+
+    Alias /static /home/collector/Collector/app/static
+    <Directory /home/collector/Collector/app/static>
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/collector_error.log
+    CustomLog ${APACHE_LOG_DIR}/collector_access.log combined
+</VirtualHost>
+```
+
+#### 6. Права доступа
+
+Убедитесь, что у Apache есть доступ к директориям и файлам вашего проекта:
+
+```bash
+sudo chmod 755 /home
+sudo chmod 755 /home/collector
+sudo chmod -R 755 /home/collector/Collector
+sudo chown -R www-data:www-data /home/collector/Collector
+```
+
+#### 7. Активация сайта и перезапуск Apache
+
+Активируйте ваш сайт и перезапустите Apache:
+
+```bash
+sudo a2ensite collector
+sudo systemctl restart apache2
+```
+
+#### 8. Проверка логов
+
+Если возникают проблемы, проверьте логи ошибок Apache:
+
+```bash
+sudo tail -f /var/log/apache2/collector_error.log
+```
+
+### Проверка работы приложения
+
+После выполнения всех этих шагов откройте браузер и перейдите по IP-адресу вашего VPS. Вы должны увидеть ваше Flask-приложение.
+
+Эти шаги должны помочь вам правильно настроить Apache для работы с вашим Flask-приложением.
