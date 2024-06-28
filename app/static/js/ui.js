@@ -159,11 +159,22 @@ function toggleUserSubscriptions(userId) {
                     </ul>
                 </td>
             `;
+
+            // Инициализируем Tippy.js на вновь созданных элементах
+            tippy('.action-button', {
+                content(reference) {
+                    return reference.getAttribute('data-tippy-content');
+                },
+                placement: 'top',
+                arrow: true,
+                theme: 'light',
+            });
         })
         .catch(error => {
             console.error('Error fetching subscriptions:', error);
         });
 }
+
 
 
 function renderUserSubscriptions(subscriptions) {
