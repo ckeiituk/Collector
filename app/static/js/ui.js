@@ -19,14 +19,16 @@ function openSidebarTab(event, tabName) {
     }
 
     // Add the active class to the clicked sidebar tab button
-    event.currentTarget.classList.add("active");
+    if (event) {
+        event.currentTarget.classList.add("active");
+    }
 }
 
 // Function to open the form for attaching a user to a subscription
 function openAttachUserForm(entity, id) {
     let url;
     if (entity === 'subscription') {
-        url = `/subscriptions/get_attach_user_form/${id}`;
+        url = `${BASE_URL}/subscriptions/get_attach_user_form/${id}`;
     }
 
     // Check if url is defined
@@ -61,16 +63,16 @@ function loadEditForm(type, id) {
     let url;
     switch (type) {
         case 'user':
-            url = `/get_user_form/${id}`;
+            url = `${BASE_URL}/get_user_form/${id}`;
             break;
         case 'subscription':
-            url = `/subscriptions/get_subscription_form/${id}`;
+            url = `${BASE_URL}/subscriptions/get_subscription_form/${id}`;
             break;
         case 'reminder':
-            url = `/reminders/get_reminder_form/${id}`;
+            url = `${BASE_URL}/reminders/get_reminder_form/${id}`;
             break;
         case 'payment':
-            url = `/payments/get_payment_form/${id}`;
+            url = `${BASE_URL}/payments/get_payment_form/${id}`;
             break;
         default:
             return;
@@ -123,7 +125,6 @@ function toggleUserSubscriptions(userId) {
     }
 }
 
-
 function toggleSubscriptionUsers(subscriptionId) {
     const userRow = document.getElementById(`subscription-users-${subscriptionId}`);
     if (userRow.style.display === "none") {
@@ -132,7 +133,3 @@ function toggleSubscriptionUsers(subscriptionId) {
         userRow.style.display = "none";
     }
 }
-
-
-
-

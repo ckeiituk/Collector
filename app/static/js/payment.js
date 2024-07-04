@@ -8,7 +8,7 @@ function createPayment() {
         jsonData[key] = value;
     });
 
-    fetch('/payments/add_payment', {
+    fetch(`${BASE_URL}/payments/add_payment`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -30,9 +30,10 @@ function createPayment() {
             showToast('An error occurred: ' + error.message, true);
         });
 }
+
 // Function to delete a payment
 function deletePayment(paymentId) {
-    fetch(`/payments/delete_payment/${paymentId}`, {
+    fetch(`${BASE_URL}/payments/delete_payment/${paymentId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -55,9 +56,10 @@ function deletePayment(paymentId) {
             showToast('An error occurred: ' + error.message, true);
         });
 }
+
 // Function to update payment status
 function updatePaymentStatus(paymentId) {
-    fetch(`/payments/update_payment_status/${paymentId}`, {
+    fetch(`${BASE_URL}/payments/update_payment_status/${paymentId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -80,6 +82,7 @@ function updatePaymentStatus(paymentId) {
             showToast('An error occurred: ' + error.message, true);
         });
 }
+
 // Function to edit a payment
 function editPayment(formId, paymentId) {
     const form = document.getElementById(formId);
@@ -95,7 +98,7 @@ function editPayment(formId, paymentId) {
         data[key] = value;
     });
 
-    fetch(`/payments/edit_payment/${paymentId}`, {
+    fetch(`${BASE_URL}/payments/edit_payment/${paymentId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

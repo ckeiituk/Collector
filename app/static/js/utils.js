@@ -1,3 +1,5 @@
+const BASE_URL = '/panel';
+
 // Function to get CSRF token
 function getCsrfToken() {
     const csrfMetaTag = document.querySelector('meta[name="csrf-token"]');
@@ -6,7 +8,7 @@ function getCsrfToken() {
 
 function updateUserList() {
     const toggledUsers = saveUserToggleState();
-    fetch('/get_users_partial')
+    fetch(`${BASE_URL}/get_users_partial`)
         .then(response => response.json())
         .then(data => {
             document.getElementById('users').innerHTML = data.users_html;
@@ -26,6 +28,7 @@ function saveUserToggleState() {
     });
     return toggledUsers;
 }
+
 function restoreUserToggleState(toggledUsers) {
     for (const [userId, isToggled] of Object.entries(toggledUsers)) {
         const row = document.getElementById(`details-row-${userId}`);
@@ -34,7 +37,6 @@ function restoreUserToggleState(toggledUsers) {
         }
     }
 }
-
 
 function saveSubscriptionToggleState() {
     const toggledSubscriptions = {};
@@ -54,10 +56,9 @@ function restoreSubscriptionToggleState(toggledSubscriptions) {
     }
 }
 
-
 function updateSubscriptionList() {
     const toggledSubscriptions = saveSubscriptionToggleState();
-    fetch('/subscriptions/get_subscriptions_partial')
+    fetch(`${BASE_URL}/subscriptions/get_subscriptions_partial`)
         .then(response => response.json())
         .then(data => {
             document.getElementById('one_time_subscriptions').innerHTML = data.one_time_subscriptions;
@@ -70,14 +71,13 @@ function updateSubscriptionList() {
         });
 }
 
-
 // Function to update the reminder list
 function updateReminderList(key = true) {
     let states;
     if (key) {
         states = saveDetailsState();
     }
-    fetch('/reminders/get_reminders_partial')
+    fetch(`${BASE_URL}/reminders/get_reminders_partial`)
         .then(response => response.json())
         .then(data => {
             document.getElementById('reminders').innerHTML = data.reminders_html;
@@ -97,7 +97,7 @@ function updatePaymentList(key = true) {
     if (key) {
         states = saveDetailsState();
     }
-    fetch('/payments/get_payments_partial')
+    fetch(`${BASE_URL}/payments/get_payments_partial`)
         .then(response => response.json())
         .then(data => {
             document.getElementById('payments').innerHTML = data.payments_html;
@@ -175,5 +175,3 @@ document.addEventListener('DOMContentLoaded', function () {
         theme: 'light',   // Тема (есть несколько встроенных тем)
     });
 });
-
-

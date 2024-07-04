@@ -10,7 +10,7 @@ function updateUserSubscription(event, userSubscriptionId) {
         jsonData[key] = value;
     });
 
-    fetch(`/update_user_subscription/${userSubscriptionId}`, {
+    fetch(`${BASE_URL}/users/update_user_subscription/${userSubscriptionId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ function addUser() {
 
     console.log("Sending JSON data:", JSON.stringify(jsonData));
 
-    fetch('/add_user', {
+    fetch(`${BASE_URL}/add_user`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ function editUser(userId) {
         data[key] = value;
     });
 
-    fetch(`/edit_user/${userId}`, {
+    fetch(`${BASE_URL}/edit_user/${userId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ function deleteUser(userId) {
         return;
     }
 
-    fetch(`/delete_user/${userId}`, {
+    fetch(`${BASE_URL}/delete_user/${userId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -138,7 +138,7 @@ function deleteUser(userId) {
 
 // Function to toggle user subscription pause
 function toggleUserSubscriptionPause(userSubscriptionId) {
-    fetch('/subscriptions/toggle_user_subscription_pause', {
+    fetch(`${BASE_URL}/subscriptions/toggle_user_subscription_pause`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

@@ -6,22 +6,3 @@ flask_sqlalchemy
 setuptools
 psycopg2
 redis
-
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE users TO ckeiituk;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE reminders TO ckeiituk;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE subscriptions TO ckeiituk;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE payments TO ckeiituk;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE notifications TO ckeiituk;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE reminder_templates TO ckeiituk;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE transactions TO ckeiituk;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE user_subscriptions TO ckeiituk;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE users_old TO ckeiituk;
-GRANT USAGE, SELECT ON SEQUENCE users_id_seq TO ckeiituk;
-GRANT USAGE, SELECT ON SEQUENCE reminders_id_seq TO ckeiituk;
-GRANT USAGE, SELECT ON SEQUENCE subscriptions_id_seq TO ckeiituk;
-GRANT USAGE, SELECT ON SEQUENCE payments_id_seq TO ckeiituk;
-GRANT USAGE, SELECT ON SEQUENCE notifications_id_seq TO ckeiituk;
-GRANT USAGE, SELECT ON SEQUENCE reminder_templates_id_seq TO ckeiituk;
-GRANT USAGE, SELECT ON SEQUENCE transactions_id_seq TO ckeiituk;
-GRANT USAGE, SELECT ON SEQUENCE user_subscriptions_id_seq TO ckeiituk;
-GRANT USAGE, SELECT ON SEQUENCE users_old_id_seq TO ckeiituk;

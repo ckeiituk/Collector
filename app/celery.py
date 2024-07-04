@@ -16,7 +16,7 @@ def get_schedule():
     elif schedule_type == 'interval':
         return timedelta(minutes=1)
     elif schedule_type == 'daily':
-        return crontab(minute=9, hour=22)
+        return crontab(minute=0, hour=18)
     else:
         raise ValueError("Invalid reminder_schedule_type in config")
 

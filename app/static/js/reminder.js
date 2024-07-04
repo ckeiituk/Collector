@@ -8,9 +8,10 @@ function setTodayDate(elementId) {
 document.addEventListener('DOMContentLoaded', () => {
     setTodayDate('reminder_date');
 });
+
 // Function to delete a reminder
 function deleteReminder(reminderId) {
-    fetch(`/reminders/delete_reminder/${reminderId}`, {
+    fetch(`${BASE_URL}/reminders/delete_reminder/${reminderId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -32,6 +33,7 @@ function deleteReminder(reminderId) {
             showToast('An error occurred: ' + error.message, true);
         });
 }
+
 // Function to edit a reminder
 function editReminder(formId, reminderId) {
     const form = document.getElementById(formId);
@@ -47,7 +49,7 @@ function editReminder(formId, reminderId) {
         data[key] = value;
     });
 
-    fetch(`/reminders/edit_reminder/${reminderId}`, {
+    fetch(`${BASE_URL}/reminders/edit_reminder/${reminderId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -69,9 +71,10 @@ function editReminder(formId, reminderId) {
             showToast('An error occurred: ' + error.message, true);
         });
 }
+
 // Function to create a reminder
 function createReminder(paymentId) {
-    fetch(`/payments/create_reminder/${paymentId}`, {
+    fetch(`${BASE_URL}/payments/create_reminder/${paymentId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -96,6 +99,7 @@ function createReminder(paymentId) {
             showToast('An error occurred: ' + error.message, true);
         });
 }
+
 // Function to add a reminder
 function addReminder() {
     const form = document.getElementById('addReminderForm');
@@ -106,7 +110,7 @@ function addReminder() {
         jsonData[key] = value;
     });
 
-    fetch('/reminders/add_reminder', {
+    fetch(`${BASE_URL}/reminders/add_reminder`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

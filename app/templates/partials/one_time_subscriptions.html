@@ -38,7 +38,7 @@
         </button>
       </td>
     </tr>
-    <tr id="subscription-users-{{ subscription.id }}" style="display: none;">
+    <tr id="subscription-users-{{ subscription.id }}" class="subscription-users-row" style="display: none;">
       <td colspan="6">
         <ul>
           {% for user_subscription in subscription.user_subscriptions %}
@@ -103,7 +103,7 @@
         </button>
       </td>
     </tr>
-    <tr id="subscription-users-{{ subscription.id }}" style="display: none;">
+    <tr id="subscription-users-{{ subscription.id }}" class="subscription-users-row" style="display: none;">
       <td colspan="6">
         <ul>
           {% for user_subscription in subscription.user_subscriptions %}

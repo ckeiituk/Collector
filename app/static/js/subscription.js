@@ -8,7 +8,7 @@ function addSubscription() {
         jsonData[key] = value;
     });
 
-    fetch('/subscriptions/add_subscription', {
+    fetch(`${BASE_URL}/subscriptions/add_subscription`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ function addSubscription() {
 
 // Function to toggle subscription pause
 function toggleSubscriptionPause(subscriptionId) {
-    fetch('/subscriptions/toggle_subscription_pause', {
+    fetch(`${BASE_URL}/subscriptions/toggle_subscription_pause`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ function toggleSubscriptionPause(subscriptionId) {
 
 // Function to delete subscription
 function deleteSubscription(subscriptionId) {
-    fetch(`/subscriptions/delete_subscription/${subscriptionId}`, {
+    fetch(`${BASE_URL}/subscriptions/delete_subscription/${subscriptionId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -86,7 +86,7 @@ function editSubscription(formId, subscriptionId) {
         data[key] = value;
     });
 
-    fetch(`/subscriptions/edit_subscription/${subscriptionId}`, {
+    fetch(`${BASE_URL}/subscriptions/edit_subscription/${subscriptionId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -111,7 +111,7 @@ function editSubscription(formId, subscriptionId) {
 
 // Function to detach user from subscription
 function detachUserFromSubscription(userSubscriptionId, subscriptionId) {
-    fetch(`/subscriptions/detach_user_subscription/${userSubscriptionId}/${subscriptionId}`, {
+    fetch(`${BASE_URL}/subscriptions/detach_user_subscription/${userSubscriptionId}/${subscriptionId}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -147,7 +147,7 @@ function attachUserToSubscription(formId) {
         }
     });
 
-    fetch('/subscriptions/attach_user_to_subscription', {
+    fetch(`${BASE_URL}/subscriptions/attach_user_to_subscription`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
