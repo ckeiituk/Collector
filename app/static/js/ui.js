@@ -1,28 +1,24 @@
 // Function to switch between sidebar tabs
-function openSidebarTab(event, tabName) {
-    // Hide all sidebar tab contents
-    const sidebarTabContents = document.getElementsByClassName("sidebar-tab-content");
-    for (const content of sidebarTabContents) {
-        content.style.display = "none";
+function openSidebarTab(event, tabId) {
+    console.log(`Opening sidebar tab: ${tabId}`);
+    let i, tabcontent, tablinks;
+
+    tabcontent = document.getElementsByClassName("sidebar-tab-content");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
     }
 
-    // Remove the active class from all sidebar tab buttons
-    const sidebarTabButtons = document.getElementsByClassName("sidebar-tab-button");
-    for (const button of sidebarTabButtons) {
-        button.classList.remove("active");
+    tablinks = document.getElementsByClassName("sidebar-tab-button");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
 
-    // Show the selected sidebar tab content
-    const selectedSidebarTabContent = document.getElementById(tabName);
-    if (selectedSidebarTabContent) {
-        selectedSidebarTabContent.style.display = "block";
-    }
-
-    // Add the active class to the clicked sidebar tab button
+    document.getElementById(tabId).style.display = "block";
     if (event) {
-        event.currentTarget.classList.add("active");
+        event.currentTarget.className += " active";
     }
 }
+
 
 // Function to open the form for attaching a user to a subscription
 function openAttachUserForm(entity, id) {
@@ -74,12 +70,20 @@ function loadEditForm(type, id) {
         case 'payment':
             url = `${BASE_URL}/payments/get_payment_form/${id}`;
             break;
+        case 'user_subscription':
+            url = `${BASE_URL}/subscriptions/get_user_subscription_form/${id}`;
+            break;
         default:
             return;
     }
 
     fetch(url)
-        .then(response => response.text())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.text();
+        })
         .then(html => {
             document.getElementById('edit_user').innerHTML = html;
             openSidebarTab(null, 'edit_user');

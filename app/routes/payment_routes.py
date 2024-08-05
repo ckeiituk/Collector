@@ -11,6 +11,10 @@ csrf = CSRFProtect()
 
 @payment_bp.route('/payments')
 def payments():
+    payments = Payment.query.order_by(Payment.created_at.desc()).all()
+    payments_by_date = defaultdict(list)
+    for payment in payments:
+        payments_by_date[payment.created_at.date()].append(payment)
     return render_template('partials/payments.html', payments_by_date=payments_by_date)
 
 @payment_bp.route('/add_payment', methods=['POST'])
@@ -32,8 +36,8 @@ def add_payment():
 
         balance = Decimal(user.balance)
         final_amount = total_amount - balance
-        comment = " | ".join(comment_parts)
-        comment += f" | Общая сумма ({total_amount:.2f} RUB) - Баланс({balance:.2f} RUB) = Итого: {final_amount:.2f} RUB"
+        comment = "\n".join(comment_parts)
+        comment += f"\nОбщая сумма ({total_amount:.2f} RUB) - Баланс({balance:.2f} RUB) = Итого: {final_amount:.2f} RUB"
 
         if status == 'pending' and balance >= total_amount:
             status = 'paid'
@@ -49,8 +53,6 @@ def add_payment():
     except Exception as e:
         db.session.rollback()
         return jsonify({'message': str(e)}), 500
-
-
 
 @payment_bp.route('/delete_payment/<int:payment_id>', methods=['POST'])
 def delete_payment(payment_id):

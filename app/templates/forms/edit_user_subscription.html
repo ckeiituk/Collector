@@ -1,0 +1,14 @@
+<!-- app/templates/forms/edit_user_subscription.html -->
+<div>
+    <h2 id="formHeader">{{ user_subscription.user.name }} - {{ user_subscription.subscription.name }}</h2>
+    <form id="editUserSubscriptionForm-{{ user_subscription.id }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount-{{ user_subscription.id }}" name="amount" value="{{ user_subscription.amount }}" step="0.01" required>
+
+        <label for="next_due_date">Next Due Date:</label>
+        <input type="date" id="next_due_date-{{ user_subscription.id }}" name="next_due_date" value="{{ user_subscription.next_due_date.strftime('%Y-%m-%d') }}" required>
+
+        <button type="button" onclick="editUserSubscription({{ user_subscription.id }})"><i class="fas fa-save"></i> Save</button>
+    </form>
+</div>

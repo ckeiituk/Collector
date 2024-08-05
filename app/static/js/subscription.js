@@ -170,3 +170,42 @@ function attachUserToSubscription(formId) {
         showToast('An error occurred: ' + error.message, true);
     });
 }
+
+// static/js/subscription.js
+async function editUserSubscription(userSubscriptionId) {
+    const form = document.getElementById(`editUserSubscriptionForm-${userSubscriptionId}`);
+    const data = new FormData(form);
+    const jsonData = {};
+
+    data.forEach((value, key) => {
+        jsonData[key] = value;
+    });
+
+    try {
+        const response = await fetch(`${BASE_URL}/subscriptions/update_user_subscription/${userSubscriptionId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify(jsonData)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message);
+        }
+
+        const result = await response.json();
+        showToast(result.message);
+        updateUserList(); // Update the user list dynamically
+        updateSubscriptionList(); // Update the subscription list dynamically
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('Failed to update user subscription: ' + error.message, true);
+    }
+}
+
+
+
+

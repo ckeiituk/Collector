@@ -9,7 +9,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     broker_url = 'redis://localhost:6379/0'
     result_backend = 'redis://localhost:6379/0'
-    reminder_schedule_type = 'daily'  # Допустимые значения: 'time', 'interval' 'daily'
+    reminder_schedule_type = 'interval'  # Допустимые значения: 'time', 'interval' 'daily'
     SECRET_KEY = os.urandom(32)
     WTF_CSRF_ENABLED = True
     WTF_CSRF_SECRET_KEY = 'your_csrf_secret_key'

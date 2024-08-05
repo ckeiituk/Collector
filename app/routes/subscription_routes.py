@@ -12,6 +12,7 @@ csrf = CSRFProtect(app)
 
 subscription_bp = Blueprint('subscription_bp', __name__)
 
+
 @subscription_bp.route('/toggle_subscription_pause', methods=['POST'])
 def toggle_subscription_pause():
     data = request.get_json()
@@ -31,13 +32,15 @@ def toggle_subscription_pause():
     return jsonify({'message': f'Subscription {status} successfully.'})
 
 
-
 @subscription_bp.route('/subscriptions')
 def subscription_list():
     one_time_subscriptions = Subscription.query.filter_by(period='one-time').all()
     regular_subscriptions = Subscription.query.filter(Subscription.period != 'one-time').all()
     # Передаем данные в 'index.html' и используем соответствующие частичные шаблоны для отображения данных
-    return render_template('index.html', one_time_subscriptions=one_time_subscriptions, regular_subscriptions=regular_subscriptions)
+    return render_template('index.html', one_time_subscriptions=one_time_subscriptions,
+                           regular_subscriptions=regular_subscriptions)
+
+
 @subscription_bp.route('/add_subscription', methods=['POST'])
 def add_subscription():
     data = request.get_json()
@@ -67,6 +70,8 @@ def add_subscription():
     except Exception as e:
         db.session.rollback()
         return jsonify({'message': str(e)}), 500
+
+
 @subscription_bp.route('/edit_subscription/<int:id>', methods=['POST'])
 def edit_subscription(id):
     subscription = Subscription.query.get_or_404(id)
@@ -89,7 +94,6 @@ def edit_subscription(id):
         return jsonify({'error': str(e)}), 500
 
 
-
 @subscription_bp.route('/delete_subscription/<int:id>', methods=['POST'])
 def delete_subscription(id):
     try:
@@ -100,6 +104,7 @@ def delete_subscription(id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
+
 
 @subscription_bp.route('/pause_subscription/<int:subscription_id>', methods=['POST'])
 def pause_subscription(subscription_id):
@@ -113,6 +118,7 @@ def pause_subscription(subscription_id):
     flash(f'Subscription {subscription.name} paused successfully!', 'success')
     return redirect(url_for('user_bp.index'))
 
+
 @subscription_bp.route('/unpause_subscription/<int:subscription_id>', methods=['POST'])
 def unpause_subscription(subscription_id):
     subscription = Subscription.query.get_or_404(subscription_id)
@@ -124,22 +130,6 @@ def unpause_subscription(subscription_id):
     db.session.commit()
     flash(f'Subscription {subscription.name} unpaused successfully!', 'success')
     return redirect(url_for('user_bp.index'))
-
-@subscription_bp.route('/update_user_subscription/<int:user_subscription_id>', methods=['POST'])
-def update_user_subscription(user_subscription_id):
-    user_subscription = UserSubscription.query.get_or_404(user_subscription_id)
-    data = request.get_json()
-
-    try:
-        user_subscription.amount = Decimal(data.get('amount', user_subscription.amount))
-        user_subscription.is_manual = data.get('is_manual', user_subscription.is_manual) == 'on'
-
-        db.session.commit()
-
-        return jsonify({'message': 'User subscription updated successfully!'})
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'message': str(e)}), 500
 
 
 @subscription_bp.route('/attach_user_to_subscription', methods=['POST'])
@@ -192,33 +182,49 @@ def detach_user_from_subscription(user_subscription_id, subscription_id):
         db.session.rollback()
         return jsonify({'message': str(e)}), 500
 
+
 @subscription_bp.route('/get_unattached_users/<int:subscription_id>', methods=['GET'])
 def get_unattached_users(subscription_id):
-    attached_users = db.session.query(User.id).join(UserSubscription).filter(UserSubscription.subscription_id == subscription_id).all()
+    attached_users = db.session.query(User.id).join(UserSubscription).filter(
+        UserSubscription.subscription_id == subscription_id).all()
     attached_user_ids = [user_id for (user_id,) in attached_users]
     unattached_users = User.query.filter(User.id.notin_(attached_user_ids)).all()
     return jsonify({'users': [{'id': user.id, 'name': user.name} for user in unattached_users]})
+
 
 @subscription_bp.route('/get_subscription_form/<int:subscription_id>', methods=['GET'])
 def get_subscription_form(subscription_id):
     subscription = Subscription.query.get_or_404(subscription_id)
     return render_template('forms/edit_subscription.html', subscription=subscription, csrf_token=generate_csrf())
 
+
 @subscription_bp.route('/get_attach_user_form/<int:subscription_id>', methods=['GET'])
 def get_attach_user_form(subscription_id):
     subscription = Subscription.query.get_or_404(subscription_id)
-    attached_users = db.session.query(User.id).join(UserSubscription).filter(UserSubscription.subscription_id == subscription_id).all()
+    attached_users = db.session.query(User.id).join(UserSubscription).filter(
+        UserSubscription.subscription_id == subscription_id).all()
     attached_user_ids = [user_id for (user_id,) in attached_users]
     unattached_users = User.query.filter(User.id.notin_(attached_user_ids)).all()
-    return render_template('forms/attach_user_to_subscription.html', subscription=subscription, users=unattached_users, csrf_token=generate_csrf())
+    return render_template('forms/attach_user_to_subscription.html', subscription=subscription, users=unattached_users,
+                           csrf_token=generate_csrf())
+
 
 @subscription_bp.route('/get_subscriptions_partial', methods=['GET'])
 def get_subscriptions_partial():
     one_time_subscriptions = Subscription.query.filter_by(period='one-time').all()
     regular_subscriptions = Subscription.query.filter(Subscription.period != 'one-time').all()
 
-    one_time_subscriptions_html = render_template('partials/one_time_subscriptions.html', one_time_subscriptions=one_time_subscriptions)
-    regular_subscriptions_html = render_template('partials/regular_subscriptions.html', regular_subscriptions=regular_subscriptions)
+    # Load relationships to avoid lazy loading in template
+    for subscription in one_time_subscriptions:
+        db.session.query(UserSubscription).filter_by(subscription_id=subscription.id).all()
+
+    for subscription in regular_subscriptions:
+        db.session.query(UserSubscription).filter_by(subscription_id=subscription.id).all()
+
+    one_time_subscriptions_html = render_template('partials/one_time_subscriptions.html',
+                                                  one_time_subscriptions=one_time_subscriptions)
+    regular_subscriptions_html = render_template('partials/regular_subscriptions.html',
+                                                 regular_subscriptions=regular_subscriptions)
 
     return jsonify({
         'one_time_subscriptions': one_time_subscriptions_html,
@@ -237,3 +243,25 @@ def toggle_user_subscription_pause():
 
     status = 'paused' if user_subscription.is_paused else 'resumed'
     return jsonify({'message': f'User subscription {status} successfully.'})
+
+@subscription_bp.route('/get_user_subscription_form/<int:user_subscription_id>', methods=['GET'])
+def get_user_subscription_form(user_subscription_id):
+    user_subscription = UserSubscription.query.get_or_404(user_subscription_id)
+    return render_template('forms/edit_user_subscription.html', user_subscription=user_subscription, csrf_token=generate_csrf())
+
+@subscription_bp.route('/update_user_subscription/<int:user_subscription_id>', methods=['POST'])
+def update_user_subscription(user_subscription_id):
+    user_subscription = UserSubscription.query.get_or_404(user_subscription_id)
+    data = request.get_json()
+
+    try:
+        user_subscription.amount = Decimal(data.get('amount', user_subscription.amount))
+        user_subscription.is_manual = data.get('is_manual', user_subscription.is_manual) == 'on'
+        user_subscription.next_due_date = datetime.strptime(data.get('next_due_date'), '%Y-%m-%d')
+
+        db.session.commit()
+
+        return jsonify({'message': 'User subscription updated successfully!'})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'message': str(e)}), 500

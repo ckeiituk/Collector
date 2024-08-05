@@ -42,8 +42,8 @@ class UserSubscription(db.Model):
     coefficient = db.Column(db.Numeric(3, 2), default=1.0)
     is_manual = db.Column(db.Boolean, default=False)
 
-    user = relationship('User', back_populates='subscriptions')
-    subscription = relationship('Subscription', back_populates='user_subscriptions')
+    user = relationship('User', back_populates='subscriptions', lazy='joined')
+    subscription = relationship('Subscription', back_populates='user_subscriptions', lazy='joined')
 
     def __init__(self, user_id, subscription_id, next_due_date=None, amount=None, is_paused=False, coefficient=1.0, is_manual=False):
         self.user_id = user_id
@@ -62,17 +62,24 @@ class UserSubscription(db.Model):
             self.amount = Decimal(amount).quantize(Decimal('1'), rounding=ROUND_UP)
         return self.amount
 
-    def set_next_due_date(self):
+    def update_next_due_date(self):
         subscription = Subscription.query.get(self.subscription_id)
-        if subscription.period == 'one-time':
-            self.next_due_date = datetime.utcnow().date() + timedelta(days=30)  # Set the due date for the loan
-        else:
-            self.next_due_date = datetime.utcnow().date() + timedelta(days=30)
-        return self.next_due_date
+        if subscription:
+            if subscription.period == 'monthly':
+                self.next_due_date += timedelta(days=30)
+            elif subscription.period == 'semiannual':
+                self.next_due_date += timedelta(days=182)
+            elif subscription.period == 'annual':
+                self.next_due_date += timedelta(days=365)
+            elif subscription.period == 'one-time':
+                self.next_due_date = None  # Для one-time подписок нет следующей даты
 
     def total_paid(self):
         transactions = Transaction.query.filter_by(user_id=self.user_id).all()
         return sum(transaction.amount for transaction in transactions)
+
+    def __repr__(self):
+        return f"<UserSubscription {self.id}, User {self.user_id}, Subscription {self.subscription_id}, Due {self.next_due_date}, Amount {self.amount}>"
 
 # app/models.py
 class Payment(db.Model):

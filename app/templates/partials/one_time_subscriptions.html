@@ -7,8 +7,7 @@
       <th>Name</th>
       <th>Description</th>
       <th>Amount</th>
-      <th>Period</th>
-      <th class="actions">Actions</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -19,7 +18,6 @@
       <td>{{ subscription.name }}</td>
       <td>{{ subscription.description }}</td>
       <td>{{ subscription.monthly_amount }} RUB</td>
-      <td>{{ subscription.period }}</td>
       <td class="actions">
         <button type="button" class="action-button" data-tippy-content="Edit" onclick="loadEditForm('subscription', '{{ subscription.id }}')">
           <i class="fas fa-edit"></i>
@@ -38,12 +36,16 @@
         </button>
       </td>
     </tr>
-    <tr id="subscription-users-{{ subscription.id }}" class="subscription-users-row" style="display: none;">
+    <tr id="subscription-users-{{ subscription.id }}" class="subscription-users-row" style="display: table-row;">
       <td colspan="6">
         <ul>
           {% for user_subscription in subscription.user_subscriptions %}
           <li>
-            {{ user_subscription.user.name }} - {{ user_subscription.amount }} RUB
+            {{ user_subscription.user.name }} - {{ user_subscription.amount }} RUB - Next Due Date: {{ user_subscription.next_due_date }}
+<button type="button" class="action-button" data-tippy-content="Edit" onclick="loadEditForm('user_subscription', '{{ user_subscription.id }}')">
+  <i class="fas fa-edit"></i>
+</button>
+
             <button type="button" class="action-button" data-tippy-content="Detach" onclick="detachUserFromSubscription({{ user_subscription.id }}, {{ subscription.id }})">
               <i class="fas fa-unlink"></i>
             </button>
@@ -72,7 +74,6 @@
       <th>Name</th>
       <th>Description</th>
       <th>Amount</th>
-      <th>Period</th>
       <th class="actions">Actions</th>
     </tr>
   </thead>
@@ -84,7 +85,6 @@
       <td>{{ subscription.name }}</td>
       <td>{{ subscription.description }}</td>
       <td>{{ subscription.monthly_amount }} RUB</td>
-      <td>{{ subscription.period }}</td>
       <td class="actions">
         <button type="button" class="action-button" data-tippy-content="Edit" onclick="loadEditForm('subscription', '{{ subscription.id }}')">
           <i class="fas fa-edit"></i>
@@ -95,7 +95,7 @@
         <button type="button" class="action-button" data-tippy-content="Delete" onclick="deleteSubscription({{ subscription.id }})">
           <i class="fas fa-trash"></i>
         </button>
-        <button type="button" class="action-button" data-tippy-content="Attach" onclick="openAttachUserForm('subscription', '{{ subscription.id }}')">
+        <button type="button" class="action-button" data-tippy-content="Attach User" onclick="openAttachUserForm('subscription', '{{ subscription.id }}')">
           <i class="fas fa-user-plus"></i>
         </button>
         <button type="button" class="action-button" data-tippy-content="Users" onclick="toggleSubscriptionUsers('{{ subscription.id }}')">
@@ -103,12 +103,15 @@
         </button>
       </td>
     </tr>
-    <tr id="subscription-users-{{ subscription.id }}" class="subscription-users-row" style="display: none;">
+    <tr id="subscription-users-{{ subscription.id }}" class="subscription-users-row" style="display: table-row;">
       <td colspan="6">
         <ul>
           {% for user_subscription in subscription.user_subscriptions %}
           <li>
-            {{ user_subscription.user.name }} - {{ user_subscription.amount }} RUB
+            {{ user_subscription.user.name }} - {{ user_subscription.amount }} RUB - Next Due Date: {{ user_subscription.next_due_date }}
+            <button type="button" class="action-button" data-tippy-content="Edit User Subscription" onclick="loadEditForm('user_subscription', '{{ user_subscription.id }}')">
+              <i class="fas fa-edit"></i>
+            </button>
             <button type="button" class="action-button" data-tippy-content="Detach" onclick="detachUserFromSubscription({{ user_subscription.id }}, {{ subscription.id }})">
               <i class="fas fa-unlink"></i>
             </button>

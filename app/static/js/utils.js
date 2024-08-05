@@ -149,7 +149,9 @@ function showToast(message, isError = false) {
         close: true,
         gravity: "top",
         position: "center",
-        backgroundColor: isError ? "#e74c3c" : "#007bff",
+        style: {
+            background: isError ? "#e74c3c" : "#007bff"
+        },
         stopOnFocus: true,
     }).showToast();
 }

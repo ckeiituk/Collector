@@ -41,28 +41,30 @@
         </button>
       </td>
     </tr>
-<tr id="subscription-users-{{ subscription.id }}" class="subscription-users-row" style="display: none;">
-    <td colspan="6">
-        <ul>
-            {% for user_subscription in subscription.user_subscriptions %}
-            <li>
-                {{ user_subscription.user.name }} - {{ user_subscription.amount }} RUB
-                <button type="button" class="action-button" data-tippy-content="Detach" onclick="detachUserFromSubscription({{ user_subscription.id }}, {{ subscription.id }})">
-                    <i class="fas fa-unlink"></i>
-                </button>
-                <button type="button" class="action-button" data-tippy-content="{% if user_subscription.is_paused %}Resume{% else %}Pause{% endif %}" onclick="toggleUserSubscriptionPause({{ user_subscription.id }})">
-                    {% if user_subscription.is_paused %}
-                    <i class="fas fa-play"></i>
-                    {% else %}
-                    <i class="fas fa-pause"></i>
-                    {% endif %}
-                </button>
-            </li>
-            {% endfor %}
-        </ul>
-    </td>
-</tr>
-
+    <tr id="subscription-users-{{ subscription.id }}" class="subscription-users-row" style="display: none;">
+        <td colspan="6">
+            <ul>
+                {% for user_subscription in subscription.user_subscriptions %}
+                <li>
+                    {{ user_subscription.user.name }} - {{ user_subscription.amount }} RUB
+                    <button type="button" class="action-button" data-tippy-content="Edit User Subscription" onclick="loadEditForm('user_subscription', '{{ user_subscription.id }}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button type="button" class="action-button" data-tippy-content="Detach" onclick="detachUserFromSubscription({{ user_subscription.id }}, {{ subscription.id }})">
+                        <i class="fas fa-unlink"></i>
+                    </button>
+                    <button type="button" class="action-button" data-tippy-content="{% if user_subscription.is_paused %}Resume{% else %}Pause{% endif %}" onclick="toggleUserSubscriptionPause({{ user_subscription.id }})">
+                        {% if user_subscription.is_paused %}
+                        <i class="fas fa-play"></i>
+                        {% else %}
+                        <i class="fas fa-pause"></i>
+                        {% endif %}
+                    </button>
+                </li>
+                {% endfor %}
+            </ul>
+        </td>
+    </tr>
     {% endfor %}
   </tbody>
 </table>
