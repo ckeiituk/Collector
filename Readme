@@ -9,6 +9,7 @@ sudo apt update
 sudo apt install apache2
 sudo apt install libapache2-mod-wsgi-py3
 sudo apt install python3-pip
+sudo apt-get install libpq-dev
 ```
 
 #### 2. Установка Flask
@@ -106,16 +107,17 @@ except Exception as e:
 ```apache
 <VirtualHost *:80>
     ServerAdmin webmaster@localhost
+    ServerName ip
 
     WSGIDaemonProcess collector python-path=/home/collector/Collector:/home/collector/Collector/.venv/lib/python3.12/site-packages
     WSGIProcessGroup collector
-    WSGIScriptAlias / /home/collector/Collector/collector.wsgi
+    WSGIScriptAlias /panel /home/collector/Collector/collector.wsgi
 
     <Directory /home/collector/Collector>
         Require all granted
     </Directory>
 
-    Alias /static /home/collector/Collector/app/static
+    Alias /panel/static /home/collector/Collector/app/static
     <Directory /home/collector/Collector/app/static>
         Require all granted
     </Directory>
@@ -130,6 +132,9 @@ except Exception as e:
 Убедитесь, что у Apache есть доступ к директориям и файлам вашего проекта:
 
 ```bash
+Добавить пользователя www-data в группу collector
+sudo usermod -a -G collector www-data
+
 sudo chmod 755 /home
 sudo chmod 755 /home/collector
 sudo chmod -R 755 /home/collector/Collector
